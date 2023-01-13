@@ -8,20 +8,20 @@ import spoon.reflect.code.CtVariableAccess;
  *
  */
 public class VarAccessWrapper {
-	
-	private CtVariableAccess var;
+    
+    private CtVariableAccess var;
 
-	public VarAccessWrapper(CtVariableAccess var) {
-		this.var = var;
-	}
+    public VarAccessWrapper(CtVariableAccess var) {
+        this.var = var;
+    }
 
-	public CtVariableAccess getVar() {
-		return var;
-	}
+    public CtVariableAccess getVar() {
+        return var;
+    }
 
-	@Override
-	public String toString() {
-		return var.toString();
-	}
+    @Override
+    public String toString() {
+        return var.toString();
+    }
 
 }

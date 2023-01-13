@@ -6,8 +6,8 @@ package fr.inria.astor.core.faultlocalization.cocospoon.testrunner;
  */
 public interface TestResult {
 
-	TestCase getTestCase();
+    TestCase getTestCase();
 
-	boolean isSuccessful();
+    boolean isSuccessful();
 
 }

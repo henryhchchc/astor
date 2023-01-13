@@ -23,28 +23,28 @@ import java.util.Random;
  */
 public class RandomManager {
 
-	private static Random randomNumberGenerator = null;
+    private static Random randomNumberGenerator = null;
 
-	public static void initialize() {
-		if (ConfigurationProperties.hasProperty("seed")) {
-			Integer seed = ConfigurationProperties.getPropertyInt("seed");
-			randomNumberGenerator = new Random(seed);
-		} else {
-			// by default Astor is deterministic
-			ConfigurationProperties.properties.setProperty("seed", "0");
-			randomNumberGenerator = new Random(0);
-		}
-	}
+    public static void initialize() {
+        if (ConfigurationProperties.hasProperty("seed")) {
+            Integer seed = ConfigurationProperties.getPropertyInt("seed");
+            randomNumberGenerator = new Random(seed);
+        } else {
+            // by default Astor is deterministic
+            ConfigurationProperties.properties.setProperty("seed", "0");
+            randomNumberGenerator = new Random(0);
+        }
+    }
 
-	public static Integer nextInt(int bound) {
-		return randomNumberGenerator.nextInt(bound);
-	}
+    public static Integer nextInt(int bound) {
+        return randomNumberGenerator.nextInt(bound);
+    }
 
-	public static Double nextDouble() {
-		return randomNumberGenerator.nextDouble();
-	}
+    public static Double nextDouble() {
+        return randomNumberGenerator.nextDouble();
+    }
 
-	public static Random getRandom() {
-		return randomNumberGenerator;
-	}
+    public static Random getRandom() {
+        return randomNumberGenerator;
+    }
 }

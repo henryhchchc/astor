@@ -11,34 +11,34 @@ import spoon.reflect.reference.CtExecutableReference;
 @SuppressWarnings("rawtypes")
 public class InvocationTransformation implements Transformation {
 
-	CtExecutableReference selectedExecutableTarget;
-	InvocationPlaceholder varplaceholder;
+    CtExecutableReference selectedExecutableTarget;
+    InvocationPlaceholder varplaceholder;
 
-	private String previousElementName;
+    private String previousElementName;
 
-	public InvocationTransformation(InvocationPlaceholder varplaceholder,
-			CtExecutableReference selectedExecutableTarget) {
-		this.selectedExecutableTarget = selectedExecutableTarget;
-		this.varplaceholder = varplaceholder;
-	}
+    public InvocationTransformation(InvocationPlaceholder varplaceholder,
+            CtExecutableReference selectedExecutableTarget) {
+        this.selectedExecutableTarget = selectedExecutableTarget;
+        this.varplaceholder = varplaceholder;
+    }
 
-	@Override
-	public void apply() {
+    @Override
+    public void apply() {
 
-		this.previousElementName = this.varplaceholder.getInvocation().getExecutable()
-				.getSimpleName()/* varplaceholder.getName() */;
-		this.varplaceholder.getInvocation().getExecutable()
-				.setSimpleName(this.selectedExecutableTarget.getSimpleName());
-	}
+        this.previousElementName = this.varplaceholder.getInvocation().getExecutable()
+                .getSimpleName()/* varplaceholder.getName() */;
+        this.varplaceholder.getInvocation().getExecutable()
+                .setSimpleName(this.selectedExecutableTarget.getSimpleName());
+    }
 
-	@Override
-	public void revert() {
-		this.varplaceholder.getInvocation().getExecutable().setSimpleName(previousElementName);
+    @Override
+    public void revert() {
+        this.varplaceholder.getInvocation().getExecutable().setSimpleName(previousElementName);
 
-	}
+    }
 
-	public String toString() {
-		return this.getClass().getSimpleName() + " (" + selectedExecutableTarget.getSimpleName() + " --> "
-				+ this.varplaceholder.getName() + ")";
-	}
+    public String toString() {
+        return this.getClass().getSimpleName() + " (" + selectedExecutableTarget.getSimpleName() + " --> "
+                + this.varplaceholder.getName() + ")";
+    }
 }

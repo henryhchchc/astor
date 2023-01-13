@@ -35,200 +35,200 @@ import spoon.reflect.declaration.CtType;
  */
 public class ProcessEvoSuiteValidator extends JUnitProcessValidator {
 
-	protected Logger log = Logger.getLogger(Thread.currentThread().getName());
+    protected Logger log = Logger.getLogger(Thread.currentThread().getName());
 
-	protected List<CtClass> evoTestClasses = new ArrayList<>();
+    protected List<CtClass> evoTestClasses = new ArrayList<>();
 
-	protected List<String> testAlreadyGenerated = new ArrayList<String>();
+    protected List<String> testAlreadyGenerated = new ArrayList<String>();
 
-	public ProcessEvoSuiteValidator() {
-		evoTestClasses = new ArrayList<>();
-	}
+    public ProcessEvoSuiteValidator() {
+        evoTestClasses = new ArrayList<>();
+    }
 
-	/**
-	 * Process-based validation Advantage: stability, memory consumption, CG
-	 * activity Disadvantage: time.
-	 * 
-	 * @param currentVariant
-	 * @return
-	 */
-	@Override
-	public TestCaseVariantValidationResult validate(ProgramVariant currentVariant, ProjectRepairFacade projectFacade) {
+    /**
+     * Process-based validation Advantage: stability, memory consumption, CG
+     * activity Disadvantage: time.
+     * 
+     * @param currentVariant
+     * @return
+     */
+    @Override
+    public TestCaseVariantValidationResult validate(ProgramVariant currentVariant, ProjectRepairFacade projectFacade) {
 
-		try {
-			boolean executeAlloriginalValidation = false;
-			TestCaseVariantValidationResult resultOriginal = super.validate(currentVariant, projectFacade,
-					executeAlloriginalValidation);
-			if (resultOriginal == null || !resultOriginal.isSuccessful()) {
-				// It's not a solution, we discard this.
-				return resultOriginal;
-			}
-			boolean runESoverOriginalBuggyClass = ConfigurationProperties.getPropertyBool("evoRunOnBuggyClass");
+        try {
+            boolean executeAlloriginalValidation = false;
+            TestCaseVariantValidationResult resultOriginal = super.validate(currentVariant, projectFacade,
+                    executeAlloriginalValidation);
+            if (resultOriginal == null || !resultOriginal.isSuccessful()) {
+                // It's not a solution, we discard this.
+                return resultOriginal;
+            }
+            boolean runESoverOriginalBuggyClass = ConfigurationProperties.getPropertyBool("evoRunOnBuggyClass");
 
-			TestCaseVariantValidationResult resultEvoExecution = runTestFromEvoSuite(currentVariant, projectFacade,
-					runESoverOriginalBuggyClass);
-			log.info("Evo Result " + resultEvoExecution.toString());
+            TestCaseVariantValidationResult resultEvoExecution = runTestFromEvoSuite(currentVariant, projectFacade,
+                    runESoverOriginalBuggyClass);
+            log.info("Evo Result " + resultEvoExecution.toString());
 
-			EvoSuiteValidationResult evoResult = new EvoSuiteValidationResult();
-			evoResult.setManualTestValidation(resultOriginal);
-			evoResult.setEvoValidation(resultEvoExecution);
-			return evoResult;
+            EvoSuiteValidationResult evoResult = new EvoSuiteValidationResult();
+            evoResult.setManualTestValidation(resultOriginal);
+            evoResult.setEvoValidation(resultEvoExecution);
+            return evoResult;
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-	/** Generates and runs evosuite test cases **/
-	public TestCaseVariantValidationResult runTestFromEvoSuite(ProgramVariant currentVariant,
-			ProjectRepairFacade projectFacade, boolean runOverOriginal) throws Exception {
-		log.info("Running Evosuite for variant " + currentVariant.currentMutatorIdentifier());
+    /** Generates and runs evosuite test cases **/
+    public TestCaseVariantValidationResult runTestFromEvoSuite(ProgramVariant currentVariant,
+            ProjectRepairFacade projectFacade, boolean runOverOriginal) throws Exception {
+        log.info("Running Evosuite for variant " + currentVariant.currentMutatorIdentifier());
 
-		log.debug("Run ES over " + ((runOverOriginal) ? "default" : "patched"));
+        log.debug("Run ES over " + ((runOverOriginal) ? "default" : "patched"));
 
-		String sufix = (runOverOriginal) ? "default" : ("var" + currentVariant.getId());
+        String sufix = (runOverOriginal) ? "default" : ("var" + currentVariant.getId());
 
-		EvoSuiteFacade fev = new EvoSuiteFacade();
-		String testEScodepath = projectFacade.getInDirWithPrefix(
-				ConfigurationProperties.getProperty("evosuiteresultfolder") + File.separator + sufix);
-		File esPath = new File(testEScodepath);
-		log.info("Evo output: " + esPath);
+        EvoSuiteFacade fev = new EvoSuiteFacade();
+        String testEScodepath = projectFacade.getInDirWithPrefix(
+                ConfigurationProperties.getProperty("evosuiteresultfolder") + File.separator + sufix);
+        File esPath = new File(testEScodepath);
+        log.info("Evo output: " + esPath);
 
-		// Set up dirs
-		String classpathForCompile = "";
-		classpathForCompile = projectFacade.getProperties().getDependenciesString() + File.pathSeparator
-				+ projectFacade.getOutDirWithPrefix(currentVariant.currentMutatorIdentifier()) + File.pathSeparator//
-				+ new File(ConfigurationProperties.getProperty("evosuitejar")).getAbsolutePath() + File.pathSeparator
-				+ projectFacade.getOutDirWithPrefix(currentVariant.DEFAULT_ORIGINAL_VARIANT);
+        // Set up dirs
+        String classpathForCompile = "";
+        classpathForCompile = projectFacade.getProperties().getDependenciesString() + File.pathSeparator
+                + projectFacade.getOutDirWithPrefix(currentVariant.currentMutatorIdentifier()) + File.pathSeparator//
+                + new File(ConfigurationProperties.getProperty("evosuitejar")).getAbsolutePath() + File.pathSeparator
+                + projectFacade.getOutDirWithPrefix(currentVariant.DEFAULT_ORIGINAL_VARIANT);
 
-		String outPutTest = projectFacade.getOutDirWithPrefix("/evosuite/evosuite-tests/" + sufix);
+        String outPutTest = projectFacade.getOutDirWithPrefix("/evosuite/evosuite-tests/" + sufix);
 
-		List<String> classesToGenerateTests = new ArrayList<String>();
-		List<String> testToExecute = new ArrayList<String>();
+        List<String> classesToGenerateTests = new ArrayList<String>();
+        List<String> testToExecute = new ArrayList<String>();
 
-		// Classed affected by the patch
-		List<CtType<?>> typesToProcess = fev.getClassesToProcess(currentVariant);
+        // Classed affected by the patch
+        List<CtType<?>> typesToProcess = fev.getClassesToProcess(currentVariant);
 
-		//
-		// See which we have to execute, if this runOverPatch, all are included
-		for (CtType<?> ctType : typesToProcess) {
-			String stype = ctType.getQualifiedName();
-			String testName = stype + EvoSuiteFacade.EVOSUITE_SUFFIX;
-			if (!runOverOriginal || !testAlreadyGenerated.contains(testName)) {
-				classesToGenerateTests.add(stype);
-			}
-			// all test affected must be executed
-			testToExecute.add(testName);
-		}
+        //
+        // See which we have to execute, if this runOverPatch, all are included
+        for (CtType<?> ctType : typesToProcess) {
+            String stype = ctType.getQualifiedName();
+            String testName = stype + EvoSuiteFacade.EVOSUITE_SUFFIX;
+            if (!runOverOriginal || !testAlreadyGenerated.contains(testName)) {
+                classesToGenerateTests.add(stype);
+            }
+            // all test affected must be executed
+            testToExecute.add(testName);
+        }
 
-		log.debug("Classes Affected: " + classesToGenerateTests);
+        log.debug("Classes Affected: " + classesToGenerateTests);
 
-		if (classesToGenerateTests.size() > 0) {
+        if (classesToGenerateTests.size() > 0) {
 
-			List<String> pathTestGenerated = new ArrayList<String>();
+            List<String> pathTestGenerated = new ArrayList<String>();
 
-			log.debug("Generating test for the first time");
-			boolean executed = fev.runEvosuite(currentVariant, classesToGenerateTests, projectFacade, testEScodepath,
-					runOverOriginal);
+            log.debug("Generating test for the first time");
+            boolean executed = fev.runEvosuite(currentVariant, classesToGenerateTests, projectFacade, testEScodepath,
+                    runOverOriginal);
 
-			// we collect the files generated
+            // we collect the files generated
 
-			Collection<File> files = FileUtils.listFiles(esPath, new RegexFileFilter("^(.*?)"),
-					DirectoryFileFilter.DIRECTORY);
-			for (File file : files) {
-				pathTestGenerated.add(file.getAbsolutePath());
-			}
+            Collection<File> files = FileUtils.listFiles(esPath, new RegexFileFilter("^(.*?)"),
+                    DirectoryFileFilter.DIRECTORY);
+            for (File file : files) {
+                pathTestGenerated.add(file.getAbsolutePath());
+            }
 
-			List<String> testGenerated = new ArrayList<>();
+            List<String> testGenerated = new ArrayList<>();
 
-			// Collect test generated from files generated by ES
-			for (String f : pathTestGenerated) {
-				String qualifiedTestName = f.replace(".java", "").replace(esPath.toString(), "")
-						.replace("/evosuite-tests/", "").replace(File.separator, ".");
-				if (!qualifiedTestName.endsWith(EvoSuiteFacade.EVOSUITE_scaffolding_SUFFIX) && classesToGenerateTests
-						.contains(qualifiedTestName.replace(EvoSuiteFacade.EVOSUITE_SUFFIX, ""))) {
-					testGenerated.add(qualifiedTestName);
-				}
-			}
-			// check if number of test cases generated is the same that the
-			// number of test case we wanted to generate
-			if (classesToGenerateTests.size() != testGenerated.size()) {
-				log.error("ES did not generate all test cases that I should do, test generated " + testGenerated
-						+ ", classes under generation " + classesToGenerateTests);
-			}
-			log.debug("Generated tests to run: " + testGenerated);
+            // Collect test generated from files generated by ES
+            for (String f : pathTestGenerated) {
+                String qualifiedTestName = f.replace(".java", "").replace(esPath.toString(), "")
+                        .replace("/evosuite-tests/", "").replace(File.separator, ".");
+                if (!qualifiedTestName.endsWith(EvoSuiteFacade.EVOSUITE_scaffolding_SUFFIX) && classesToGenerateTests
+                        .contains(qualifiedTestName.replace(EvoSuiteFacade.EVOSUITE_SUFFIX, ""))) {
+                    testGenerated.add(qualifiedTestName);
+                }
+            }
+            // check if number of test cases generated is the same that the
+            // number of test case we wanted to generate
+            if (classesToGenerateTests.size() != testGenerated.size()) {
+                log.error("ES did not generate all test cases that I should do, test generated " + testGenerated
+                        + ", classes under generation " + classesToGenerateTests);
+            }
+            log.debug("Generated tests to run: " + testGenerated);
 
-			testAlreadyGenerated.addAll(testGenerated);
+            testAlreadyGenerated.addAll(testGenerated);
 
-			// Now, Compilation of generated test cases.
+            // Now, Compilation of generated test cases.
 
-			// WE COMPILE EVO TEST
-			log.info("Classpath " + classpathForCompile);
+            // WE COMPILE EVO TEST
+            log.info("Classpath " + classpathForCompile);
 
-			String javaPath = ConfigurationProperties.getProperty("jvm4evosuitetestexecution");
-			List<String> command = new ArrayList<String>();
-			command.add(javaPath + File.separator + "javac");
-			command.add("-classpath");
-			command.add(classpathForCompile);
-			command.add("-d");
+            String javaPath = ConfigurationProperties.getProperty("jvm4evosuitetestexecution");
+            List<String> command = new ArrayList<String>();
+            command.add(javaPath + File.separator + "javac");
+            command.add("-classpath");
+            command.add(classpathForCompile);
+            command.add("-d");
 
-			//// Save compiled
-			File fout = new File(outPutTest);
-			fout.mkdirs();
-			command.add(outPutTest);
+            //// Save compiled
+            File fout = new File(outPutTest);
+            fout.mkdirs();
+            command.add(outPutTest);
 
-			// Adding the files
-			for (String testPath : pathTestGenerated) {
-				command.add(testPath);
-			}
-			// Run compilation:
-			fev.runProcess(command.toArray(new String[command.size()]));
+            // Adding the files
+            for (String testPath : pathTestGenerated) {
+                command.add(testPath);
+            }
+            // Run compilation:
+            fev.runProcess(command.toArray(new String[command.size()]));
 
-		} else {
-			log.debug("Any test to generate, all test cases were generated before: " + testAlreadyGenerated);
-		}
+        } else {
+            log.debug("Any test to generate, all test cases were generated before: " + testAlreadyGenerated);
+        }
 
-		String classpathForRunTest = classpathForCompile + (File.pathSeparator) + outPutTest + File.pathSeparator
-				+ System.getProperty("java.class.path");
-		log.info("Process classpath " + classpathForRunTest);
+        String classpathForRunTest = classpathForCompile + (File.pathSeparator) + outPutTest + File.pathSeparator
+                + System.getProperty("java.class.path");
+        log.info("Process classpath " + classpathForRunTest);
 
-		ProcessEvoSuiteValidator evoProcess = new ProcessEvoSuiteValidator();
-		TestCaseVariantValidationResult evoResult = evoProcess.executeRegressionTesting(
-				Converters.toURLArray(classpathForRunTest.split(File.pathSeparator)), testToExecute);
+        ProcessEvoSuiteValidator evoProcess = new ProcessEvoSuiteValidator();
+        TestCaseVariantValidationResult evoResult = evoProcess.executeRegressionTesting(
+                Converters.toURLArray(classpathForRunTest.split(File.pathSeparator)), testToExecute);
 
-		return evoResult;
+        return evoResult;
 
-	}
+    }
 
-	public TestCasesProgramValidationResult executeRegressionTesting(URL[] processClasspath,
-			List<String> testCasesRegression) {
-		boolean avoidInterrupt = true;
-		return executeRegressionTesting(processClasspath, testCasesRegression, avoidInterrupt);
-	}
+    public TestCasesProgramValidationResult executeRegressionTesting(URL[] processClasspath,
+            List<String> testCasesRegression) {
+        boolean avoidInterrupt = true;
+        return executeRegressionTesting(processClasspath, testCasesRegression, avoidInterrupt);
+    }
 
-	public TestCasesProgramValidationResult executeRegressionTesting(URL[] processClasspath,
-			List<String> testCasesRegression, boolean avoidInterrupt) {
-		log.debug("Executing EvosuiteTest :" + testCasesRegression);
+    public TestCasesProgramValidationResult executeRegressionTesting(URL[] processClasspath,
+            List<String> testCasesRegression, boolean avoidInterrupt) {
+        log.debug("Executing EvosuiteTest :" + testCasesRegression);
 
-		LaucherJUnitProcess process = new LaucherJUnitProcess(avoidInterrupt);
+        LaucherJUnitProcess process = new LaucherJUnitProcess(avoidInterrupt);
 
-		int time = 60000;
-		String jvmPath = ConfigurationProperties.getProperty("jvm4evosuitetestexecution");
-		TestResult trregression = process.execute(jvmPath, processClasspath, testCasesRegression, time);
+        int time = 60000;
+        String jvmPath = ConfigurationProperties.getProperty("jvm4evosuitetestexecution");
+        TestResult trregression = process.execute(jvmPath, processClasspath, testCasesRegression, time);
 
-		if (trregression == null) {
-			currentStats.increment(GeneralStatEnum.NR_FAILING_VALIDATION_PROCESS);
+        if (trregression == null) {
+            currentStats.increment(GeneralStatEnum.NR_FAILING_VALIDATION_PROCESS);
 
-			boolean error = true;
-			return new TestCasesProgramValidationResult(error);
+            boolean error = true;
+            return new TestCasesProgramValidationResult(error);
 
-		} else {
-			log.debug(trregression);
-			return new TestCasesProgramValidationResult(trregression, trregression.wasSuccessful(),
-					(trregression != null));
+        } else {
+            log.debug(trregression);
+            return new TestCasesProgramValidationResult(trregression, trregression.wasSuccessful(),
+                    (trregression != null));
 
-		}
-	}
+        }
+    }
 
 }

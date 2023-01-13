@@ -19,42 +19,42 @@ import org.apache.log4j.Logger;
  */
 public class ClusteringParser {
 
-	private static Logger logger = Logger.getLogger(ClusteringParser.class.getName());
+    private static Logger logger = Logger.getLogger(ClusteringParser.class.getName());
 
-	Map<String, List<String>> clusters = new TreeMap<>();
+    Map<String, List<String>> clusters = new TreeMap<>();
 
-	public Map<String, List<String>> getClusters() {
-		return clusters;
-	}
+    public Map<String, List<String>> getClusters() {
+        return clusters;
+    }
 
-	public Map<String, List<String>> readClusterFile(Path file) {
+    public Map<String, List<String>> readClusterFile(Path file) {
 
-		if (!clusters.isEmpty())
-			return clusters;
+        if (!clusters.isEmpty())
+            return clusters;
 
-		logger.debug("reading " + file);
-		Charset charset = Charset.forName("US-ASCII");
-		try (BufferedReader reader = Files.newBufferedReader(file, charset)) {
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				String[] metad = line.split(",");
-				String lexicalElement = metad[0];
-				String idcluster = metad[1];
-				List<String> clusterElements = new ArrayList<String>();
+        logger.debug("reading " + file);
+        Charset charset = Charset.forName("US-ASCII");
+        try (BufferedReader reader = Files.newBufferedReader(file, charset)) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                String[] metad = line.split(",");
+                String lexicalElement = metad[0];
+                String idcluster = metad[1];
+                List<String> clusterElements = new ArrayList<String>();
 
-				if (metad.length == 3) {
-					String cluster = metad[2];
-					for (String elementCluster : cluster.split(";")) {
-						clusterElements.add(elementCluster);
-					}
-				}
-				clusters.put(lexicalElement, clusterElements);
+                if (metad.length == 3) {
+                    String cluster = metad[2];
+                    for (String elementCluster : cluster.split(";")) {
+                        clusterElements.add(elementCluster);
+                    }
+                }
+                clusters.put(lexicalElement, clusterElements);
 
-			}
-		} catch (IOException x) {
-			logger.error("IOException: %s%n", x);
-		}
-		return clusters;
-	}
+            }
+        } catch (IOException x) {
+            logger.error("IOException: %s%n", x);
+        }
+        return clusters;
+    }
 
 }

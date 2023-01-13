@@ -11,33 +11,33 @@ import spoon.reflect.code.CtVariableAccess;
  */
 public class VarLiTransformation implements Transformation {
 
-	@SuppressWarnings("rawtypes")
-	CtVariableAccess previousVariable = null;
-	CtLiteral newLiteral = null;
-	VarLiPlaceholder varLiPlaceholder = null;
+    @SuppressWarnings("rawtypes")
+    CtVariableAccess previousVariable = null;
+    CtLiteral newLiteral = null;
+    VarLiPlaceholder varLiPlaceholder = null;
 
-	public VarLiTransformation(VarLiPlaceholder varLiPlaceholder, CtVariableAccess previousVariable,
-			CtLiteral newLiteral) {
-		super();
-		this.varLiPlaceholder = varLiPlaceholder;
-		this.previousVariable = previousVariable;
-		this.newLiteral = newLiteral;
-	}
+    public VarLiTransformation(VarLiPlaceholder varLiPlaceholder, CtVariableAccess previousVariable,
+            CtLiteral newLiteral) {
+        super();
+        this.varLiPlaceholder = varLiPlaceholder;
+        this.previousVariable = previousVariable;
+        this.newLiteral = newLiteral;
+    }
 
-	@Override
-	public void apply() {
-		previousVariable.replace(newLiteral);
+    @Override
+    public void apply() {
+        previousVariable.replace(newLiteral);
 
-	}
+    }
 
-	@Override
-	public void revert() {
-		newLiteral.replace(previousVariable);
+    @Override
+    public void revert() {
+        newLiteral.replace(previousVariable);
 
-	}
+    }
 
-	public String toString() {
-		return this.getClass().getSimpleName() + " (" + newLiteral + " --> "
-				+ this.varLiPlaceholder.getPlaceholder_name() + ") ";
-	}
+    public String toString() {
+        return this.getClass().getSimpleName() + " (" + newLiteral + " --> "
+                + this.varLiPlaceholder.getPlaceholder_name() + ") ";
+    }
 }

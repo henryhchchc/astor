@@ -11,10 +11,10 @@ import fr.inria.astor.core.solutionsearch.extension.AstorExtensionPoint;
  */
 public interface FitnessFunction extends  AstorExtensionPoint {
 
-	
-	public double calculateFitnessValue(VariantValidationResult validationResult);
+    
+    public double calculateFitnessValue(VariantValidationResult validationResult);
 
-	
-	public double getWorstMaxFitnessValue();
-	
+    
+    public double getWorstMaxFitnessValue();
+    
 }

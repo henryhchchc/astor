@@ -46,222 +46,222 @@ import spoon.reflect.reference.CtExecutableReference;
  */
 public class PatchGenerator {
 
-	protected static Logger logger = Logger.getLogger(PatchGenerator.class.getName());
+    protected static Logger logger = Logger.getLogger(PatchGenerator.class.getName());
 
-	LiteralsSpace literalspace = null;
+    LiteralsSpace literalspace = null;
 
-	public PatchGenerator() {
-		literalspace = null;
-	}
+    public PatchGenerator() {
+        literalspace = null;
+    }
 
-	@SuppressWarnings("rawtypes")
-	public List<Transformation> process(ModificationPoint modificationPoint, InvocationPlaceholder varplaceholder) {
+    @SuppressWarnings("rawtypes")
+    public List<Transformation> process(ModificationPoint modificationPoint, InvocationPlaceholder varplaceholder) {
 
-		List<Transformation> transformed = new ArrayList<>();
-		InvocationMatching matchingVar = InvocationResolver.mapImplicitInvocation(modificationPoint.getCtClass(),
-				varplaceholder.getInvocation());
+        List<Transformation> transformed = new ArrayList<>();
+        InvocationMatching matchingVar = InvocationResolver.mapImplicitInvocation(modificationPoint.getCtClass(),
+                varplaceholder.getInvocation());
 
-		if (!matchingVar.isCorrect()) {
-			logger.debug("Incorrect: we cannot put that ingredient there.");
-			return transformed;
-		} else {
-			//
-			if (matchingVar.TARGET_IS_VARIABLE.equals(matchingVar)) {
-				Collection<CtExecutableReference<?>> allExecutables = varplaceholder.getTarget().getAllExecutables();
-				for (CtExecutableReference executableTarget : allExecutables) {
+        if (!matchingVar.isCorrect()) {
+            logger.debug("Incorrect: we cannot put that ingredient there.");
+            return transformed;
+        } else {
+            //
+            if (matchingVar.TARGET_IS_VARIABLE.equals(matchingVar)) {
+                Collection<CtExecutableReference<?>> allExecutables = varplaceholder.getTarget().getAllExecutables();
+                for (CtExecutableReference executableTarget : allExecutables) {
 
-					createTransformations(varplaceholder, transformed, executableTarget);
-				}
-			} else if (InvocationMatching.TARGET_SAME_TYPE.equals(matchingVar)
-					|| InvocationMatching.SAME_SIGNATURE_FROM_DIFF_TYPE.equals(matchingVar)) {
-				CtAbstractInvocation inv = varplaceholder.getInvocation();
-				CtExecutableReference executableTarget = inv.getExecutable();
-				createTransformations(varplaceholder, transformed, executableTarget);
-			}
-		}
+                    createTransformations(varplaceholder, transformed, executableTarget);
+                }
+            } else if (InvocationMatching.TARGET_SAME_TYPE.equals(matchingVar)
+                    || InvocationMatching.SAME_SIGNATURE_FROM_DIFF_TYPE.equals(matchingVar)) {
+                CtAbstractInvocation inv = varplaceholder.getInvocation();
+                CtExecutableReference executableTarget = inv.getExecutable();
+                createTransformations(varplaceholder, transformed, executableTarget);
+            }
+        }
 
-		return transformed;
+        return transformed;
 
-	}
+    }
 
-	private void createTransformations(InvocationPlaceholder varplaceholder, List<Transformation> transformed,
-			CtExecutableReference executableTarget) {
-		if (executableTarget.getType().equals(varplaceholder.getType()) && varplaceholder.getInvocation()
-				.getExecutable().getParameters().equals(executableTarget.getParameters())) {
+    private void createTransformations(InvocationPlaceholder varplaceholder, List<Transformation> transformed,
+            CtExecutableReference executableTarget) {
+        if (executableTarget.getType().equals(varplaceholder.getType()) && varplaceholder.getInvocation()
+                .getExecutable().getParameters().equals(executableTarget.getParameters())) {
 
-			InvocationTransformation it = new InvocationTransformation(varplaceholder, executableTarget);
+            InvocationTransformation it = new InvocationTransformation(varplaceholder, executableTarget);
 
-			transformed.add(it);
-		}
-	}
+            transformed.add(it);
+        }
+    }
 
-	@SuppressWarnings("rawtypes")
-	public List<Transformation> process(ModificationPoint modificationPoint, VariablePlaceholder varplaceholder) {
+    @SuppressWarnings("rawtypes")
+    public List<Transformation> process(ModificationPoint modificationPoint, VariablePlaceholder varplaceholder) {
 
-		List<Transformation> transformation = new ArrayList<>();
+        List<Transformation> transformation = new ArrayList<>();
 
-		// Vars in scope at the modification point
-		List<Transformation> transformationVariables = replaceByVars(varplaceholder, modificationPoint);
-		transformation.addAll(transformationVariables);
+        // Vars in scope at the modification point
+        List<Transformation> transformationVariables = replaceByVars(varplaceholder, modificationPoint);
+        transformation.addAll(transformationVariables);
 
-		return transformation;
-	}
+        return transformation;
+    }
 
-	@SuppressWarnings("rawtypes")
-	private List<Transformation> replaceByVars(VariablePlaceholder varplaceholder,
-			ModificationPoint modificationPoint) {
-		List<CtVariable> variablesInScope = modificationPoint.getContextOfModificationPoint();
+    @SuppressWarnings("rawtypes")
+    private List<Transformation> replaceByVars(VariablePlaceholder varplaceholder,
+            ModificationPoint modificationPoint) {
+        List<CtVariable> variablesInScope = modificationPoint.getContextOfModificationPoint();
 
-		List<Transformation> transformation = new ArrayList<>();
-		// Check Those vars not transformed must exist in context
-		List<CtVariableAccess> concreteVars = varplaceholder.getVariablesNotModified();
-		List<CtVariableAccess> outOfContext = VariableResolver.retriveVariablesOutOfContext(variablesInScope,
-				concreteVars);
-		if (outOfContext != null && !outOfContext.isEmpty()) {
-			logger.debug("Concrete vars could not be mapped  " + outOfContext + "\nin context: " + variablesInScope);
-			return transformation;
+        List<Transformation> transformation = new ArrayList<>();
+        // Check Those vars not transformed must exist in context
+        List<CtVariableAccess> concreteVars = varplaceholder.getVariablesNotModified();
+        List<CtVariableAccess> outOfContext = VariableResolver.retriveVariablesOutOfContext(variablesInScope,
+                concreteVars);
+        if (outOfContext != null && !outOfContext.isEmpty()) {
+            logger.debug("Concrete vars could not be mapped  " + outOfContext + "\nin context: " + variablesInScope);
+            return transformation;
 
-		}
+        }
 
-		// Once we mapped all concrete variables (i.e., not transformed), and we
-		// are sure they exist in
-		// context.
+        // Once we mapped all concrete variables (i.e., not transformed), and we
+        // are sure they exist in
+        // context.
 
-		// Now we map placeholders with vars in scope:
-		MapList<String, CtVariableAccess> placeholders = varplaceholder.getPalceholders();
+        // Now we map placeholders with vars in scope:
+        MapList<String, CtVariableAccess> placeholders = varplaceholder.getPalceholders();
 
-		List<CtVariableAccess> placeholdersVariables = new ArrayList<>();
-		for (List<CtVariableAccess> pvs : placeholders.values()) {
-			placeholdersVariables.addAll(pvs);
-		}
+        List<CtVariableAccess> placeholdersVariables = new ArrayList<>();
+        for (List<CtVariableAccess> pvs : placeholders.values()) {
+            placeholdersVariables.addAll(pvs);
+        }
 
-		logger.debug("Placeholder variables to map: " + placeholdersVariables);
-		VarMapping mapping = VariableResolver.mapVariablesFromContext(variablesInScope, placeholdersVariables);
+        logger.debug("Placeholder variables to map: " + placeholdersVariables);
+        VarMapping mapping = VariableResolver.mapVariablesFromContext(variablesInScope, placeholdersVariables);
 
-		// if we map all placeholder variables
-		if (mapping.getNotMappedVariables().isEmpty()) {
-			if (mapping.getMappedVariables().isEmpty()) {
-				// nothing to transform, accept the ingredient
-				logger.debug("Something is wrong: Any placeholder var was mapped ");
+        // if we map all placeholder variables
+        if (mapping.getNotMappedVariables().isEmpty()) {
+            if (mapping.getMappedVariables().isEmpty()) {
+                // nothing to transform, accept the ingredient
+                logger.debug("Something is wrong: Any placeholder var was mapped ");
 
-			} else {
+            } else {
 
-				List<VarCombinationForIngredient> allCombinations = findAllVarMappingCombinationUsingRandom(
-						mapping.getMappedVariables());
+                List<VarCombinationForIngredient> allCombinations = findAllVarMappingCombinationUsingRandom(
+                        mapping.getMappedVariables());
 
-				if (allCombinations.size() > 0) {
+                if (allCombinations.size() > 0) {
 
-					for (VarCombinationForIngredient varCombinationForIngredient : allCombinations) {
-						transformation.add(new VariableTransformation(varplaceholder, placeholders,
-								varCombinationForIngredient, mapping));
-					}
-				}
-			}
-		} else {
+                    for (VarCombinationForIngredient varCombinationForIngredient : allCombinations) {
+                        transformation.add(new VariableTransformation(varplaceholder, placeholders,
+                                varCombinationForIngredient, mapping));
+                    }
+                }
+            }
+        } else {
 
-			// Placeholders without mapping: we discart it.
-			logger.debug(
-					String.format("Placeholders without mapping (%d/%d): %s ", mapping.getNotMappedVariables().size(),
-							placeholdersVariables.size(), mapping.getNotMappedVariables().toString()));
-			String varContext = "";
-			for (CtVariable context : variablesInScope) {
-				varContext += context.getSimpleName() + " " + context.getType().getQualifiedName() + ", ";
-			}
-			logger.debug("Context: " + varContext);
-			for (CtVariableAccess ingredient : mapping.getNotMappedVariables()) {
-				logger.debug("---out_of_context: " + ingredient.getVariable().getSimpleName() + ": "
-						+ ingredient.getVariable().getType().getQualifiedName());
-			}
-		}
-		return transformation;
-	}
+            // Placeholders without mapping: we discart it.
+            logger.debug(
+                    String.format("Placeholders without mapping (%d/%d): %s ", mapping.getNotMappedVariables().size(),
+                            placeholdersVariables.size(), mapping.getNotMappedVariables().toString()));
+            String varContext = "";
+            for (CtVariable context : variablesInScope) {
+                varContext += context.getSimpleName() + " " + context.getType().getQualifiedName() + ", ";
+            }
+            logger.debug("Context: " + varContext);
+            for (CtVariableAccess ingredient : mapping.getNotMappedVariables()) {
+                logger.debug("---out_of_context: " + ingredient.getVariable().getSimpleName() + ": "
+                        + ingredient.getVariable().getType().getQualifiedName());
+            }
+        }
+        return transformation;
+    }
 
-	@SuppressWarnings("rawtypes")
-	public List<VarCombinationForIngredient> findAllVarMappingCombinationUsingRandom(
-			Map<VarAccessWrapper, List<CtVariable>> mappedVars) {
+    @SuppressWarnings("rawtypes")
+    public List<VarCombinationForIngredient> findAllVarMappingCombinationUsingRandom(
+            Map<VarAccessWrapper, List<CtVariable>> mappedVars) {
 
-		List<VarCombinationForIngredient> allCom = new ArrayList<>();
+        List<VarCombinationForIngredient> allCom = new ArrayList<>();
 
-		List<Map<String, CtVariable>> allWithoutOrder = VariableResolver.findAllVarMappingCombination(mappedVars, null);
+        List<Map<String, CtVariable>> allWithoutOrder = VariableResolver.findAllVarMappingCombination(mappedVars, null);
 
-		for (Map<String, CtVariable> varMapping : allWithoutOrder) {
-			try {
-				VarCombinationForIngredient varCombinationWrapper = new VarCombinationForIngredient(varMapping);
-				// In random mode, all same probabilities
-				varCombinationWrapper.setProbality((double) 1 / (double) allWithoutOrder.size());
-				allCom.add(varCombinationWrapper);
-			} catch (Exception e) {
-				logger.error("Error for obtaining a string representation of combination with " + varMapping.size()
-						+ " variables");
-			}
-		}
-		Collections.shuffle(allCom, RandomManager.getRandom());
+        for (Map<String, CtVariable> varMapping : allWithoutOrder) {
+            try {
+                VarCombinationForIngredient varCombinationWrapper = new VarCombinationForIngredient(varMapping);
+                // In random mode, all same probabilities
+                varCombinationWrapper.setProbality((double) 1 / (double) allWithoutOrder.size());
+                allCom.add(varCombinationWrapper);
+            } catch (Exception e) {
+                logger.error("Error for obtaining a string representation of combination with " + varMapping.size()
+                        + " variables");
+            }
+        }
+        Collections.shuffle(allCom, RandomManager.getRandom());
 
-		logger.debug("Number combination RANDOMLY sorted : " + allCom.size() + " over " + allWithoutOrder.size());
+        logger.debug("Number combination RANDOMLY sorted : " + allCom.size() + " over " + allWithoutOrder.size());
 
-		return allCom;
+        return allCom;
 
-	}
+    }
 
-	public LiteralsSpace getSpace(ProgramVariant pv) {
+    public LiteralsSpace getSpace(ProgramVariant pv) {
 
-		String scope = ConfigurationProperties.properties.getProperty("scope");
-		IngredientPoolScope ingScope = IngredientPoolScope.valueOf(scope.toUpperCase());
-		if (literalspace == null) {
-			try {
-				logger.debug("Initializing literal space: scope " + ingScope);
-				literalspace = new LiteralsSpace(ingScope);
-				literalspace.defineSpace(pv);
+        String scope = ConfigurationProperties.properties.getProperty("scope");
+        IngredientPoolScope ingScope = IngredientPoolScope.valueOf(scope.toUpperCase());
+        if (literalspace == null) {
+            try {
+                logger.debug("Initializing literal space: scope " + ingScope);
+                literalspace = new LiteralsSpace(ingScope);
+                literalspace.defineSpace(pv);
 
-			} catch (JSAPException e) {
-				e.printStackTrace();
-				logger.error(e);
-			}
-		}
-		return literalspace;
-	}
+            } catch (JSAPException e) {
+                e.printStackTrace();
+                logger.error(e);
+            }
+        }
+        return literalspace;
+    }
 
-	public List<Transformation> process(ModificationPoint modificationPoint, LiteralPlaceholder literalPlaceholder) {
+    public List<Transformation> process(ModificationPoint modificationPoint, LiteralPlaceholder literalPlaceholder) {
 
-		List<Transformation> transformation = new ArrayList<>();
+        List<Transformation> transformation = new ArrayList<>();
 
-		///
-		List<Ingredient> ingredients = getSpace(modificationPoint.getProgramVariant())
-				.getIngredients(modificationPoint.getCodeElement());
-		logger.debug("Ingredients lit (" + ingredients.size() + ") " + ingredients);
-		// logger.debug("Placeholder vars "+
-		// varplaceholder.getPalceholders().keySet().size());
+        ///
+        List<Ingredient> ingredients = getSpace(modificationPoint.getProgramVariant())
+                .getIngredients(modificationPoint.getCodeElement());
+        logger.debug("Ingredients lit (" + ingredients.size() + ") " + ingredients);
+        // logger.debug("Placeholder vars "+
+        // varplaceholder.getPalceholders().keySet().size());
 
-		for (Ingredient ctCodeElement : ingredients) {
-			CtLiteral literal4Space = (CtLiteral) ctCodeElement.getCode();
-			if (literal4Space.getType().isSubtypeOf(literalPlaceholder.getAffected().getType())) {
-				Transformation t = new LiteralTransformation(literalPlaceholder, literalPlaceholder.getAffected(),
-						literal4Space.getValue());
-				transformation.add(t);
-			}
-		}
+        for (Ingredient ctCodeElement : ingredients) {
+            CtLiteral literal4Space = (CtLiteral) ctCodeElement.getCode();
+            if (literal4Space.getType().isSubtypeOf(literalPlaceholder.getAffected().getType())) {
+                Transformation t = new LiteralTransformation(literalPlaceholder, literalPlaceholder.getAffected(),
+                        literal4Space.getValue());
+                transformation.add(t);
+            }
+        }
 
-		return transformation;
-	}
+        return transformation;
+    }
 
-	public List<Transformation> process(ModificationPoint modificationPoint, VarLiPlaceholder varLiPlaceholder) {
+    public List<Transformation> process(ModificationPoint modificationPoint, VarLiPlaceholder varLiPlaceholder) {
 
-		List<Transformation> transformation = new ArrayList<>();
+        List<Transformation> transformation = new ArrayList<>();
 
-		List<Ingredient> ingredients = getSpace(modificationPoint.getProgramVariant())
-				.getIngredients(modificationPoint.getCodeElement());
-		logger.debug("Ingredients lit (" + ingredients.size() + ") " + ingredients);
+        List<Ingredient> ingredients = getSpace(modificationPoint.getProgramVariant())
+                .getIngredients(modificationPoint.getCodeElement());
+        logger.debug("Ingredients lit (" + ingredients.size() + ") " + ingredients);
 
-		for (Ingredient ctCodeElement : ingredients) {
-			CtLiteral literal4Space = (CtLiteral) ctCodeElement.getCode();
-			if (literal4Space.getType().isSubtypeOf(varLiPlaceholder.getAffectedVariable().getType())) {
-				Transformation t = new VarLiTransformation(varLiPlaceholder, varLiPlaceholder.getAffectedVariable(),
-						literal4Space.clone());
-				transformation.add(t);
-			}
-		}
+        for (Ingredient ctCodeElement : ingredients) {
+            CtLiteral literal4Space = (CtLiteral) ctCodeElement.getCode();
+            if (literal4Space.getType().isSubtypeOf(varLiPlaceholder.getAffectedVariable().getType())) {
+                Transformation t = new VarLiTransformation(varLiPlaceholder, varLiPlaceholder.getAffectedVariable(),
+                        literal4Space.clone());
+                transformation.add(t);
+            }
+        }
 
-		return transformation;
-	}
+        return transformation;
+    }
 
 }

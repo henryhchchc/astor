@@ -10,12 +10,12 @@ import spoon.reflect.declaration.CtElement;
  * @param <T>
  */
 public interface IMutator<T extends CtElement,M> {
-	
-	
-	public List<M> execute(T toMutate);
-	
-	public String key();
-	
-	public void setup();
+    
+    
+    public List<M> execute(T toMutate);
+    
+    public String key();
+    
+    public void setup();
 
 }

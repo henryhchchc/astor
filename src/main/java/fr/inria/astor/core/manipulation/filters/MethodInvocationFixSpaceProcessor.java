@@ -13,15 +13,15 @@ import spoon.reflect.code.CtStatement;
  */
 public class MethodInvocationFixSpaceProcessor extends TargetElementProcessor<CtInvocation> {
 
-	private Logger logger = Logger.getLogger(MethodInvocationFixSpaceProcessor.class.getName());
-	@Override
-	public void process(CtInvocation element) {
-		
-		if(element.getParent() instanceof CtBlock){
-			if(!element.toString().equals("super()"))
-				super.add((CtStatement)element);
-			
-		}
-	}
+    private Logger logger = Logger.getLogger(MethodInvocationFixSpaceProcessor.class.getName());
+    @Override
+    public void process(CtInvocation element) {
+        
+        if(element.getParent() instanceof CtBlock){
+            if(!element.toString().equals("super()"))
+                super.add((CtStatement)element);
+            
+        }
+    }
 
 }

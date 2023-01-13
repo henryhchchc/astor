@@ -5,8 +5,8 @@ package fr.inria.astor.approaches.tos.entity.transf;
  *
  */
 public interface Transformation {
-	
-	public void apply();
-	public void revert();
+    
+    public void apply();
+    public void revert();
 
 }

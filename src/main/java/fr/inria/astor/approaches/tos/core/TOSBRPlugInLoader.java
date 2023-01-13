@@ -26,41 +26,41 @@ import fr.inria.main.evolution.ExtensionPoints;
 public class TOSBRPlugInLoader {
 
 
-	public static void loadTargetElements(AstorCoreEngine approach) throws Exception {
+    public static void loadTargetElements(AstorCoreEngine approach) throws Exception {
 
-		List<TargetElementProcessor<?>> targetElementProcessors = new ArrayList<TargetElementProcessor<?>>();
-		targetElementProcessors.add(new StatementFixSpaceProcessor());
-		approach.setTargetElementProcessors(targetElementProcessors);
-	}
+        List<TargetElementProcessor<?>> targetElementProcessors = new ArrayList<TargetElementProcessor<?>>();
+        targetElementProcessors.add(new StatementFixSpaceProcessor());
+        approach.setTargetElementProcessors(targetElementProcessors);
+    }
 
-	
-	public static void loadIngredientPool(AstorCoreEngine approach) throws JSAPException, Exception {
-		IngredientBasedApproach ibra = (IngredientBasedApproach) approach;
+    
+    public static void loadIngredientPool(AstorCoreEngine approach) throws JSAPException, Exception {
+        IngredientBasedApproach ibra = (IngredientBasedApproach) approach;
 
-		List<TargetElementProcessor<?>> ingredientProcessors = approach.getTargetElementProcessors();
-		TOSIngredientPool ingredientspace = new TOSIngredientPool(ingredientProcessors);
-		String scope = ConfigurationProperties.getProperty(ExtensionPoints.INGREDIENT_STRATEGY_SCOPE.identifier);
-		if (scope != null) {
-			ingredientspace.scope = IngredientPoolScope.valueOf(scope.toUpperCase());
-		}
-		ibra.setIngredientPool(ingredientspace);
-	
-	}
+        List<TargetElementProcessor<?>> ingredientProcessors = approach.getTargetElementProcessors();
+        TOSIngredientPool ingredientspace = new TOSIngredientPool(ingredientProcessors);
+        String scope = ConfigurationProperties.getProperty(ExtensionPoints.INGREDIENT_STRATEGY_SCOPE.identifier);
+        if (scope != null) {
+            ingredientspace.scope = IngredientPoolScope.valueOf(scope.toUpperCase());
+        }
+        ibra.setIngredientPool(ingredientspace);
+    
+    }
 
 
-	public static void loadIngredientSearchStrategy(AstorCoreEngine approach) throws Exception {
+    public static void loadIngredientSearchStrategy(AstorCoreEngine approach) throws Exception {
 
-		IngredientBasedApproach ibra = (IngredientBasedApproach) approach;
+        IngredientBasedApproach ibra = (IngredientBasedApproach) approach;
 
-		ibra.setIngredientSearchStrategy(new TOSIngredientRandomSearchStrategy(ibra.getIngredientPool()));
-	}
+        ibra.setIngredientSearchStrategy(new TOSIngredientRandomSearchStrategy(ibra.getIngredientPool()));
+    }
 
-	public static void loadOperatorSpaceDefinition(AstorCoreEngine approach) throws Exception {
+    public static void loadOperatorSpaceDefinition(AstorCoreEngine approach) throws Exception {
 
-		OperatorSpace opSpace = new OperatorSpace();
-		opSpace.register(new ReplaceOp());
-		approach.setOperatorSpace(opSpace);
+        OperatorSpace opSpace = new OperatorSpace();
+        opSpace.register(new ReplaceOp());
+        approach.setOperatorSpace(opSpace);
 
-	}
+    }
 
 }

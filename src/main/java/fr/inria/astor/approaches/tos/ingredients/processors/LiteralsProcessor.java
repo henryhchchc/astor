@@ -11,9 +11,9 @@ import spoon.reflect.code.CtLiteral;
 @SuppressWarnings("rawtypes")
 public class LiteralsProcessor extends TargetElementProcessor<CtLiteral> {
 
-	@Override
-	public void process(CtLiteral element) {
-		add(element);
-	}
+    @Override
+    public void process(CtLiteral element) {
+        add(element);
+    }
 
 }

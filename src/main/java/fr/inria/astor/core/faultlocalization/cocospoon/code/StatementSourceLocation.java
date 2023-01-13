@@ -7,22 +7,22 @@ import fr.inria.astor.core.faultlocalization.cocospoon.metrics.Metric;
  */
 public class StatementSourceLocation extends AbstractStatement {
 
-	private final SourceLocation location;
+    private final SourceLocation location;
 
-	public StatementSourceLocation(Metric metric, SourceLocation location) {
-		super(metric);
-		this.location = location;
-	}
+    public StatementSourceLocation(Metric metric, SourceLocation location) {
+        super(metric);
+        this.location = location;
+    }
 
-	public SourceLocation getLocation() {
-		return location;
-	}
+    public SourceLocation getLocation() {
+        return location;
+    }
 
-	@Override
-	public String toString() {
-		return "StatementSourceLocation [location=" + location + ", getSuspiciousness()=" + getSuspiciousness() + "]";
-	}
-	
-	
-	
+    @Override
+    public String toString() {
+        return "StatementSourceLocation [location=" + location + ", getSuspiciousness()=" + getSuspiciousness() + "]";
+    }
+    
+    
+    
 }

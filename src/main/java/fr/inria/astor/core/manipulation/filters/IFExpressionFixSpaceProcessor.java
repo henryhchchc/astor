@@ -14,21 +14,21 @@ import spoon.reflect.code.CtIf;
  */
 public class IFExpressionFixSpaceProcessor extends TargetElementProcessor<CtIf>  {
 
-	private Logger logger = Logger.getLogger(IFExpressionFixSpaceProcessor.class.getName());
+    private Logger logger = Logger.getLogger(IFExpressionFixSpaceProcessor.class.getName());
 
-	public  IFExpressionFixSpaceProcessor(){
-		super();
-		
-	}
-	
-	
-	@Override
-	public void process(CtIf element) {
-		List<CtExpression<Boolean>> ctExp = ExpressionRevolver.getExpressions(element.getCondition());
-		for (CtExpression ctExpression : ctExp) {
-			super.add(ctExpression);
-		}
-	
-	}
-	
+    public  IFExpressionFixSpaceProcessor(){
+        super();
+        
+    }
+    
+    
+    @Override
+    public void process(CtIf element) {
+        List<CtExpression<Boolean>> ctExp = ExpressionRevolver.getExpressions(element.getCondition());
+        for (CtExpression ctExpression : ctExp) {
+            super.add(ctExpression);
+        }
+    
+    }
+    
 }

@@ -11,17 +11,17 @@ import fr.inria.astor.core.solutionsearch.extension.AstorExtensionPoint;
  */
 public interface PopulationController extends  AstorExtensionPoint{
 
-	/**
-	 * 
-	 * @param parentVariants Originals variant 
-	 * @param childVariants New Variants
-	 * @param maxNumberInstances
-	 * @return 
-	 */
-	public List<ProgramVariant> selectProgramVariantsForNextGeneration(List<ProgramVariant> parentVariants,
-			List<ProgramVariant> childVariants, 
-			int maxNumberInstances,ProgramVariantFactory variantFactory, ProgramVariant original, 
-			int generation
-			);
+    /**
+     * 
+     * @param parentVariants Originals variant 
+     * @param childVariants New Variants
+     * @param maxNumberInstances
+     * @return 
+     */
+    public List<ProgramVariant> selectProgramVariantsForNextGeneration(List<ProgramVariant> parentVariants,
+            List<ProgramVariant> childVariants, 
+            int maxNumberInstances,ProgramVariantFactory variantFactory, ProgramVariant original, 
+            int generation
+            );
 
 }

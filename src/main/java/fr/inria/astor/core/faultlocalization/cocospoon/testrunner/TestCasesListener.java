@@ -63,23 +63,23 @@ public class TestCasesListener extends RunListener {
     }
 
     protected void processTestStarted(TestCase testCase) {
-    	/* subclassResponsibility */
+        /* subclassResponsibility */
     }
 
     protected void processSuccessfulRun(TestCase testCase) {
-		/* subclassResponsibility */
+        /* subclassResponsibility */
     }
 
     protected void processFailedRun(TestCase testCase) {
-    	/* subclassResponsibility */
+        /* subclassResponsibility */
     }
 
     protected void processTestFinished(TestCase testCase) {
-    	/* subclassResponsibility */
+        /* subclassResponsibility */
     }
 
     protected void processAfterRun() {
-    	/* subclassResponsibility */
+        /* subclassResponsibility */
     }
 
     public int numberOfTests() {

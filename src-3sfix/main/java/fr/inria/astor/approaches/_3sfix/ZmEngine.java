@@ -23,34 +23,34 @@ import fr.inria.astor.core.solutionsearch.EvolutionarySearchEngine;
  */
 public class ZmEngine extends EvolutionarySearchEngine {
 
-	public ZmEngine(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade) throws JSAPException {
-		super(mutatorExecutor, projFacade);
-		ConfigurationProperties.setProperty("skipfitnessinitialpopulation", "true");
+    public ZmEngine(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade) throws JSAPException {
+        super(mutatorExecutor, projFacade);
+        ConfigurationProperties.setProperty("skipfitnessinitialpopulation", "true");
 
-	}
+    }
 
-	@Override
-	protected void loadValidator() throws Exception {
-		FileProcessValidator fileValidator = new FileProcessValidator();
-		this.setProgramValidator(fileValidator);
-	}
+    @Override
+    protected void loadValidator() throws Exception {
+        FileProcessValidator fileValidator = new FileProcessValidator();
+        this.setProgramValidator(fileValidator);
+    }
 
-	public List<SuspiciousModificationPoint> getSuspicious() {
-		List<SuspiciousModificationPoint> ls = new ArrayList<>();
-		ProgramVariant pv = this.getVariants().get(0);
-		for (ModificationPoint modificationPoint : pv.getModificationPoints()) {
-			if (modificationPoint instanceof SuspiciousModificationPoint) {
-				ls.add((SuspiciousModificationPoint) modificationPoint);
-			}
+    public List<SuspiciousModificationPoint> getSuspicious() {
+        List<SuspiciousModificationPoint> ls = new ArrayList<>();
+        ProgramVariant pv = this.getVariants().get(0);
+        for (ModificationPoint modificationPoint : pv.getModificationPoints()) {
+            if (modificationPoint instanceof SuspiciousModificationPoint) {
+                ls.add((SuspiciousModificationPoint) modificationPoint);
+            }
 
-		}
-		return ls;
-	}
+        }
+        return ls;
+    }
 
-	public VariantValidationResult validate(File modifiedFile) {
-		VariantValidationResult result = null;
+    public VariantValidationResult validate(File modifiedFile) {
+        VariantValidationResult result = null;
 
-		return result;
-	}
+        return result;
+    }
 
 }

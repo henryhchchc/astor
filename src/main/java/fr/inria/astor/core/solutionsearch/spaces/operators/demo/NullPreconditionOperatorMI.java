@@ -25,85 +25,85 @@ import spoon.reflect.code.CtVariableAccess;
  */
 public class NullPreconditionOperatorMI extends AutonomousOperator implements StatementLevelOperator {
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public List<OperatorInstance> createOperatorInstances(ModificationPoint modificationPoint) {
-		List<OperatorInstance> instances = new ArrayList<>();
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public List<OperatorInstance> createOperatorInstances(ModificationPoint modificationPoint) {
+        List<OperatorInstance> instances = new ArrayList<>();
 
-		CtInvocation invocation = (CtInvocation) modificationPoint.getCodeElement();
+        CtInvocation invocation = (CtInvocation) modificationPoint.getCodeElement();
 
-		CtExpression targetExpresionOfMI = invocation.getTarget();
+        CtExpression targetExpresionOfMI = invocation.getTarget();
 
-		if (targetExpresionOfMI instanceof CtVariableAccess) {
+        if (targetExpresionOfMI instanceof CtVariableAccess) {
 
-			CtStatement parentStatement = modificationPoint.getCodeElement().getParent(CtStatement.class);
+            CtStatement parentStatement = modificationPoint.getCodeElement().getParent(CtStatement.class);
 
-			CtExpression ifcondition = MutationSupporter.factory.createBinaryOperator(targetExpresionOfMI,
-					MutationSupporter.factory.createCodeSnippetExpression("null").compile(), BinaryOperatorKind.NE);
+            CtExpression ifcondition = MutationSupporter.factory.createBinaryOperator(targetExpresionOfMI,
+                    MutationSupporter.factory.createCodeSnippetExpression("null").compile(), BinaryOperatorKind.NE);
 
-			CtIf precodition = MutationSupporter.factory.createIf();
-			precodition.setCondition(ifcondition);
-			precodition.setThenStatement(parentStatement);
+            CtIf precodition = MutationSupporter.factory.createIf();
+            precodition.setCondition(ifcondition);
+            precodition.setThenStatement(parentStatement);
 
-			OperatorInstance operatorInstance = new StatementOperatorInstance(modificationPoint, this, parentStatement,
-					precodition);
+            OperatorInstance operatorInstance = new StatementOperatorInstance(modificationPoint, this, parentStatement,
+                    precodition);
 
-			instances.add(operatorInstance);
-		}
-		return instances;
+            instances.add(operatorInstance);
+        }
+        return instances;
 
-	};
+    };
 
-	@Override
-	public boolean canBeAppliedToPoint(ModificationPoint point) {
+    @Override
+    public boolean canBeAppliedToPoint(ModificationPoint point) {
 
-		return (point.getCodeElement() instanceof CtInvocation);
-	}
+        return (point.getCodeElement() instanceof CtInvocation);
+    }
 
-	public boolean applyChangesInModel(OperatorInstance operation, ProgramVariant p) {
-		StatementOperatorInstance stmtoperator = (StatementOperatorInstance) operation;
-		boolean successful = false;
-		CtStatement ctst = (CtStatement) operation.getOriginal();
-		CtStatement fix = (CtStatement) operation.getModified();
+    public boolean applyChangesInModel(OperatorInstance operation, ProgramVariant p) {
+        StatementOperatorInstance stmtoperator = (StatementOperatorInstance) operation;
+        boolean successful = false;
+        CtStatement ctst = (CtStatement) operation.getOriginal();
+        CtStatement fix = (CtStatement) operation.getModified();
 
-		CtBlock parentBlock = stmtoperator.getParentBlock();
+        CtBlock parentBlock = stmtoperator.getParentBlock();
 
-		if (parentBlock != null) {
+        if (parentBlock != null) {
 
-			try {
-				ctst.replace((CtStatement) fix);
-				fix.setParent(parentBlock);
-				successful = true;
-				operation.setSuccessfulyApplied(successful);
-			} catch (Exception ex) {
-				log.error("Error applying an operation, exception: " + ex.getMessage());
-				operation.setExceptionAtApplied(ex);
-				operation.setSuccessfulyApplied(false);
-			}
-		} else {
-			log.error("Operation not applied. Parent null ");
-		}
-		return successful;
-	}
+            try {
+                ctst.replace((CtStatement) fix);
+                fix.setParent(parentBlock);
+                successful = true;
+                operation.setSuccessfulyApplied(successful);
+            } catch (Exception ex) {
+                log.error("Error applying an operation, exception: " + ex.getMessage());
+                operation.setExceptionAtApplied(ex);
+                operation.setSuccessfulyApplied(false);
+            }
+        } else {
+            log.error("Operation not applied. Parent null ");
+        }
+        return successful;
+    }
 
-	@Override
-	public boolean undoChangesInModel(OperatorInstance operation, ProgramVariant p) {
-		StatementOperatorInstance stmtoperator = (StatementOperatorInstance) operation;
-		CtStatement ctst = (CtStatement) operation.getOriginal();
-		CtStatement fix = (CtStatement) operation.getModified();
-		CtBlock<?> parentBlock = stmtoperator.getParentBlock();
-		if (parentBlock != null) {
-			fix.replace((CtStatement) ctst);
-			return true;
+    @Override
+    public boolean undoChangesInModel(OperatorInstance operation, ProgramVariant p) {
+        StatementOperatorInstance stmtoperator = (StatementOperatorInstance) operation;
+        CtStatement ctst = (CtStatement) operation.getOriginal();
+        CtStatement fix = (CtStatement) operation.getModified();
+        CtBlock<?> parentBlock = stmtoperator.getParentBlock();
+        if (parentBlock != null) {
+            fix.replace((CtStatement) ctst);
+            return true;
 
-		}
-		return false;
-	}
+        }
+        return false;
+    }
 
-	@Override
-	public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
+    @Override
+    public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
 
-		return false;
-	}
+        return false;
+    }
 
 }

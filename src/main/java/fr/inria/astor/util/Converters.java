@@ -13,26 +13,26 @@ import java.util.List;
  */
 public class Converters {
 
-	
-	
-	public static URL[] toURLArray(String[] cp) throws MalformedURLException {
-		List<URL> urls = new ArrayList<URL>();
+    
+    
+    public static URL[] toURLArray(String[] cp) throws MalformedURLException {
+        List<URL> urls = new ArrayList<URL>();
 
-		for (String c : cp) {
-			urls.add(new File(c).toURI().toURL());
-		}
-		URL[] u = new URL[urls.size()];
+        for (String c : cp) {
+            urls.add(new File(c).toURI().toURL());
+        }
+        URL[] u = new URL[urls.size()];
 
-		return (URL[]) urls.toArray(u);
-	}
+        return (URL[]) urls.toArray(u);
+    }
 
-	public static URL[] redefineURL(File foutgen, URL[] originalURL) throws MalformedURLException {
-		List<URL> urls = new ArrayList<URL>();
-		urls.add(foutgen.toURL());
-		for (int i = 0; (originalURL != null) && i < originalURL.length; i++) {
-			urls.add(originalURL[i]);
-		}
+    public static URL[] redefineURL(File foutgen, URL[] originalURL) throws MalformedURLException {
+        List<URL> urls = new ArrayList<URL>();
+        urls.add(foutgen.toURL());
+        for (int i = 0; (originalURL != null) && i < originalURL.length; i++) {
+            urls.add(originalURL[i]);
+        }
 
-		return (URL[]) urls.toArray(originalURL);
-	}
+        return (URL[]) urls.toArray(originalURL);
+    }
 }

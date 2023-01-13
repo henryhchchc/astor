@@ -19,97 +19,97 @@ import spoon.reflect.path.CtRole;
  */
 public class ExpressionReplaceOperator extends ReplaceOp {
 
-	@Override
-	public boolean applyChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
+    @Override
+    public boolean applyChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
 
-		CtExpression elementToModify = (CtExpression) opInstance.getOriginal();
-		CtExpression elementOriginalCloned = (CtExpression) MutationSupporter.clone(elementToModify);
+        CtExpression elementToModify = (CtExpression) opInstance.getOriginal();
+        CtExpression elementOriginalCloned = (CtExpression) MutationSupporter.clone(elementToModify);
 
-		CtElement elFixIngredient = opInstance.getModified();
+        CtElement elFixIngredient = opInstance.getModified();
 
-		// we transform the Spoon model
+        // we transform the Spoon model
 
-		try {
-			opInstance.getModificationPoint().getCodeElement().replace(elFixIngredient);
-		} catch (Exception e) {
-			log.error("error to modify " + elementOriginalCloned + " to " + elFixIngredient);
-			log.equals(e);
-			opInstance.setExceptionAtApplied(e);
-			return false;
-		}
+        try {
+            opInstance.getModificationPoint().getCodeElement().replace(elFixIngredient);
+        } catch (Exception e) {
+            log.error("error to modify " + elementOriginalCloned + " to " + elFixIngredient);
+            log.equals(e);
+            opInstance.setExceptionAtApplied(e);
+            return false;
+        }
 
-		// I save the original instance
-		opInstance.setOriginal(elementOriginalCloned);
-		// Finally, we update the modification point (i.e., Astor
-		// Representation)
-		opInstance.getModificationPoint().setCodeElement(elFixIngredient);
+        // I save the original instance
+        opInstance.setOriginal(elementOriginalCloned);
+        // Finally, we update the modification point (i.e., Astor
+        // Representation)
+        opInstance.getModificationPoint().setCodeElement(elFixIngredient);
 
-		boolean change = !opInstance.getModificationPoint().getCodeElement().toString()
-				.equals(elementOriginalCloned.toString());
+        boolean change = !opInstance.getModificationPoint().getCodeElement().toString()
+                .equals(elementOriginalCloned.toString());
 
-		if (!change)
-			log.error("Replacement does not work for  modify " + elementOriginalCloned + " to " + elFixIngredient);
+        if (!change)
+            log.error("Replacement does not work for  modify " + elementOriginalCloned + " to " + elFixIngredient);
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean undoChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
+    @Override
+    public boolean undoChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
 
-		// We update the spoon Model
-		opInstance.getModificationPoint().getCodeElement().replace(opInstance.getOriginal());
-		// Finally, we update the modification point (i.e., Astor
-		// Representation)
-		opInstance.getModificationPoint().setCodeElement(opInstance.getOriginal());
-		return true;
-	}
+        // We update the spoon Model
+        opInstance.getModificationPoint().getCodeElement().replace(opInstance.getOriginal());
+        // Finally, we update the modification point (i.e., Astor
+        // Representation)
+        opInstance.getModificationPoint().setCodeElement(opInstance.getOriginal());
+        return true;
+    }
 
-	@Override
-	public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
-		// We dont need to update the variant here
-		return false;
-	}
+    @Override
+    public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
+        // We dont need to update the variant here
+        return false;
+    }
 
-	@Override
-	public boolean canBeAppliedToPoint(ModificationPoint point) {
+    @Override
+    public boolean canBeAppliedToPoint(ModificationPoint point) {
 
-		return (point.getCodeElement() instanceof CtExpression);
-	}
+        return (point.getCodeElement() instanceof CtExpression);
+    }
 
-	@Override
-	protected OperatorInstance createOperatorInstance(ModificationPoint mp) {
-		OperatorInstance operation = new OperatorInstance(mp, this, mp.getCodeElement(), null);
-		return operation;
-	}
+    @Override
+    protected OperatorInstance createOperatorInstance(ModificationPoint mp) {
+        OperatorInstance operation = new OperatorInstance(mp, this, mp.getCodeElement(), null);
+        return operation;
+    }
 
-	@Override
-	protected OperatorInstance createOperatorInstance(ModificationPoint mp, Ingredient ingredient) {
-		CtElement toModif = mp.getCodeElement();
-		CtElement ingredCOde = ingredient.getCode();
+    @Override
+    protected OperatorInstance createOperatorInstance(ModificationPoint mp, Ingredient ingredient) {
+        CtElement toModif = mp.getCodeElement();
+        CtElement ingredCOde = ingredient.getCode();
 
-		// Or both statement or both not statement
-		boolean isStmtToModif = isStatement(toModif);
-		boolean isStmtnIngr = isStatement(ingredCOde);
-		if (isStmtToModif ^ isStmtnIngr)
-			return null;
+        // Or both statement or both not statement
+        boolean isStmtToModif = isStatement(toModif);
+        boolean isStmtnIngr = isStatement(ingredCOde);
+        if (isStmtToModif ^ isStmtnIngr)
+            return null;
 
-		return super.createOperatorInstance(mp, ingredient);
-	}
+        return super.createOperatorInstance(mp, ingredient);
+    }
 
-	public boolean isStatement(CtElement toModif) {
+    public boolean isStatement(CtElement toModif) {
 
-		if (!(toModif instanceof CtStatement))
-			return false;
+        if (!(toModif instanceof CtStatement))
+            return false;
 
-		if (toModif.getParent() instanceof CtBlock)
-			return true;
+        if (toModif.getParent() instanceof CtBlock)
+            return true;
 
-		CtRole roleInParent = toModif.getRoleInParent();
+        CtRole roleInParent = toModif.getRoleInParent();
 
-		if (CtRole.BODY.equals(roleInParent) || CtRole.THEN.equals(roleInParent) || CtRole.ELSE.equals(roleInParent))
-			return true;
+        if (CtRole.BODY.equals(roleInParent) || CtRole.THEN.equals(roleInParent) || CtRole.ELSE.equals(roleInParent))
+            return true;
 
-		return false;
-	}
+        return false;
+    }
 
 }

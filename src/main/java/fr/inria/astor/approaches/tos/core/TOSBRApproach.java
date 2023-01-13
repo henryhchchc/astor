@@ -17,35 +17,35 @@ import fr.inria.main.evolution.ExtensionPoints;
  */
 public class TOSBRApproach extends IngredientBasedEvolutionaryRepairApproachImpl implements IngredientBasedApproach {
 
-	public TOSBRApproach(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade) throws JSAPException {
-		super(mutatorExecutor, projFacade);
-		if (!ConfigurationProperties.hasProperty(ExtensionPoints.INGREDIENT_TRANSFORM_STRATEGY.identifier)) {
-			ConfigurationProperties.setProperty(ExtensionPoints.INGREDIENT_TRANSFORM_STRATEGY.identifier,
-					"random-variable-replacement");
-		}
-	}
+    public TOSBRApproach(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade) throws JSAPException {
+        super(mutatorExecutor, projFacade);
+        if (!ConfigurationProperties.hasProperty(ExtensionPoints.INGREDIENT_TRANSFORM_STRATEGY.identifier)) {
+            ConfigurationProperties.setProperty(ExtensionPoints.INGREDIENT_TRANSFORM_STRATEGY.identifier,
+                    "random-variable-replacement");
+        }
+    }
 
-	@Override
-	protected void loadTargetElements() throws Exception {
-		TOSBRPlugInLoader.loadTargetElements(this);
-	}
+    @Override
+    protected void loadTargetElements() throws Exception {
+        TOSBRPlugInLoader.loadTargetElements(this);
+    }
 
-	@Override
-	protected void loadIngredientPool() throws JSAPException, Exception {
-		TOSBRPlugInLoader.loadIngredientPool(this);
-	}
+    @Override
+    protected void loadIngredientPool() throws JSAPException, Exception {
+        TOSBRPlugInLoader.loadIngredientPool(this);
+    }
 
-	@Override
-	protected void loadIngredientSearchStrategy() throws Exception {
+    @Override
+    protected void loadIngredientSearchStrategy() throws Exception {
 
-		TOSBRPlugInLoader.loadIngredientSearchStrategy(this);
-	}
+        TOSBRPlugInLoader.loadIngredientSearchStrategy(this);
+    }
 
-	@Override
-	protected void loadOperatorSpaceDefinition() throws Exception {
+    @Override
+    protected void loadOperatorSpaceDefinition() throws Exception {
 
-		TOSBRPlugInLoader.loadOperatorSpaceDefinition(this);
+        TOSBRPlugInLoader.loadOperatorSpaceDefinition(this);
 
-	}
+    }
 
 }

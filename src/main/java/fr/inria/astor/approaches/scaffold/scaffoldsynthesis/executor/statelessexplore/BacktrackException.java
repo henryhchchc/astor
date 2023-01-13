@@ -2,5 +2,5 @@ package fr.inria.astor.approaches.scaffold.scaffoldsynthesis.executor.statelesse
 
 @SuppressWarnings("serial")
 public class BacktrackException extends RuntimeException {
-	
+    
 }

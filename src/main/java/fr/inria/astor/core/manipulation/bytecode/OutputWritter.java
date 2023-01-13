@@ -21,78 +21,78 @@ import spoon.support.JavaOutputProcessor;
  */
 public class OutputWritter {
 
-	private JavaOutputProcessor javaPrinter;
+    private JavaOutputProcessor javaPrinter;
 
-	private Factory factory;
+    private Factory factory;
 
-	public static final String CLASS_EXT = ".class";
+    public static final String CLASS_EXT = ".class";
 
-	private Logger logger = Logger.getLogger(SpoonClassCompiler.class.getName());
+    private Logger logger = Logger.getLogger(SpoonClassCompiler.class.getName());
 
-	public OutputWritter(Factory factory) {
-		super();
-		this.factory = factory;
-	}
+    public OutputWritter(Factory factory) {
+        super();
+        this.factory = factory;
+    }
 
-	public void updateOutput(String output) {
-		getEnvironment().setSourceOutputDirectory(new File(output));
-		JavaOutputProcessor fileOutput = new JavaOutputProcessor(new DefaultJavaPrettyPrinter(getEnvironment()));
-		fileOutput.setFactory(getFactory());
+    public void updateOutput(String output) {
+        getEnvironment().setSourceOutputDirectory(new File(output));
+        JavaOutputProcessor fileOutput = new JavaOutputProcessor(new DefaultJavaPrettyPrinter(getEnvironment()));
+        fileOutput.setFactory(getFactory());
 
-		this.javaPrinter = fileOutput;
-	}
+        this.javaPrinter = fileOutput;
+    }
 
-	public void saveSourceCode(CtClass element) {
-		this.getEnvironment().setCommentEnabled(true);
-		this.getEnvironment().setPreserveLineNumbers(ConfigurationProperties.getPropertyBool("preservelinenumbers"));
-		if (javaPrinter == null) {
-			throw new IllegalArgumentException("Java printer is null");
-		}
-		if (!element.isTopLevel()) {
-			return;
-		}
-		// Create Java code and create ICompilationUnit
-		try {
-			javaPrinter.getCreatedFiles().clear();
-			javaPrinter.process(element);
-		} catch (Exception e) {
-			logger.error("Error saving ctclass " + element.getQualifiedName());
-		}
+    public void saveSourceCode(CtClass element) {
+        this.getEnvironment().setCommentEnabled(true);
+        this.getEnvironment().setPreserveLineNumbers(ConfigurationProperties.getPropertyBool("preservelinenumbers"));
+        if (javaPrinter == null) {
+            throw new IllegalArgumentException("Java printer is null");
+        }
+        if (!element.isTopLevel()) {
+            return;
+        }
+        // Create Java code and create ICompilationUnit
+        try {
+            javaPrinter.getCreatedFiles().clear();
+            javaPrinter.process(element);
+        } catch (Exception e) {
+            logger.error("Error saving ctclass " + element.getQualifiedName());
+        }
 
-	}
+    }
 
-	public void saveByteCode(CompilationResult compilation, File outputDir) {
-		try {
-			outputDir.mkdirs();
+    public void saveByteCode(CompilationResult compilation, File outputDir) {
+        try {
+            outputDir.mkdirs();
 
-			for (String compiledClassName : compilation.getByteCodes().keySet()) {
-				String fileName = new String(compiledClassName).replace('.', File.separatorChar) + CLASS_EXT;
-				byte[] compiledClass = compilation.getByteCodes().get(compiledClassName);
-				ClassFileUtil.writeToDisk(true, outputDir.getAbsolutePath(), fileName, compiledClass);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            for (String compiledClassName : compilation.getByteCodes().keySet()) {
+                String fileName = new String(compiledClassName).replace('.', File.separatorChar) + CLASS_EXT;
+                byte[] compiledClass = compilation.getByteCodes().get(compiledClassName);
+                ClassFileUtil.writeToDisk(true, outputDir.getAbsolutePath(), fileName, compiledClass);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	}
+    }
 
-	public Environment getEnvironment() {
-		return this.getFactory().getEnvironment();
-	}
+    public Environment getEnvironment() {
+        return this.getFactory().getEnvironment();
+    }
 
-	/**
-	 * Gets the associated factory.
-	 */
+    /**
+     * Gets the associated factory.
+     */
 
-	public Factory getFactory() {
-		return this.factory;
-	}
+    public Factory getFactory() {
+        return this.factory;
+    }
 
-	public JavaOutputProcessor getJavaPrinter() {
-		return javaPrinter;
-	}
+    public JavaOutputProcessor getJavaPrinter() {
+        return javaPrinter;
+    }
 
-	public void setJavaPrinter(JavaOutputProcessor javaPrinter) {
-		this.javaPrinter = javaPrinter;
-	}
+    public void setJavaPrinter(JavaOutputProcessor javaPrinter) {
+        this.javaPrinter = javaPrinter;
+    }
 }

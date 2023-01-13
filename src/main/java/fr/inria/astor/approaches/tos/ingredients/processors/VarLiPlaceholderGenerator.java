@@ -18,26 +18,26 @@ import spoon.reflect.reference.CtFieldReference;
  */
 public class VarLiPlaceholderGenerator<T extends CtElement> implements PlaceholderGenerator<T> {
 
-	@Override
-	public List<VarLiPlaceholder> createTOS(T ingredientStatement) {
-		List<VarLiPlaceholder> results = new ArrayList<>();
-		List<CtVariableAccess> varAccessCollected = VariableResolver.collectVariableAccess(ingredientStatement, true);
-		for (CtVariableAccess ctVariableAccess : varAccessCollected) {
+    @Override
+    public List<VarLiPlaceholder> createTOS(T ingredientStatement) {
+        List<VarLiPlaceholder> results = new ArrayList<>();
+        List<CtVariableAccess> varAccessCollected = VariableResolver.collectVariableAccess(ingredientStatement, true);
+        for (CtVariableAccess ctVariableAccess : varAccessCollected) {
 
-			int i = 0;
+            int i = 0;
 
-			if (ctVariableAccess instanceof CtVariableRead) {
+            if (ctVariableAccess instanceof CtVariableRead) {
 
-				if (!(ctVariableAccess instanceof CtFieldRead)
-						|| !((CtFieldReference) ctVariableAccess.getVariable()).isStatic()) {
+                if (!(ctVariableAccess instanceof CtFieldRead)
+                        || !((CtFieldReference) ctVariableAccess.getVariable()).isStatic()) {
 
-					VarLiPlaceholder pc = new VarLiPlaceholder(ctVariableAccess,
-							"_lit_" + ctVariableAccess.getType().getSimpleName() + "_" + i);
-					results.add(pc);
-				}
-			}
-		}
-		return results;
-	}
+                    VarLiPlaceholder pc = new VarLiPlaceholder(ctVariableAccess,
+                            "_lit_" + ctVariableAccess.getType().getSimpleName() + "_" + i);
+                    results.add(pc);
+                }
+            }
+        }
+        return results;
+    }
 
 }

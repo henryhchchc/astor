@@ -12,16 +12,16 @@ import spoon.reflect.code.CtReturn;
  */
 public class ReturnFixSpaceProcessor extends TargetElementProcessor<CtReturn> {
 
-	private Logger logger = Logger.getLogger(ReturnFixSpaceProcessor.class.getName());
+    private Logger logger = Logger.getLogger(ReturnFixSpaceProcessor.class.getName());
 
-	public ReturnFixSpaceProcessor() {
-		super();
+    public ReturnFixSpaceProcessor() {
+        super();
 
-	}
+    }
 
-	@Override
-	public void process(CtReturn element) {
-		super.add(element);
-	}
+    @Override
+    public void process(CtReturn element) {
+        super.add(element);
+    }
 
 }

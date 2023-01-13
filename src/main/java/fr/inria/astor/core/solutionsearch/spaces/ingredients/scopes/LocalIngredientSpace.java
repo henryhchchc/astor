@@ -18,46 +18,46 @@ import spoon.reflect.declaration.CtType;
  */
 public class LocalIngredientSpace extends AstorCtIngredientPool {
 
-	public LocalIngredientSpace(TargetElementProcessor<?> processor) throws JSAPException {
-		super(processor);
-	}
+    public LocalIngredientSpace(TargetElementProcessor<?> processor) throws JSAPException {
+        super(processor);
+    }
 
-	public LocalIngredientSpace(List<TargetElementProcessor<?>> processors) throws JSAPException {
-		super(processors);
-	}
+    public LocalIngredientSpace(List<TargetElementProcessor<?>> processors) throws JSAPException {
+        super(processors);
+    }
 
-	public LocalIngredientSpace() throws JSAPException {
-		super();
+    public LocalIngredientSpace() throws JSAPException {
+        super();
 
-	}
+    }
 
-	@Override
-	public void defineSpace(ProgramVariant variant) {
-		List<CtType<?>> affected = variant.getAllClasses();
-		for (CtType<?> CtType : affected) {
-			this.createFixSpaceFromAClass(CtType);
-		}
+    @Override
+    public void defineSpace(ProgramVariant variant) {
+        List<CtType<?>> affected = variant.getAllClasses();
+        for (CtType<?> CtType : affected) {
+            this.createFixSpaceFromAClass(CtType);
+        }
 
-	}
+    }
 
-	@Override
-	public String getType(Ingredient element) {
+    @Override
+    public String getType(Ingredient element) {
 
-		return element.getCode().getClass().getSimpleName();
-	}
+        return element.getCode().getClass().getSimpleName();
+    }
 
-	@Override
-	public IngredientPoolScope spaceScope() {
-		return IngredientPoolScope.LOCAL;
-	}
+    @Override
+    public IngredientPoolScope spaceScope() {
+        return IngredientPoolScope.LOCAL;
+    }
 
-	@Override
-	public String calculateLocation(CtElement original) {
+    @Override
+    public String calculateLocation(CtElement original) {
 
-		if (original instanceof CtType<?>)
-			return ((CtType) original).getQualifiedName();
-		return original.getParent(CtType.class).getQualifiedName();
+        if (original instanceof CtType<?>)
+            return ((CtType) original).getQualifiedName();
+        return original.getParent(CtType.class).getQualifiedName();
 
-	}
+    }
 
 }

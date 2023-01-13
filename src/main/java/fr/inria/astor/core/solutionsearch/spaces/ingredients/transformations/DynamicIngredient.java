@@ -22,48 +22,48 @@ import spoon.reflect.declaration.CtVariable;
  */
 public class DynamicIngredient extends Ingredient {
 
-	private VarCombinationForIngredient combination;
-	private VarMapping mapping = null;
+    private VarCombinationForIngredient combination;
+    private VarMapping mapping = null;
 
-	public DynamicIngredient(VarCombinationForIngredient combination, VarMapping mapping,
-			CtCodeElement baseIngredient) {
-		super(null);
-		this.combination = combination;
-		this.mapping = mapping;
-		this.derivedFrom = baseIngredient;
-	}
+    public DynamicIngredient(VarCombinationForIngredient combination, VarMapping mapping,
+            CtCodeElement baseIngredient) {
+        super(null);
+        this.combination = combination;
+        this.mapping = mapping;
+        this.derivedFrom = baseIngredient;
+    }
 
-	@Override
-	public CtElement getCode() {
+    @Override
+    public CtElement getCode() {
 
-		if (this.ingredientCode == null) {
-			Map<String, CtVariable> selectedTransformation = this.combination.getCombination();
+        if (this.ingredientCode == null) {
+            Map<String, CtVariable> selectedTransformation = this.combination.getCombination();
 
-			Map<VarAccessWrapper, CtVariableAccess> originalMap = VariableResolver.convertIngredient(mapping,
-					selectedTransformation);
-			// Cloned transformed element
-			this.ingredientCode = MutationSupporter.clone((CtCodeElement) this.getDerivedFrom());
+            Map<VarAccessWrapper, CtVariableAccess> originalMap = VariableResolver.convertIngredient(mapping,
+                    selectedTransformation);
+            // Cloned transformed element
+            this.ingredientCode = MutationSupporter.clone((CtCodeElement) this.getDerivedFrom());
 
-			VariableResolver.resetIngredient(originalMap);
-		}
-		return this.ingredientCode;
-	}
+            VariableResolver.resetIngredient(originalMap);
+        }
+        return this.ingredientCode;
+    }
 
 
-	public VarCombinationForIngredient getCombination() {
-		return combination;
-	}
+    public VarCombinationForIngredient getCombination() {
+        return combination;
+    }
 
-	public void setCombination(VarCombinationForIngredient combination) {
-		this.combination = combination;
-	}
+    public void setCombination(VarCombinationForIngredient combination) {
+        this.combination = combination;
+    }
 
-	public VarMapping getMapping() {
-		return mapping;
-	}
+    public VarMapping getMapping() {
+        return mapping;
+    }
 
-	public void setMapping(VarMapping mapping) {
-		this.mapping = mapping;
-	}
+    public void setMapping(VarMapping mapping) {
+        this.mapping = mapping;
+    }
 
 }

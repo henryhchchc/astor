@@ -18,18 +18,18 @@ import spoon.reflect.declaration.CtElement;
  */
 public class NoIngredientTransformation implements IngredientTransformationStrategy {
 
-	protected static Logger log = Logger.getLogger(NoIngredientTransformation.class.getName());
+    protected static Logger log = Logger.getLogger(NoIngredientTransformation.class.getName());
 
-	@Override
-	public List<Ingredient> transform(ModificationPoint modificationPoint, Ingredient ingredient) {
+    @Override
+    public List<Ingredient> transform(ModificationPoint modificationPoint, Ingredient ingredient) {
 
-		List<Ingredient> result = new ArrayList<>();
+        List<Ingredient> result = new ArrayList<>();
 
-		CtElement elementFromIngredient = ingredient.getCode();
+        CtElement elementFromIngredient = ingredient.getCode();
 
-		result.add(new Ingredient(elementFromIngredient));
+        result.add(new Ingredient(elementFromIngredient));
 
-		return result;
-	}
+        return result;
+    }
 
 }

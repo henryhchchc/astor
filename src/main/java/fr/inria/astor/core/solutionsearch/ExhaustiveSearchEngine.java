@@ -25,111 +25,111 @@ import fr.inria.main.AstorOutputStatus;
  */
 public abstract class ExhaustiveSearchEngine extends AstorCoreEngine {
 
-	public ExhaustiveSearchEngine(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade)
-			throws JSAPException {
-		super(mutatorExecutor, projFacade);
-	}
+    public ExhaustiveSearchEngine(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade)
+            throws JSAPException {
+        super(mutatorExecutor, projFacade);
+    }
 
-	@Override
-	public void startSearch() throws Exception {
+    @Override
+    public void startSearch() throws Exception {
 
-		dateInitEvolution = new Date();
-		// We don't evolve variants, so the generation is always one.
-		generationsExecuted = 1;
-		// For each variant (one is enough)
-		int maxMinutes = ConfigurationProperties.getPropertyInt("maxtime");
+        dateInitEvolution = new Date();
+        // We don't evolve variants, so the generation is always one.
+        generationsExecuted = 1;
+        // For each variant (one is enough)
+        int maxMinutes = ConfigurationProperties.getPropertyInt("maxtime");
 
-		int v = 0;
-		for (ProgramVariant parentVariant : variants) {
+        int v = 0;
+        for (ProgramVariant parentVariant : variants) {
 
-			log.debug("\n****\nanalyzing variant #" + (++v) + " out of " + variants.size());
-			// We analyze each modifpoint of the variant i.e. suspicious
-			// statement
-			for (ModificationPoint modifPoint : parentVariant.getModificationPoints()) {
-				// We create all operators to apply in the modifpoint
-				List<OperatorInstance> operatorInstances = createInstancesOfOperators(
-						(SuspiciousModificationPoint) modifPoint);
+            log.debug("\n****\nanalyzing variant #" + (++v) + " out of " + variants.size());
+            // We analyze each modifpoint of the variant i.e. suspicious
+            // statement
+            for (ModificationPoint modifPoint : parentVariant.getModificationPoints()) {
+                // We create all operators to apply in the modifpoint
+                List<OperatorInstance> operatorInstances = createInstancesOfOperators(
+                        (SuspiciousModificationPoint) modifPoint);
 
-				if (operatorInstances == null || operatorInstances.isEmpty())
-					continue;
+                if (operatorInstances == null || operatorInstances.isEmpty())
+                    continue;
 
-				for (OperatorInstance pointOperation : operatorInstances) {
+                for (OperatorInstance pointOperation : operatorInstances) {
 
-					if (!belowMaxTime(dateInitEvolution, maxMinutes)) {
+                    if (!belowMaxTime(dateInitEvolution, maxMinutes)) {
 
-						this.setOutputStatus(AstorOutputStatus.TIME_OUT);
-						log.debug("Max time reached");
-						return;
-					}
+                        this.setOutputStatus(AstorOutputStatus.TIME_OUT);
+                        log.debug("Max time reached");
+                        return;
+                    }
 
-					try {
-						log.info("mod_point " + modifPoint);
-						log.info("-->op: " + pointOperation);
-					} catch (Exception e) {
-						log.error(e);
-					}
+                    try {
+                        log.info("mod_point " + modifPoint);
+                        log.info("-->op: " + pointOperation);
+                    } catch (Exception e) {
+                        log.error(e);
+                    }
 
-					// We validate the variant after applying the operator
-					ProgramVariant solutionVariant = variantFactory.createProgramVariantFromAnother(parentVariant,
-							generationsExecuted);
-					solutionVariant.getOperations().put(generationsExecuted, Arrays.asList(pointOperation));
+                    // We validate the variant after applying the operator
+                    ProgramVariant solutionVariant = variantFactory.createProgramVariantFromAnother(parentVariant,
+                            generationsExecuted);
+                    solutionVariant.getOperations().put(generationsExecuted, Arrays.asList(pointOperation));
 
-					applyNewMutationOperationToSpoonElement(pointOperation);
+                    applyNewMutationOperationToSpoonElement(pointOperation);
 
-					boolean solution = processCreatedVariant(solutionVariant, generationsExecuted);
+                    boolean solution = processCreatedVariant(solutionVariant, generationsExecuted);
 
-					// We undo the operator (for try the next one)
-					undoOperationToSpoonElement(pointOperation);
+                    // We undo the operator (for try the next one)
+                    undoOperationToSpoonElement(pointOperation);
 
-					if (solution) {
-						this.solutions.add(solutionVariant);
+                    if (solution) {
+                        this.solutions.add(solutionVariant);
 
-						this.savePatch(solutionVariant);
+                        this.savePatch(solutionVariant);
 
-						if (ConfigurationProperties.getPropertyBool("stopfirst")) {
-							this.setOutputStatus(AstorOutputStatus.STOP_BY_PATCH_FOUND);
-							return;
-						}
-					}
+                        if (ConfigurationProperties.getPropertyBool("stopfirst")) {
+                            this.setOutputStatus(AstorOutputStatus.STOP_BY_PATCH_FOUND);
+                            return;
+                        }
+                    }
 
-					if (!belowMaxTime(dateInitEvolution, maxMinutes)) {
+                    if (!belowMaxTime(dateInitEvolution, maxMinutes)) {
 
-						this.setOutputStatus(AstorOutputStatus.TIME_OUT);
-						log.debug("Max time reached");
-						return;
-					}
-				}
-			}
-		}
-		log.debug("End exhaustive navigation");
+                        this.setOutputStatus(AstorOutputStatus.TIME_OUT);
+                        log.debug("Max time reached");
+                        return;
+                    }
+                }
+            }
+        }
+        log.debug("End exhaustive navigation");
 
-		this.setOutputStatus(AstorOutputStatus.EXHAUSTIVE_NAVIGATED);
-	}
+        this.setOutputStatus(AstorOutputStatus.EXHAUSTIVE_NAVIGATED);
+    }
 
-	/**
-	 * @param modificationPoint
-	 * @return
-	 */
-	protected List<OperatorInstance> createInstancesOfOperators(SuspiciousModificationPoint modificationPoint) {
-		List<OperatorInstance> ops = new ArrayList<>();
-		AstorOperator[] operators = getOperatorSpace().values();
-		for (AstorOperator astorOperator : operators) {
-			if (astorOperator.canBeAppliedToPoint(modificationPoint)) {
-				if (!astorOperator.needIngredient()) {
-					List<OperatorInstance> instances = astorOperator.createOperatorInstances(modificationPoint);
+    /**
+     * @param modificationPoint
+     * @return
+     */
+    protected List<OperatorInstance> createInstancesOfOperators(SuspiciousModificationPoint modificationPoint) {
+        List<OperatorInstance> ops = new ArrayList<>();
+        AstorOperator[] operators = getOperatorSpace().values();
+        for (AstorOperator astorOperator : operators) {
+            if (astorOperator.canBeAppliedToPoint(modificationPoint)) {
+                if (!astorOperator.needIngredient()) {
+                    List<OperatorInstance> instances = astorOperator.createOperatorInstances(modificationPoint);
 
-					if (instances != null && instances.size() > 0) {
-						ops.addAll(instances);
-					} else {
-						log.error("Ignored operator: The approach has an operator that needs ingredients: "
-								+ astorOperator.getClass().getCanonicalName());
-					}
-				}
-			}
-		}
+                    if (instances != null && instances.size() > 0) {
+                        ops.addAll(instances);
+                    } else {
+                        log.error("Ignored operator: The approach has an operator that needs ingredients: "
+                                + astorOperator.getClass().getCanonicalName());
+                    }
+                }
+            }
+        }
 
-		return ops;
+        return ops;
 
-	}
+    }
 
 }

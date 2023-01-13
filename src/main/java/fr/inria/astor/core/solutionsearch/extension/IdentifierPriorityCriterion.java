@@ -14,15 +14,15 @@ import fr.inria.astor.core.entities.ProgramVariant;
  */
 public class IdentifierPriorityCriterion implements SolutionVariantSortCriterion {
 
-	/**
-	 * Receives a list of patches and returns another list with the patches
-	 * sorted by the ID.
-	 */
-	@Override
-	public List<ProgramVariant> priorize(List<ProgramVariant> patches) {
-		List<ProgramVariant> toSort = new ArrayList<>(patches);
-		Collections.sort(toSort, (o1, o2) -> Integer.compare(o1.getId(), o2.getId()));
+    /**
+     * Receives a list of patches and returns another list with the patches
+     * sorted by the ID.
+     */
+    @Override
+    public List<ProgramVariant> priorize(List<ProgramVariant> patches) {
+        List<ProgramVariant> toSort = new ArrayList<>(patches);
+        Collections.sort(toSort, (o1, o2) -> Integer.compare(o1.getId(), o2.getId()));
 
-		return toSort;
-	}
+        return toSort;
+    }
 }

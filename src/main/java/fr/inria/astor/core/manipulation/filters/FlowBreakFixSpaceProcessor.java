@@ -9,10 +9,10 @@ import spoon.reflect.code.CtCFlowBreak;
 public class FlowBreakFixSpaceProcessor extends TargetElementProcessor<CtCFlowBreak>  {
 
 
-	@Override
-	public void process(CtCFlowBreak element) {
-		
-		super.add(element);
-	}
+    @Override
+    public void process(CtCFlowBreak element) {
+        
+        super.add(element);
+    }
 
 }

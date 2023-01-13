@@ -11,32 +11,32 @@ import spoon.reflect.code.CtLiteral;
 @SuppressWarnings("rawtypes")
 public class LiteralTransformation implements Transformation {
 
-	CtLiteral target;
-	Object newValue;
-	Object previousValue;
-	LiteralPlaceholder literalPlaceholder;
+    CtLiteral target;
+    Object newValue;
+    Object previousValue;
+    LiteralPlaceholder literalPlaceholder;
 
-	public LiteralTransformation(LiteralPlaceholder literalPlaceholder, CtLiteral target, Object newValue) {
-		super();
-		this.literalPlaceholder = literalPlaceholder;
-		this.target = target;
-		this.newValue = newValue;
-	}
+    public LiteralTransformation(LiteralPlaceholder literalPlaceholder, CtLiteral target, Object newValue) {
+        super();
+        this.literalPlaceholder = literalPlaceholder;
+        this.target = target;
+        this.newValue = newValue;
+    }
 
-	@Override
-	public void apply() {
-		previousValue = target.getValue();
-		target.setValue(newValue);
-	}
+    @Override
+    public void apply() {
+        previousValue = target.getValue();
+        target.setValue(newValue);
+    }
 
-	@Override
-	public void revert() {
-		target.setValue(previousValue);
-		previousValue = null;
-	}
+    @Override
+    public void revert() {
+        target.setValue(previousValue);
+        previousValue = null;
+    }
 
-	public String toString() {
-		return this.getClass().getSimpleName() + " (" + newValue + " --> "
-				+ this.literalPlaceholder.getPlaceholder_name() + ") ";
-	}
+    public String toString() {
+        return this.getClass().getSimpleName() + " (" + newValue + " --> "
+                + this.literalPlaceholder.getPlaceholder_name() + ") ";
+    }
 }

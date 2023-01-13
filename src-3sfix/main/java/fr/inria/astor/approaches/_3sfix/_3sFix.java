@@ -81,7 +81,7 @@ public static void main(String[] args) throws Exception
         cs.command.put("-package", package_name);
         cs.command.put("-maxgen", "0");
         cs.command.put("-jvm4testexecution", "/mnt/vdb/jdk1.7.0_80/bin/");
-	cs.command.put("-customengine", ZmEngine.class.getCanonicalName());
+    cs.command.put("-customengine", ZmEngine.class.getCanonicalName());
         cs.command.put("-parameters", "disablelog:false:logtestexecution:true");
 
         System.out.println(Arrays.toString(cs.flat()));
@@ -101,19 +101,19 @@ public static void main(String[] args) throws Exception
         int id = 1;
         PrintWriter writer = null;
         String path_to_patch;
-	String path_to_diff;
+    String path_to_diff;
         File patch = null;
-	File diff = null;
+    File diff = null;
         FileProgramVariant fvariant = null;
         VariantValidationResult resultValidation = null;
         Process p;
-	String command;
+    String command;
         String line_output;
         StringBuffer output;
         BufferedReader reader;
-	System.out.println("Number of SuspiciousModificationPoint: " + susp.size());
+    System.out.println("Number of SuspiciousModificationPoint: " + susp.size());
 
-	long start = System.currentTimeMillis();
+    long start = System.currentTimeMillis();
         long end = start + 2*60*60*1000;
 
         for(SuspiciousModificationPoint smp : susp)
@@ -122,17 +122,17 @@ public static void main(String[] args) throws Exception
                 Collections.sort(ingredientPool, new normalized_lcs_comparator(suspFile.getSuspiciousLine().trim()));
                 List<String> original_allLines = suspFile.getAllLines();
                 System.out.println("SuspiciousModificationPoint: " + suspFile.getSuspiciousLine());
-		System.out.println("At: " + suspFile.getFileName()+" "+suspFile.getClassName());
-		System.out.println("Line number: " + Integer.toString(suspFile.getSuspiciousLineNumber()));
+        System.out.println("At: " + suspFile.getFileName()+" "+suspFile.getClassName());
+        System.out.println("Line number: " + Integer.toString(suspFile.getSuspiciousLineNumber()));
                 for(String ingredient : ingredientPool.subList(0,100))
                 {
-		    if(System.currentTimeMillis() >= end)
+            if(System.currentTimeMillis() >= end)
                     {
                         break;
                     }
                     System.out.println("Used ingredient: " + ingredient);
                     List<String> allLines = new ArrayList<String>(original_allLines);
-		    allLines.set(suspFile.getSuspiciousLineNumber()-1, ingredient);
+            allLines.set(suspFile.getSuspiciousLineNumber()-1, ingredient);
                     path_to_patch = path_output+File.separator+project+File.separator+(project+"_"+bugid)+File.separator+id+File.separator+suspFile.getFileName();
                     patch = new File(path_to_patch);
                     System.out.println(patch.getAbsolutePath());
@@ -143,7 +143,7 @@ public static void main(String[] args) throws Exception
                     {
                       writer.println(line);
                     }
-		    writer.flush();
+            writer.flush();
                     writer.close();
 
                     fvariant = new FileProgramVariant(id, suspFile.getClassName(), patch);
@@ -151,7 +151,7 @@ public static void main(String[] args) throws Exception
                     if(resultValidation != null && resultValidation.isSuccessful())
                     {
                         System.out.println("Found patch for " + (project+"_"+bugid) + ", id: " + id);
-                    	command = "diff -u " + smp.getCodeElement().getPosition().getFile().getAbsolutePath() + " " + patch.getAbsolutePath();
+                        command = "diff -u " + smp.getCodeElement().getPosition().getFile().getAbsolutePath() + " " + patch.getAbsolutePath();
                         System.out.println("Execute command: " + command);
                         p = Runtime.getRuntime().exec(command);
                         p.waitFor();
@@ -168,13 +168,13 @@ public static void main(String[] args) throws Exception
                         writer.print(output.toString());
                         writer.flush();
                         writer.close();
-		    }else{
-			patch.delete();
-			patch.getParentFile().delete();
-		    }
+            }else{
+            patch.delete();
+            patch.getParentFile().delete();
+            }
                     id++;
                 }
-		if(System.currentTimeMillis() >= end)
+        if(System.currentTimeMillis() >= end)
                 {
                     break;
                 }

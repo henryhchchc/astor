@@ -6,5 +6,5 @@ package fr.inria.astor.core.solutionsearch.population;
  *
  */
 public enum PopulationConformation {
-	PARENTS,SOLUTIONS, ORIGINAL
+    PARENTS,SOLUTIONS, ORIGINAL
 }

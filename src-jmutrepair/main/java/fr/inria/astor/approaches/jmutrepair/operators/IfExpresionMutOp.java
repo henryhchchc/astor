@@ -17,41 +17,41 @@ import spoon.reflect.declaration.CtElement;
 @SuppressWarnings("rawtypes")
 public class IfExpresionMutOp extends ExpresionMutOp {
 
-	public IfExpresionMutOp() {
-		super();
-	}
+    public IfExpresionMutOp() {
+        super();
+    }
 
-	@Override
-	public boolean canBeAppliedToPoint(ModificationPoint point) {
-		return (point.getCodeElement() instanceof CtIf);
-	}
+    @Override
+    public boolean canBeAppliedToPoint(ModificationPoint point) {
+        return (point.getCodeElement() instanceof CtIf);
+    }
 
-	protected OperatorInstance createModificationInstance(ModificationPoint point, MutantCtElement fix)
-			throws IllegalAccessException {
-		CtIf targetIF = (CtIf) point.getCodeElement();
-		OperatorInstance operation = new OperatorInstance();
-		operation.setOriginal(targetIF.getCondition());
-		operation.setOperationApplied(this);
-		operation.setModificationPoint(point);
-		operation.setModified(fix.getElement());
+    protected OperatorInstance createModificationInstance(ModificationPoint point, MutantCtElement fix)
+            throws IllegalAccessException {
+        CtIf targetIF = (CtIf) point.getCodeElement();
+        OperatorInstance operation = new OperatorInstance();
+        operation.setOriginal(targetIF.getCondition());
+        operation.setOperationApplied(this);
+        operation.setModificationPoint(point);
+        operation.setModified(fix.getElement());
 
-		return operation;
-	}
+        return operation;
+    }
 
-	/** Return the list of CtElements Mutanted */
-	@Override
-	public List<MutantCtElement> getMutants(CtElement element) {
+    /** Return the list of CtElements Mutanted */
+    @Override
+    public List<MutantCtElement> getMutants(CtElement element) {
 
-		CtIf targetIF = (CtIf) element;
-		List<MutantCtElement> mutations = null;
-		mutations = this.mutatorBinary.execute(targetIF.getCondition());
-		return mutations;
-	}
+        CtIf targetIF = (CtIf) element;
+        List<MutantCtElement> mutations = null;
+        mutations = this.mutatorBinary.execute(targetIF.getCondition());
+        return mutations;
+    }
 
-	@Override
-	public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
 }

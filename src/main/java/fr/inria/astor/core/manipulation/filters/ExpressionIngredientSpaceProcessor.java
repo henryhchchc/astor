@@ -16,22 +16,22 @@ import spoon.reflect.code.CtVariableAccess;
  */
 public class ExpressionIngredientSpaceProcessor extends TargetElementProcessor<CtExpression> {
 
-	private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
-	public ExpressionIngredientSpaceProcessor() {
-		super();
+    public ExpressionIngredientSpaceProcessor() {
+        super();
 
-	}
+    }
 
-	@Override
-	public void process(CtExpression element) {
+    @Override
+    public void process(CtExpression element) {
 
-		if (element instanceof CtAssignment || element instanceof CtNewArray || element instanceof CtTypeAccess
-				|| element instanceof CtVariableAccess || element instanceof CtLiteral)
-			return;
-		if (element.getType() != null)
-			this.add(element);
+        if (element instanceof CtAssignment || element instanceof CtNewArray || element instanceof CtTypeAccess
+                || element instanceof CtVariableAccess || element instanceof CtLiteral)
+            return;
+        if (element.getType() != null)
+            this.add(element);
 
-	}
+    }
 
 }

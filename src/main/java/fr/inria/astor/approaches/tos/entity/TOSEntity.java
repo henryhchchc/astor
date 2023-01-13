@@ -23,108 +23,108 @@ import spoon.reflect.declaration.CtVariable;
  */
 public class TOSEntity extends Ingredient {
 
-	List<Placeholder> placeholders = new ArrayList<>();
+    List<Placeholder> placeholders = new ArrayList<>();
 
-	public TOSEntity() {
-		super(null);
-	}
+    public TOSEntity() {
+        super(null);
+    }
 
-	public List<Placeholder> getPlaceholders() {
-		return placeholders;
-	}
+    public List<Placeholder> getPlaceholders() {
+        return placeholders;
+    }
 
-	public void setPlaceholders(List<Placeholder> resolvers) {
-		this.placeholders = resolvers;
-	}
+    public void setPlaceholders(List<Placeholder> resolvers) {
+        this.placeholders = resolvers;
+    }
 
-	public int getNrPlaceholder() {
-		return placeholders.size();
-	}
+    public int getNrPlaceholder() {
+        return placeholders.size();
+    }
 
-	public CtElement generateCodeofTOS() {
+    public CtElement generateCodeofTOS() {
 
-		for (Placeholder placeholder : placeholders) {
+        for (Placeholder placeholder : placeholders) {
 
-			placeholder.apply();
+            placeholder.apply();
 
-		}
-		CtCodeElement cloned = MutationSupporter.clone((CtCodeElement) this.derivedFrom);
+        }
+        CtCodeElement cloned = MutationSupporter.clone((CtCodeElement) this.derivedFrom);
 
-		this.ingredientCode = cloned;
+        this.ingredientCode = cloned;
 
-		for (Placeholder placeholder : placeholders) {
+        for (Placeholder placeholder : placeholders) {
 
-			placeholder.revert();
+            placeholder.revert();
 
-		}
+        }
 
-		return this.ingredientCode;
+        return this.ingredientCode;
 
-	}
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((placeholders == null) ? 0 : placeholders.hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((placeholders == null) ? 0 : placeholders.hashCode());
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		TOSEntity other = (TOSEntity) obj;
-		if (this.ingredientCode == null) {
-			if (other.getCode() != null)
-				return false;
-		} else if (!this.getCode().equals(other.getCode()))
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        TOSEntity other = (TOSEntity) obj;
+        if (this.ingredientCode == null) {
+            if (other.getCode() != null)
+                return false;
+        } else if (!this.getCode().equals(other.getCode()))
+            return false;
+        return true;
+    }
 
-	@Override
-	public CtElement getCode() {
-		if (this.ingredientCode == null) {
-			return this.generateCodeofTOS();
-		}
-		return super.getCode();
-	}
+    @Override
+    public CtElement getCode() {
+        if (this.ingredientCode == null) {
+            return this.generateCodeofTOS();
+        }
+        return super.getCode();
+    }
 
-	public boolean canBeApplied(ModificationPoint modificationPoint) {
-		return getVarsOutOfContext(modificationPoint).isEmpty();
-	}
+    public boolean canBeApplied(ModificationPoint modificationPoint) {
+        return getVarsOutOfContext(modificationPoint).isEmpty();
+    }
 
-	public List<CtVariableAccess> getVarsOutOfContext(ModificationPoint modificationPoint) {
+    public List<CtVariableAccess> getVarsOutOfContext(ModificationPoint modificationPoint) {
 
-		List<CtVariable> variablesInScope = modificationPoint.getContextOfModificationPoint();
+        List<CtVariable> variablesInScope = modificationPoint.getContextOfModificationPoint();
 
-		Set<CtCodeElement> affected = getAffectedElements();
+        Set<CtCodeElement> affected = getAffectedElements();
 
-		// Check Those vars not transformed must exist in context
-		List<CtVariableAccess> outOfContext = VariableResolver.retriveVariablesOutOfContext(variablesInScope,
-				this.derivedFrom);
+        // Check Those vars not transformed must exist in context
+        List<CtVariableAccess> outOfContext = VariableResolver.retriveVariablesOutOfContext(variablesInScope,
+                this.derivedFrom);
 
-		// remove the affected
-		boolean removed = outOfContext.removeAll(affected);
+        // remove the affected
+        boolean removed = outOfContext.removeAll(affected);
 
-		return outOfContext;
+        return outOfContext;
 
-	}
+    }
 
-	public Set<CtCodeElement> getAffectedElements() {
-		Set<CtCodeElement> affected = new HashSet<>();
+    public Set<CtCodeElement> getAffectedElements() {
+        Set<CtCodeElement> affected = new HashSet<>();
 
-		for (Placeholder placeholder : this.getPlaceholders()) {
+        for (Placeholder placeholder : this.getPlaceholders()) {
 
-			List<CtCodeElement> affected_i = placeholder.getAffectedElements();
-			affected.addAll(affected_i);
+            List<CtCodeElement> affected_i = placeholder.getAffectedElements();
+            affected.addAll(affected_i);
 
-		}
-		return affected;
-	}
+        }
+        return affected;
+    }
 }

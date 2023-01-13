@@ -31,113 +31,113 @@ import spoon.support.RuntimeProcessingManager;
  */
 public class SpoonClassCompiler implements VariantCompiler {
 
-	private Factory factory;
+    private Factory factory;
 
-	private ProcessingManager processing;
+    private ProcessingManager processing;
 
-	private DefaultJavaPrettyPrinter prettyPrinter;
+    private DefaultJavaPrettyPrinter prettyPrinter;
 
-	private JavaXToolsCompiler dcc = new JavaXToolsCompiler();
+    private JavaXToolsCompiler dcc = new JavaXToolsCompiler();
 
-	private Logger logger = Logger.getLogger(SpoonClassCompiler.class.getName());
+    private Logger logger = Logger.getLogger(SpoonClassCompiler.class.getName());
 
-	public SpoonClassCompiler() {
-		this.factory = MutationSupporter.getFactory();
-	}
+    public SpoonClassCompiler() {
+        this.factory = MutationSupporter.getFactory();
+    }
 
-	public SpoonClassCompiler(Factory factory) {
-		this.factory = factory;
-	}
+    public SpoonClassCompiler(Factory factory) {
+        this.factory = factory;
+    }
 
-	@Override
-	public CompilationResult compile(ProgramVariant instance, URL[] cp) {
-		List<CtType<?>> ctClasses = instance.getClassesAffectedByOperators();
+    @Override
+    public CompilationResult compile(ProgramVariant instance, URL[] cp) {
+        List<CtType<?>> ctClasses = instance.getClassesAffectedByOperators();
 
-		if (ctClasses == null || ctClasses.isEmpty()) {
-			// In case we dont have affected by operations, we take all.
-			ctClasses = instance.getAllClasses();
+        if (ctClasses == null || ctClasses.isEmpty()) {
+            // In case we dont have affected by operations, we take all.
+            ctClasses = instance.getAllClasses();
 
-			if (ctClasses == null || ctClasses.isEmpty())
-				throw new IllegalStateException("No class to compile");
-		}
+            if (ctClasses == null || ctClasses.isEmpty())
+                throw new IllegalStateException("No class to compile");
+        }
 
-		CompilationResult compilation2 = this.compile(ctClasses, cp);
+        CompilationResult compilation2 = this.compile(ctClasses, cp);
 
-		return compilation2;
-	}
+        return compilation2;
+    }
 
-	@Override
-	public CompilationResult compile(Collection<? extends CtType> ctClassList, URL[] cp) {
+    @Override
+    public CompilationResult compile(Collection<? extends CtType> ctClassList, URL[] cp) {
 
-		Map<String, String> toCompile = new HashMap<String, String>();
-		prettyPrinter = new DefaultJavaPrettyPrinter(this.getFactory().getEnvironment());
+        Map<String, String> toCompile = new HashMap<String, String>();
+        prettyPrinter = new DefaultJavaPrettyPrinter(this.getFactory().getEnvironment());
 
-		for (CtType ctClass : ctClassList) {
-			try {
-				this.getProcessingManager().process(ctClass);
-				toCompile.put(ctClass.getQualifiedName(), sourceForModelledClass(ctClass));
-			} catch (Exception e) {
-				logger.error("Error printing class " + ctClass.getQualifiedName(), e);
-			}
-		}
-		try {
-			return compile(cp, toCompile);
-		} catch (Exception e) {
-			logger.error("Problem compiling");
-			throw e;
-		}
-	}
+        for (CtType ctClass : ctClassList) {
+            try {
+                this.getProcessingManager().process(ctClass);
+                toCompile.put(ctClass.getQualifiedName(), sourceForModelledClass(ctClass));
+            } catch (Exception e) {
+                logger.error("Error printing class " + ctClass.getQualifiedName(), e);
+            }
+        }
+        try {
+            return compile(cp, toCompile);
+        } catch (Exception e) {
+            logger.error("Problem compiling");
+            throw e;
+        }
+    }
 
-	public CompilationResult compile(URL[] cp, Map<String, String> toCompile) {
-		List<String> cps = new ArrayList<>();
-		cps.add("-cp");
-		String path = "";
-		for (URL url : cp) {
-			path += ((url.getPath()) + File.pathSeparator);
-		}
-		cps.add(path);
+    public CompilationResult compile(URL[] cp, Map<String, String> toCompile) {
+        List<String> cps = new ArrayList<>();
+        cps.add("-cp");
+        String path = "";
+        for (URL url : cp) {
+            path += ((url.getPath()) + File.pathSeparator);
+        }
+        cps.add(path);
 
-		String compliance = ConfigurationProperties.getProperty("javacompliancelevel");
-		cps.add("-source");
-		cps.add("1." + compliance);
+        String compliance = ConfigurationProperties.getProperty("javacompliancelevel");
+        cps.add("-source");
+        cps.add("1." + compliance);
 
-		cps.add("-target");
-		cps.add("1." + compliance);
-		dcc = new JavaXToolsCompiler();
-		CompilationResult rbc = dcc.javaBytecodeFor(toCompile, new HashMap<String, byte[]>(), cps);
-		return rbc;
-	}
+        cps.add("-target");
+        cps.add("1." + compliance);
+        dcc = new JavaXToolsCompiler();
+        CompilationResult rbc = dcc.javaBytecodeFor(toCompile, new HashMap<String, byte[]>(), cps);
+        return rbc;
+    }
 
-	protected synchronized String sourceForModelledClass(CtType<?> modelledClass) {
-		prettyPrinter = new DefaultJavaPrettyPrinter(this.getFactory().getEnvironment());
-		prettyPrinter.scan(modelledClass);
-		String sourceCode = "package " + modelledClass.getPackage().toString() + ";"
-				+ System.getProperty("line.separator") + prettyPrinter.toString();
-		prettyPrinter = new DefaultJavaPrettyPrinter(this.getFactory().getEnvironment());
-		return sourceCode;
-	}
+    protected synchronized String sourceForModelledClass(CtType<?> modelledClass) {
+        prettyPrinter = new DefaultJavaPrettyPrinter(this.getFactory().getEnvironment());
+        prettyPrinter.scan(modelledClass);
+        String sourceCode = "package " + modelledClass.getPackage().toString() + ";"
+                + System.getProperty("line.separator") + prettyPrinter.toString();
+        prettyPrinter = new DefaultJavaPrettyPrinter(this.getFactory().getEnvironment());
+        return sourceCode;
+    }
 
-	/**
-	 * Gets the associated (standard) environment. When we create it, we set the
-	 * compliance level taken as parameter (if any)
-	 */
+    /**
+     * Gets the associated (standard) environment. When we create it, we set the
+     * compliance level taken as parameter (if any)
+     */
 
-	/**
-	 * Gets the associated factory.
-	 */
+    /**
+     * Gets the associated factory.
+     */
 
-	public Factory getFactory() {
-		return this.factory;
-	}
+    public Factory getFactory() {
+        return this.factory;
+    }
 
-	/**
-	 * Gets the processing manager.
-	 */
-	public ProcessingManager getProcessingManager() {
-		if (this.processing == null) {
-			this.processing = new RuntimeProcessingManager(this.getFactory());
-		}
-		return this.processing;
-	}
+    /**
+     * Gets the processing manager.
+     */
+    public ProcessingManager getProcessingManager() {
+        if (this.processing == null) {
+            this.processing = new RuntimeProcessingManager(this.getFactory());
+        }
+        return this.processing;
+    }
 
 }

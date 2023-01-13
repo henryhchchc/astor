@@ -24,49 +24,49 @@ import spoon.reflect.code.CtWhile;
  */
 public class SpecialStatementFixSpaceProcessor extends TargetElementProcessor<CtStatement> {
 
-	/**
-	 * The default statement transformator is CTStamemeny
-	 */
-	public SpecialStatementFixSpaceProcessor() {
-		super();
-	}
+    /**
+     * The default statement transformator is CTStamemeny
+     */
+    public SpecialStatementFixSpaceProcessor() {
+        super();
+    }
 
-	@Override
-	public void process(CtStatement element) {
+    @Override
+    public void process(CtStatement element) {
 
-		if (element instanceof CtIf) {
-			add(((CtIf) element).getCondition());
-		} else if (element instanceof CtFor) {
-			add(((CtFor) element).getExpression());
-		} else if (element instanceof CtWhile) {
-			add(((CtWhile) element).getLoopingExpression());
-		} else if (element instanceof CtDo) {
-			add(((CtDo) element).getLoopingExpression());
-		} else if (element instanceof CtThrow) {
-			add(((CtThrow) element).getThrownExpression());
-		} else if (element instanceof CtInvocation && (element.getParent() instanceof CtBlock)) {
-			add(element);
-		} else if (element instanceof CtAssignment || element instanceof CtConstructorCall
-				|| element instanceof CtCFlowBreak || element instanceof CtLocalVariable) {
-			add(element);
-		}
+        if (element instanceof CtIf) {
+            add(((CtIf) element).getCondition());
+        } else if (element instanceof CtFor) {
+            add(((CtFor) element).getExpression());
+        } else if (element instanceof CtWhile) {
+            add(((CtWhile) element).getLoopingExpression());
+        } else if (element instanceof CtDo) {
+            add(((CtDo) element).getLoopingExpression());
+        } else if (element instanceof CtThrow) {
+            add(((CtThrow) element).getThrownExpression());
+        } else if (element instanceof CtInvocation && (element.getParent() instanceof CtBlock)) {
+            add(element);
+        } else if (element instanceof CtAssignment || element instanceof CtConstructorCall
+                || element instanceof CtCFlowBreak || element instanceof CtLocalVariable) {
+            add(element);
+        }
 
-	}
+    }
 
-	@Override
-	public void add(CtCodeElement st) {
+    @Override
+    public void add(CtCodeElement st) {
 
-		if (st == null || st.getParent() == null) {
-			return;
-		}
+        if (st == null || st.getParent() == null) {
+            return;
+        }
 
-		if (allowsDuplicateIngredients || !contains(st)) {
-			CtCodeElement code = st;
+        if (allowsDuplicateIngredients || !contains(st)) {
+            CtCodeElement code = st;
 
-			if (mustClone()) {
-				code = MutationSupporter.clone(st);
-			}
-			spaceElements.add(code);
-		}
-	}
+            if (mustClone()) {
+                code = MutationSupporter.clone(st);
+            }
+            spaceElements.add(code);
+        }
+    }
 }

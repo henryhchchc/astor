@@ -23,61 +23,61 @@ import spoon.reflect.declaration.CtElement;
  */
 public class ShortestIngredientSearchStrategy extends IngredientSearchStrategy {
 
-	private List<CtElement> locationsAnalyzed = new ArrayList<>();
+    private List<CtElement> locationsAnalyzed = new ArrayList<>();
 
-	public ShortestIngredientSearchStrategy(IngredientPool space) {
-		super(space);
+    public ShortestIngredientSearchStrategy(IngredientPool space) {
+        super(space);
 
-	}
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Ingredient getFixIngredient(ModificationPoint modificationPoint, AstorOperator operationType) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public Ingredient getFixIngredient(ModificationPoint modificationPoint, AstorOperator operationType) {
 
-		// We get ingredients that we can use to modify the point.
-		List<Ingredient> ingredientsLocation = null;
-		if (operationType instanceof ReplaceOp)
-			// we specify the kind of operator, so, ingredients are returned
-			// according to it.
-			ingredientsLocation = this.ingredientSpace.getIngredients(modificationPoint.getCodeElement(),
-					modificationPoint.getCodeElement().getClass().getSimpleName());
-		else {
-			// if we do not specify the kind of operator to apply to the point,
-			// any kind of ingredient can be returned
-			ingredientsLocation = this.ingredientSpace.getIngredients(modificationPoint.getCodeElement());
+        // We get ingredients that we can use to modify the point.
+        List<Ingredient> ingredientsLocation = null;
+        if (operationType instanceof ReplaceOp)
+            // we specify the kind of operator, so, ingredients are returned
+            // according to it.
+            ingredientsLocation = this.ingredientSpace.getIngredients(modificationPoint.getCodeElement(),
+                    modificationPoint.getCodeElement().getClass().getSimpleName());
+        else {
+            // if we do not specify the kind of operator to apply to the point,
+            // any kind of ingredient can be returned
+            ingredientsLocation = this.ingredientSpace.getIngredients(modificationPoint.getCodeElement());
 
-		}
-		if (ingredientsLocation == null || ingredientsLocation.isEmpty()) {
-			return null;
-		}
-		// We store the location to avoid sorting the ingredient twice.
-		if (!locationsAnalyzed.contains(modificationPoint.getCodeElement())) {
-			locationsAnalyzed.add(modificationPoint.getCodeElement());
-			// We create the list to reorder the ingredients without modifying
-			// the original.
-			List<Ingredient> ingredientsLocationSort = new ArrayList<>(ingredientsLocation);
+        }
+        if (ingredientsLocation == null || ingredientsLocation.isEmpty()) {
+            return null;
+        }
+        // We store the location to avoid sorting the ingredient twice.
+        if (!locationsAnalyzed.contains(modificationPoint.getCodeElement())) {
+            locationsAnalyzed.add(modificationPoint.getCodeElement());
+            // We create the list to reorder the ingredients without modifying
+            // the original.
+            List<Ingredient> ingredientsLocationSort = new ArrayList<>(ingredientsLocation);
 
-			// We have never analyze this location, let's sort the ingredients.
-			Collections.sort(ingredientsLocationSort, new Comparator<Ingredient>() {
+            // We have never analyze this location, let's sort the ingredients.
+            Collections.sort(ingredientsLocationSort, new Comparator<Ingredient>() {
 
-				@Override
-				public int compare(Ingredient o1, Ingredient o2) {
-					return Integer.compare(o1.toString().length(), o2.toString().length());
-				}
-			});
-			// We reintroduce the sorted list ingredient into the space
-			this.ingredientSpace.setIngredients(modificationPoint.getCodeElement(), ingredientsLocationSort);
-			ingredientsLocation = ingredientsLocationSort;
-		}
-		int size = ingredientsLocation.size();
-		if (size > 0) {
-			// We get the smaller element
-			CtElement element = ingredientsLocation.get(0).getCode();
-			// we remove it from space
-			ingredientsLocation.remove(0);
-			return new Ingredient(element, this.ingredientSpace.spaceScope());
-		} // any ingredient
-		return null;
-	}
+                @Override
+                public int compare(Ingredient o1, Ingredient o2) {
+                    return Integer.compare(o1.toString().length(), o2.toString().length());
+                }
+            });
+            // We reintroduce the sorted list ingredient into the space
+            this.ingredientSpace.setIngredients(modificationPoint.getCodeElement(), ingredientsLocationSort);
+            ingredientsLocation = ingredientsLocationSort;
+        }
+        int size = ingredientsLocation.size();
+        if (size > 0) {
+            // We get the smaller element
+            CtElement element = ingredientsLocation.get(0).getCode();
+            // we remove it from space
+            ingredientsLocation.remove(0);
+            return new Ingredient(element, this.ingredientSpace.spaceScope());
+        } // any ingredient
+        return null;
+    }
 
 }

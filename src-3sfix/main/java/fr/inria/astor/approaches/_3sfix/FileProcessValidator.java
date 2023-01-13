@@ -24,55 +24,55 @@ import fr.inria.astor.util.Converters;
  *
  */
 public class FileProcessValidator extends JUnitProcessValidator {
-	SpoonClassCompiler compiled = new SpoonClassCompiler();
+    SpoonClassCompiler compiled = new SpoonClassCompiler();
 
-	
-	@Override
-	protected URL[] createClassPath(ProgramVariant mutatedVariant, ProjectRepairFacade projectFacade)
-			throws MalformedURLException {
+    
+    @Override
+    protected URL[] createClassPath(ProgramVariant mutatedVariant, ProjectRepairFacade projectFacade)
+            throws MalformedURLException {
 
-		List<URL> originalURL = createOriginalURLs(projectFacade);
-		URL[] bc;
+        List<URL> originalURL = createOriginalURLs(projectFacade);
+        URL[] bc;
 
-		File variantOutputFile = defineLocationOfCompiledCode(mutatedVariant, projectFacade);
+        File variantOutputFile = defineLocationOfCompiledCode(mutatedVariant, projectFacade);
 
-		bc = Converters.redefineURL(variantOutputFile, originalURL.toArray(new URL[0]));
-		return bc;
-	}
-	
-	@Override
-	protected File defineLocationOfCompiledCode(ProgramVariant mutatedVariant, ProjectRepairFacade projectFacade) {
+        bc = Converters.redefineURL(variantOutputFile, originalURL.toArray(new URL[0]));
+        return bc;
+    }
+    
+    @Override
+    protected File defineLocationOfCompiledCode(ProgramVariant mutatedVariant, ProjectRepairFacade projectFacade) {
 
-		FileProgramVariant fileVariant = (FileProgramVariant) mutatedVariant;
-		File codeFile = fileVariant.getLocationVariantCodeSource();
+        FileProgramVariant fileVariant = (FileProgramVariant) mutatedVariant;
+        File codeFile = fileVariant.getLocationVariantCodeSource();
 
-		String content = "";
-		try {
-			content = new String(Files.readAllBytes(codeFile.toPath()));
-		} catch (IOException e) {
-			e.printStackTrace();
-			log.error(e);
-			return null;
-		}
+        String content = "";
+        try {
+            content = new String(Files.readAllBytes(codeFile.toPath()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error(e);
+            return null;
+        }
 
-		Map<String, String> toCompile = new HashMap<String, String>();
-		toCompile.put(fileVariant.getClassName(), content);
+        Map<String, String> toCompile = new HashMap<String, String>();
+        toCompile.put(fileVariant.getClassName(), content);
 
-		URL[] cp;
-		try {
-			cp = projectFacade.getClassPathURLforProgramVariant(ProgramVariant.DEFAULT_ORIGINAL_VARIANT);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			log.error(e);
-			return null;
-		}
+        URL[] cp;
+        try {
+            cp = projectFacade.getClassPathURLforProgramVariant(ProgramVariant.DEFAULT_ORIGINAL_VARIANT);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            log.error(e);
+            return null;
+        }
 
-		CompilationResult compilation = compiled.compile(cp, toCompile);
-		log.debug("Compilation: " + compilation.getErrorList());
-		fileVariant.setCompilation(compilation);
+        CompilationResult compilation = compiled.compile(cp, toCompile);
+        log.debug("Compilation: " + compilation.getErrorList());
+        fileVariant.setCompilation(compilation);
 
-		return super.defineLocationOfCompiledCode(fileVariant, projectFacade);
-	}
+        return super.defineLocationOfCompiledCode(fileVariant, projectFacade);
+    }
 
 
 

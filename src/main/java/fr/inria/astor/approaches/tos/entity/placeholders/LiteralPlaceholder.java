@@ -16,58 +16,58 @@ import spoon.reflect.code.CtLiteral;
  */
 public class LiteralPlaceholder extends Placeholder {
 
-	Object previousValue = null;
-	Object placeholder_name = null;
+    Object previousValue = null;
+    Object placeholder_name = null;
 
-	CtLiteral affected = null;
+    CtLiteral affected = null;
 
-	public LiteralPlaceholder(Object newValue, CtLiteral affected) {
-		super();
-		this.placeholder_name = newValue;
-		this.affected = affected;
-	}
+    public LiteralPlaceholder(Object newValue, CtLiteral affected) {
+        super();
+        this.placeholder_name = newValue;
+        this.affected = affected;
+    }
 
-	@Override
-	public void apply() {
+    @Override
+    public void apply() {
 
-		previousValue = affected.getValue();
-		affected.setValue(placeholder_name);
+        previousValue = affected.getValue();
+        affected.setValue(placeholder_name);
 
-	}
+    }
 
-	@Override
-	public void revert() {
+    @Override
+    public void revert() {
 
-		affected.setValue(previousValue);
-		previousValue = null;
+        affected.setValue(previousValue);
+        previousValue = null;
 
-	}
+    }
 
-	@Override
-	public List<CtCodeElement> getAffectedElements() {
-		List<CtCodeElement> elements = new ArrayList<>();
-		elements.add(affected);
-		return elements;
-	}
+    @Override
+    public List<CtCodeElement> getAffectedElements() {
+        List<CtCodeElement> elements = new ArrayList<>();
+        elements.add(affected);
+        return elements;
+    }
 
-	@Override
-	public List<Transformation> visit(ModificationPoint modificationPoint, PatchGenerator visitor) {
-		
-		return visitor.process(modificationPoint, this);
-	}
+    @Override
+    public List<Transformation> visit(ModificationPoint modificationPoint, PatchGenerator visitor) {
+        
+        return visitor.process(modificationPoint, this);
+    }
 
-	public CtLiteral getAffected() {
-		return affected;
-	}
-	public String toString(){
-		return this.getClass().getSimpleName()+ ": "+placeholder_name + " --> "+affected.getValue();
-	}
+    public CtLiteral getAffected() {
+        return affected;
+    }
+    public String toString(){
+        return this.getClass().getSimpleName()+ ": "+placeholder_name + " --> "+affected.getValue();
+    }
 
-	public Object getPlaceholder_name() {
-		return placeholder_name;
-	}
+    public Object getPlaceholder_name() {
+        return placeholder_name;
+    }
 
-	public void setPlaceholder_name(Object placeholder_name) {
-		this.placeholder_name = placeholder_name;
-	}
+    public void setPlaceholder_name(Object placeholder_name) {
+        this.placeholder_name = placeholder_name;
+    }
 }

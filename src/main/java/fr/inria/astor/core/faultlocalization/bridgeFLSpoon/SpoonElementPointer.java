@@ -16,28 +16,28 @@ import spoon.reflect.declaration.CtElement;
  */
 public class SpoonElementPointer extends AbstractProcessor<CtElement> {
 
-	Logger logger = Logger.getLogger(SpoonElementPointer.class.getName());
+    Logger logger = Logger.getLogger(SpoonElementPointer.class.getName());
 
-	
-	/**
-	 * Line to search CtElements
-	 */
-	public static int line = 0;
+    
+    /**
+     * Line to search CtElements
+     */
+    public static int line = 0;
 
-	/**
-	 * Result of the processor: CtElements found in line given by attribute @line
-	 */
-	public static List<CtElement> inLine = new ArrayList<CtElement>();
-	
-	
-	public void process(CtElement element) {
-		
-		SourcePosition pos = element.getPosition();
-		if (pos != null && pos.isValidPosition() && pos.getLine() == line) {
-			inLine.add(element);
-		}
-	}
-	
+    /**
+     * Result of the processor: CtElements found in line given by attribute @line
+     */
+    public static List<CtElement> inLine = new ArrayList<CtElement>();
+    
+    
+    public void process(CtElement element) {
+        
+        SourcePosition pos = element.getPosition();
+        if (pos != null && pos.isValidPosition() && pos.getLine() == line) {
+            inLine.add(element);
+        }
+    }
+    
 
 
 }

@@ -15,86 +15,86 @@ import spoon.reflect.declaration.CtVariable;
  */
 public class ModificationPoint implements Comparable {
 
-	protected ProgramVariant programVariant;
+    protected ProgramVariant programVariant;
 
-	protected CtElement codeElement;
+    protected CtElement codeElement;
 
-	protected CtClass ctClass;
+    protected CtClass ctClass;
 
-	List<CtVariable> contextOfModificationPoint;
+    List<CtVariable> contextOfModificationPoint;
 
-	public int identified = 0;
+    public int identified = 0;
 
-	protected int generation = -1;
+    protected int generation = -1;
 
-	public ModificationPoint() {
-	}
+    public ModificationPoint() {
+    }
 
-	public ModificationPoint(int id, CtElement rootElement, CtClass ctClass, List<CtVariable> contextOfGen,
-			int generation) {
-		super();
-		this.identified = id;
-		this.codeElement = rootElement;
-		this.ctClass = ctClass;
-		this.contextOfModificationPoint = contextOfGen;
-		this.generation = generation;
-	}
+    public ModificationPoint(int id, CtElement rootElement, CtClass ctClass, List<CtVariable> contextOfGen,
+            int generation) {
+        super();
+        this.identified = id;
+        this.codeElement = rootElement;
+        this.ctClass = ctClass;
+        this.contextOfModificationPoint = contextOfGen;
+        this.generation = generation;
+    }
 
-	public ModificationPoint(CtElement rootElement, CtClass ctClass, List<CtVariable> contextOfGen) {
-		super();
-		this.codeElement = rootElement;
-		this.ctClass = ctClass;
-		this.contextOfModificationPoint = contextOfGen;
-	}
+    public ModificationPoint(CtElement rootElement, CtClass ctClass, List<CtVariable> contextOfGen) {
+        super();
+        this.codeElement = rootElement;
+        this.ctClass = ctClass;
+        this.contextOfModificationPoint = contextOfGen;
+    }
 
-	public CtElement getCodeElement() {
-		return codeElement;
-	}
+    public CtElement getCodeElement() {
+        return codeElement;
+    }
 
-	public void setCodeElement(CtElement rootElement) {
-		this.codeElement = rootElement;
-	}
+    public void setCodeElement(CtElement rootElement) {
+        this.codeElement = rootElement;
+    }
 
-	public CtClass getCtClass() {
-		return ctClass;
-	}
+    public CtClass getCtClass() {
+        return ctClass;
+    }
 
-	public void setCtClass(CtClass clonedClass) {
-		this.ctClass = clonedClass;
-	}
+    public void setCtClass(CtClass clonedClass) {
+        this.ctClass = clonedClass;
+    }
 
-	public String toString() {
-		return "[" + codeElement.getClass().getSimpleName() + ", in " + ctClass.getQualifiedName() + "]";
-	}
+    public String toString() {
+        return "[" + codeElement.getClass().getSimpleName() + ", in " + ctClass.getQualifiedName() + "]";
+    }
 
-	public List<CtVariable> getContextOfModificationPoint() {
-		return contextOfModificationPoint;
-	}
+    public List<CtVariable> getContextOfModificationPoint() {
+        return contextOfModificationPoint;
+    }
 
-	public void setContextOfModificationPoint(List<CtVariable> contextOfModificationPoint) {
-		this.contextOfModificationPoint = contextOfModificationPoint;
-	}
+    public void setContextOfModificationPoint(List<CtVariable> contextOfModificationPoint) {
+        this.contextOfModificationPoint = contextOfModificationPoint;
+    }
 
-	public ProgramVariant getProgramVariant() {
-		return programVariant;
-	}
+    public ProgramVariant getProgramVariant() {
+        return programVariant;
+    }
 
-	public void setProgramVariant(ProgramVariant programVariant) {
-		this.programVariant = programVariant;
-	}
+    public void setProgramVariant(ProgramVariant programVariant) {
+        this.programVariant = programVariant;
+    }
 
-	@Override
-	public int compareTo(Object o) {
-		if (o instanceof ModificationPoint) {
-			return Integer.compare(this.identified, ((ModificationPoint) o).identified);
-		}
+    @Override
+    public int compareTo(Object o) {
+        if (o instanceof ModificationPoint) {
+            return Integer.compare(this.identified, ((ModificationPoint) o).identified);
+        }
 
-		return 0;
+        return 0;
 
-	}
+    }
 
-	public ModificationPoint clone() {
-		return new ModificationPoint(identified, codeElement, ctClass, contextOfModificationPoint, this.generation);
-	}
+    public ModificationPoint clone() {
+        return new ModificationPoint(identified, codeElement, ctClass, contextOfModificationPoint, this.generation);
+    }
 
 }

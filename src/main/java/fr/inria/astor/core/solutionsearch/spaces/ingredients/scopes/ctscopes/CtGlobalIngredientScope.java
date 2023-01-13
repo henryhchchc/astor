@@ -18,36 +18,36 @@ import spoon.reflect.declaration.CtPackage;
  */
 public class CtGlobalIngredientScope extends CtLocationIngredientSpace {
 
-	public CtGlobalIngredientScope() throws JSAPException {
-		super();
-	}
+    public CtGlobalIngredientScope() throws JSAPException {
+        super();
+    }
 
-	public CtGlobalIngredientScope(TargetElementProcessor<?> processor) throws JSAPException {
-		super(processor);
-	}
+    public CtGlobalIngredientScope(TargetElementProcessor<?> processor) throws JSAPException {
+        super(processor);
+    }
 
-	public CtGlobalIngredientScope(List<TargetElementProcessor<?>> processors) throws JSAPException {
-		super(processors);
-	}
+    public CtGlobalIngredientScope(List<TargetElementProcessor<?>> processors) throws JSAPException {
+        super(processors);
+    }
 
-	/**
-	 * We find the root package (empty package)
-	 */
-	@Override
-	public CtElement calculateLocation(CtElement elementToModify) {
-		CtElement root = null;
-		CtElement parent = elementToModify;
-		do {
-			root = parent;
-			parent = root.getParent(getCtElementForSplitSpace());
+    /**
+     * We find the root package (empty package)
+     */
+    @Override
+    public CtElement calculateLocation(CtElement elementToModify) {
+        CtElement root = null;
+        CtElement parent = elementToModify;
+        do {
+            root = parent;
+            parent = root.getParent(getCtElementForSplitSpace());
 
-		} while (parent != null);
+        } while (parent != null);
 
-		return root;
-	}
-	
-	@Override
-	public Class getCtElementForSplitSpace() {
-		return CtPackage.class;
-	}
+        return root;
+    }
+    
+    @Override
+    public Class getCtElementForSplitSpace() {
+        return CtPackage.class;
+    }
 }

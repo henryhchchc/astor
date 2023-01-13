@@ -13,48 +13,48 @@ public class EvoSuiteValidationResult  extends  CompoundValidationResult {
 
 
 
-	public TestCaseVariantValidationResult getFailingTestValidation() {
-		return this.validations.get("failing");
-	}
+    public TestCaseVariantValidationResult getFailingTestValidation() {
+        return this.validations.get("failing");
+    }
 
-	public void setFailingTestValidation(TestCaseVariantValidationResult evoValidation) {
-		this.addValidation("failing", evoValidation);
-	}
-	
-	public TestCaseVariantValidationResult getEvoValidation() {
-		return this.validations.get("evo");
-	}
+    public void setFailingTestValidation(TestCaseVariantValidationResult evoValidation) {
+        this.addValidation("failing", evoValidation);
+    }
+    
+    public TestCaseVariantValidationResult getEvoValidation() {
+        return this.validations.get("evo");
+    }
 
-	public void setEvoValidation(TestCaseVariantValidationResult evoValidation) {
-		this.addValidation("evo", evoValidation);
-	}
+    public void setEvoValidation(TestCaseVariantValidationResult evoValidation) {
+        this.addValidation("evo", evoValidation);
+    }
 
-	public TestCaseVariantValidationResult getManualTestValidation() {
-		return this.getValidation("manual");
-		
-	}
+    public TestCaseVariantValidationResult getManualTestValidation() {
+        return this.getValidation("manual");
+        
+    }
 
-	public void setManualTestValidation(TestCaseVariantValidationResult manualTestValidation) {
-		this.addValidation("manual",manualTestValidation);
-	}
-	public String toString(){
-		return
-			//+ ((this.getValidation("original") != null)?"\noriginal: "+ (getValidation("original")):"")
-			 ((this.getFailingTestValidation() != null)?"\nfailing: "+ (getValidation("failing")):"")
-		+((this.getManualTestValidation() != null)?"\nmanual_regression: "+(getManualTestValidation()):"")
-		+((getEvoValidation() != null)?"\nevo_regression: "+ (getEvoValidation()):"")
-		;
-	}
+    public void setManualTestValidation(TestCaseVariantValidationResult manualTestValidation) {
+        this.addValidation("manual",manualTestValidation);
+    }
+    public String toString(){
+        return
+            //+ ((this.getValidation("original") != null)?"\noriginal: "+ (getValidation("original")):"")
+             ((this.getFailingTestValidation() != null)?"\nfailing: "+ (getValidation("failing")):"")
+        +((this.getManualTestValidation() != null)?"\nmanual_regression: "+(getManualTestValidation()):"")
+        +((getEvoValidation() != null)?"\nevo_regression: "+ (getEvoValidation()):"")
+        ;
+    }
 
-	@Override
-	public boolean isSuccessful() {
-	
-		return (getValidation("failing") == null || getValidation("failing").isSuccessful())
-				//I dont know when I included the manual as part of ES validation.
-				//&&
-				//(getValidation("manual") == null || getValidation("manual").wasSuccessful())
-				;
-	}
-	
-	
+    @Override
+    public boolean isSuccessful() {
+    
+        return (getValidation("failing") == null || getValidation("failing").isSuccessful())
+                //I dont know when I included the manual as part of ES validation.
+                //&&
+                //(getValidation("manual") == null || getValidation("manual").wasSuccessful())
+                ;
+    }
+    
+    
 }

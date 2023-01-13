@@ -15,13 +15,13 @@ import fr.inria.main.evolution.ExtensionPoints;
  */
 public class JKaliEngine extends ExhaustiveSearchEngine {
 
-	public JKaliEngine(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade) throws JSAPException {
-		super(mutatorExecutor, projFacade);
-		ConfigurationProperties.properties.setProperty("regressionforfaultlocalization", "true");
-		ConfigurationProperties.properties.setProperty("population", "1");
-		setPropertyIfNotDefined(ExtensionPoints.OPERATORS_SPACE.identifier, "suppression");
-		setPropertyIfNotDefined(ExtensionPoints.TARGET_CODE_PROCESSOR.identifier, "statements");
-	}
+    public JKaliEngine(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade) throws JSAPException {
+        super(mutatorExecutor, projFacade);
+        ConfigurationProperties.properties.setProperty("regressionforfaultlocalization", "true");
+        ConfigurationProperties.properties.setProperty("population", "1");
+        setPropertyIfNotDefined(ExtensionPoints.OPERATORS_SPACE.identifier, "suppression");
+        setPropertyIfNotDefined(ExtensionPoints.TARGET_CODE_PROCESSOR.identifier, "statements");
+    }
 
 
 }

@@ -24,95 +24,95 @@ import spoon.reflect.declaration.CtVariable;
  *
  */
 public class RandomTransformationStrategy extends CacheTransformationStrategy
-		implements IngredientTransformationStrategy {
+        implements IngredientTransformationStrategy {
 
-	protected Logger logger = Logger.getLogger(RandomTransformationStrategy.class.getName());
+    protected Logger logger = Logger.getLogger(RandomTransformationStrategy.class.getName());
 
-	public RandomTransformationStrategy() {
-		super();
-	}
+    public RandomTransformationStrategy() {
+        super();
+    }
 
-	@Override
-	public List<Ingredient> transform(ModificationPoint modificationPoint, Ingredient baseIngredient) {
+    @Override
+    public List<Ingredient> transform(ModificationPoint modificationPoint, Ingredient baseIngredient) {
 
-		if (this.alreadyTransformed(modificationPoint, baseIngredient)) {
-			return getCachedTransformations(modificationPoint, baseIngredient);
-		}
+        if (this.alreadyTransformed(modificationPoint, baseIngredient)) {
+            return getCachedTransformations(modificationPoint, baseIngredient);
+        }
 
-		List<Ingredient> result = new ArrayList<>();
+        List<Ingredient> result = new ArrayList<>();
 
-		CtCodeElement codeElementToModifyFromBase = (CtCodeElement) baseIngredient.getCode();
+        CtCodeElement codeElementToModifyFromBase = (CtCodeElement) baseIngredient.getCode();
 
-		if (modificationPoint.getContextOfModificationPoint().isEmpty()) {
-			logger.debug("The modification point  has not any var in scope");
-		}
+        if (modificationPoint.getContextOfModificationPoint().isEmpty()) {
+            logger.debug("The modification point  has not any var in scope");
+        }
 
-		VarMapping mapping = VariableResolver.mapVariablesFromContext(modificationPoint.getContextOfModificationPoint(),
-				codeElementToModifyFromBase);
-		// if we map all variables
-		if (mapping.getNotMappedVariables().isEmpty()) {
-			if (mapping.getMappedVariables().isEmpty()) {
-				// nothing to transform, accept the ingredient
-				logger.debug("Any transf sucessful: The var Mapping is empty, we keep the ingredient");
-				result.add(new Ingredient(codeElementToModifyFromBase));
+        VarMapping mapping = VariableResolver.mapVariablesFromContext(modificationPoint.getContextOfModificationPoint(),
+                codeElementToModifyFromBase);
+        // if we map all variables
+        if (mapping.getNotMappedVariables().isEmpty()) {
+            if (mapping.getMappedVariables().isEmpty()) {
+                // nothing to transform, accept the ingredient
+                logger.debug("Any transf sucessful: The var Mapping is empty, we keep the ingredient");
+                result.add(new Ingredient(codeElementToModifyFromBase));
 
-			} else {// We have mappings between variables
-				logger.debug("Ingredient before transformation: " + baseIngredient);
+            } else {// We have mappings between variables
+                logger.debug("Ingredient before transformation: " + baseIngredient);
 
-				List<VarCombinationForIngredient> allCombinations = findAllVarMappingCombinationUsingRandom(
-						mapping.getMappedVariables(), modificationPoint);
+                List<VarCombinationForIngredient> allCombinations = findAllVarMappingCombinationUsingRandom(
+                        mapping.getMappedVariables(), modificationPoint);
 
-				if (allCombinations.size() > 0) {
+                if (allCombinations.size() > 0) {
 
-					for (VarCombinationForIngredient varCombinationForIngredient : allCombinations) {
+                    for (VarCombinationForIngredient varCombinationForIngredient : allCombinations) {
 
-						DynamicIngredient ding = new DynamicIngredient(varCombinationForIngredient, mapping,
-								codeElementToModifyFromBase);
-						result.add(ding);
-					}
-				}
-			}
-		} else {
-			logger.debug("Any transformation was sucessful: Vars not mapped: " + mapping.getNotMappedVariables());
-			String varContext = "";
-			for (CtVariable context : modificationPoint.getContextOfModificationPoint()) {
-				varContext += context.getSimpleName() + " " + context.getType().getQualifiedName() + ", ";
-			}
-			logger.debug("context " + varContext);
-			for (CtVariableAccess ingredient : mapping.getNotMappedVariables()) {
-				logger.debug("---out_of_context: " + ingredient.getVariable().getSimpleName() + ": "
-						+ ingredient.getVariable().getType().getQualifiedName());
-			}
-		}
+                        DynamicIngredient ding = new DynamicIngredient(varCombinationForIngredient, mapping,
+                                codeElementToModifyFromBase);
+                        result.add(ding);
+                    }
+                }
+            }
+        } else {
+            logger.debug("Any transformation was sucessful: Vars not mapped: " + mapping.getNotMappedVariables());
+            String varContext = "";
+            for (CtVariable context : modificationPoint.getContextOfModificationPoint()) {
+                varContext += context.getSimpleName() + " " + context.getType().getQualifiedName() + ", ";
+            }
+            logger.debug("context " + varContext);
+            for (CtVariableAccess ingredient : mapping.getNotMappedVariables()) {
+                logger.debug("---out_of_context: " + ingredient.getVariable().getSimpleName() + ": "
+                        + ingredient.getVariable().getType().getQualifiedName());
+            }
+        }
 
-		this.storingIngredients(modificationPoint, baseIngredient, result);
+        this.storingIngredients(modificationPoint, baseIngredient, result);
 
-		return result;
-	}
+        return result;
+    }
 
-	public List<VarCombinationForIngredient> findAllVarMappingCombinationUsingRandom(
-			Map<VarAccessWrapper, List<CtVariable>> mappedVars, ModificationPoint mpoint) {
+    public List<VarCombinationForIngredient> findAllVarMappingCombinationUsingRandom(
+            Map<VarAccessWrapper, List<CtVariable>> mappedVars, ModificationPoint mpoint) {
 
-		List<VarCombinationForIngredient> allCom = new ArrayList<>();
+        List<VarCombinationForIngredient> allCom = new ArrayList<>();
 
-		List<Map<String, CtVariable>> allWithoutOrder = VariableResolver.findAllVarMappingCombination(mappedVars, null);
+        List<Map<String, CtVariable>> allWithoutOrder = VariableResolver.findAllVarMappingCombination(mappedVars, null);
 
-		for (Map<String, CtVariable> varMapping : allWithoutOrder) {
-			try {
-				VarCombinationForIngredient varCombinationWrapper = new VarCombinationForIngredient(varMapping);
-				// In random mode, all same probabilities
-				varCombinationWrapper.setProbality((double) 1 / (double) allWithoutOrder.size());
-				allCom.add(varCombinationWrapper);
-			} catch (Exception e) {
-				logger.error("Error for obtaining a string representation of combination with " + varMapping.size()
-						+ " variables");
-			}
-		}
-		Collections.shuffle(allCom, RandomManager.getRandom());
+        for (Map<String, CtVariable> varMapping : allWithoutOrder) {
+            try {
+                VarCombinationForIngredient varCombinationWrapper = new VarCombinationForIngredient(varMapping);
+                // In random mode, all same probabilities
+                varCombinationWrapper.setProbality((double) 1 / (double) allWithoutOrder.size());
+                allCom.add(varCombinationWrapper);
+            } catch (Exception e) {
+                logger.error("Error for obtaining a string representation of combination with " + varMapping.size()
+                        + " variables");
+            }
+        }
+        Collections.shuffle(allCom, RandomManager.getRandom());
 
-		logger.debug("Number combination RANDOMLY sorted : " + allCom.size() + " over " + allWithoutOrder.size());
+        logger.debug("Number combination RANDOMLY sorted : " + allCom.size() + " over " + allWithoutOrder.size());
 
-		return allCom;
+        return allCom;
 
-	}
+    }
 }

@@ -11,12 +11,12 @@ import fr.inria.astor.core.entities.ProgramVariant;
  */
 public interface SolutionVariantSortCriterion extends  AstorExtensionPoint{
 
-	/**
-	 * This method prioritizes patches. It receives a list of program variant
-	 * that are solution, and it sorts it according to a given criterion.
-	 * 
-	 * @param patches
-	 * @return
-	 */
-	public List<ProgramVariant> priorize(List<ProgramVariant> patches);
+    /**
+     * This method prioritizes patches. It receives a list of program variant
+     * that are solution, and it sorts it according to a given criterion.
+     * 
+     * @param patches
+     * @return
+     */
+    public List<ProgramVariant> priorize(List<ProgramVariant> patches);
 }

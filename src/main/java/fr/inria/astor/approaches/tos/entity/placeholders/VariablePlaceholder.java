@@ -21,110 +21,110 @@ import spoon.reflect.code.CtVariableAccess;
  */
 @SuppressWarnings("rawtypes")
 public class VariablePlaceholder extends Placeholder {
-	/**
-	 * Maps a variable name with a placeholder name. Used for replacing
-	 * different variables with the same name
-	 */
-	Map<String, String> placeholderVarNamesMappings = null;
-	/**
-	 * Links a placeholder name with a ctVariable
-	 */
-	MapList<String, CtVariableAccess> palceholdersToVariables = null;
-	/**
-	 * List with all variables that are not modified i.e., are not a TOS.
-	 */
-	List<CtVariableAccess> variablesNotModified = null;
+    /**
+     * Maps a variable name with a placeholder name. Used for replacing
+     * different variables with the same name
+     */
+    Map<String, String> placeholderVarNamesMappings = null;
+    /**
+     * Links a placeholder name with a ctVariable
+     */
+    MapList<String, CtVariableAccess> palceholdersToVariables = null;
+    /**
+     * List with all variables that are not modified i.e., are not a TOS.
+     */
+    List<CtVariableAccess> variablesNotModified = null;
 
-	public VariablePlaceholder(MapList<String, CtVariableAccess> palceholders,
-			Map<String, String> placeholderVarNamesMappings, List<CtVariableAccess> variablesNotModified) {
-		this.palceholdersToVariables = palceholders;
-		this.placeholderVarNamesMappings = placeholderVarNamesMappings;
-		this.variablesNotModified = variablesNotModified;
-	}
+    public VariablePlaceholder(MapList<String, CtVariableAccess> palceholders,
+            Map<String, String> placeholderVarNamesMappings, List<CtVariableAccess> variablesNotModified) {
+        this.palceholdersToVariables = palceholders;
+        this.placeholderVarNamesMappings = placeholderVarNamesMappings;
+        this.variablesNotModified = variablesNotModified;
+    }
 
-	@Override
-	public String toString() {
-		String r = "";
-		for (String ph : this.palceholdersToVariables.keySet()) {
-			r += ph + " --> " + this.palceholdersToVariables.get(ph).get(0).getVariable().getSimpleName();
-			r += ", ";
-		}
+    @Override
+    public String toString() {
+        String r = "";
+        for (String ph : this.palceholdersToVariables.keySet()) {
+            r += ph + " --> " + this.palceholdersToVariables.get(ph).get(0).getVariable().getSimpleName();
+            r += ", ";
+        }
 
-		return this.getClass().getSimpleName() + ":  (" + r + ")";
-	}
+        return this.getClass().getSimpleName() + ":  (" + r + ")";
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void apply() {
-		olderNameOfVariable.clear();
-		for (String placeholder : palceholdersToVariables.keySet()) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public void apply() {
+        olderNameOfVariable.clear();
+        for (String placeholder : palceholdersToVariables.keySet()) {
 
-			List<CtVariableAccess> variables = palceholdersToVariables.get(placeholder);
-			for (CtVariableAccess variableUnderAnalysis : variables) {
-				this.olderNameOfVariable.put(variableUnderAnalysis,
-						variableUnderAnalysis.getVariable().getSimpleName());
-				variableUnderAnalysis.getVariable().setSimpleName(placeholder);
-				// workaround: Problems with var Shadowing
-				variableUnderAnalysis.getFactory().getEnvironment().setNoClasspath(true);
-				if (variableUnderAnalysis instanceof CtFieldAccess) {
-					CtFieldAccess fieldAccess = (CtFieldAccess) variableUnderAnalysis;
-					fieldAccess.getVariable().setDeclaringType(null);
+            List<CtVariableAccess> variables = palceholdersToVariables.get(placeholder);
+            for (CtVariableAccess variableUnderAnalysis : variables) {
+                this.olderNameOfVariable.put(variableUnderAnalysis,
+                        variableUnderAnalysis.getVariable().getSimpleName());
+                variableUnderAnalysis.getVariable().setSimpleName(placeholder);
+                // workaround: Problems with var Shadowing
+                variableUnderAnalysis.getFactory().getEnvironment().setNoClasspath(true);
+                if (variableUnderAnalysis instanceof CtFieldAccess) {
+                    CtFieldAccess fieldAccess = (CtFieldAccess) variableUnderAnalysis;
+                    fieldAccess.getVariable().setDeclaringType(null);
 
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 
-	Map<CtVariableAccess, String> olderNameOfVariable = new HashMap<>();
+    Map<CtVariableAccess, String> olderNameOfVariable = new HashMap<>();
 
-	public void revert() {
+    public void revert() {
 
-		for (CtVariableAccess va : olderNameOfVariable.keySet()) {
-			String oldname = olderNameOfVariable.get(va);
-			va.getVariable().setSimpleName(oldname);
-		}
-		olderNameOfVariable.clear();
-	}
+        for (CtVariableAccess va : olderNameOfVariable.keySet()) {
+            String oldname = olderNameOfVariable.get(va);
+            va.getVariable().setSimpleName(oldname);
+        }
+        olderNameOfVariable.clear();
+    }
 
-	@Override
-	public List<CtCodeElement> getAffectedElements() {
-		List<CtCodeElement> ces = new ArrayList<>();
+    @Override
+    public List<CtCodeElement> getAffectedElements() {
+        List<CtCodeElement> ces = new ArrayList<>();
 
-		for (List vars : this.palceholdersToVariables.values()) {
-			ces.addAll(vars);
-		}
-		return ces;
-	}
+        for (List vars : this.palceholdersToVariables.values()) {
+            ces.addAll(vars);
+        }
+        return ces;
+    }
 
-	@Override
-	public List<Transformation> visit(ModificationPoint modificationPoint, PatchGenerator visitor) {
+    @Override
+    public List<Transformation> visit(ModificationPoint modificationPoint, PatchGenerator visitor) {
 
-		return visitor.process(modificationPoint, this);
+        return visitor.process(modificationPoint, this);
 
-	};
+    };
 
-	public MapList<String, CtVariableAccess> getPalceholders() {
-		return palceholdersToVariables;
-	}
+    public MapList<String, CtVariableAccess> getPalceholders() {
+        return palceholdersToVariables;
+    }
 
-	public void setPalceholders(MapList<String, CtVariableAccess> palceholders) {
-		this.palceholdersToVariables = palceholders;
-	}
+    public void setPalceholders(MapList<String, CtVariableAccess> palceholders) {
+        this.palceholdersToVariables = palceholders;
+    }
 
-	public List<CtVariableAccess> getVariablesNotModified() {
-		return variablesNotModified;
-	}
+    public List<CtVariableAccess> getVariablesNotModified() {
+        return variablesNotModified;
+    }
 
-	public void setVariablesNotModified(List<CtVariableAccess> variablesNotModified) {
-		this.variablesNotModified = variablesNotModified;
-	}
+    public void setVariablesNotModified(List<CtVariableAccess> variablesNotModified) {
+        this.variablesNotModified = variablesNotModified;
+    }
 
-	public Map<String, String> getPlaceholderVarNamesMappings() {
-		return placeholderVarNamesMappings;
-	}
+    public Map<String, String> getPlaceholderVarNamesMappings() {
+        return placeholderVarNamesMappings;
+    }
 
-	public void setPlaceholderVarNamesMappings(Map<String, String> placeholderVarNamesMappings) {
-		this.placeholderVarNamesMappings = placeholderVarNamesMappings;
-	}
+    public void setPlaceholderVarNamesMappings(Map<String, String> placeholderVarNamesMappings) {
+        this.placeholderVarNamesMappings = placeholderVarNamesMappings;
+    }
 
 }

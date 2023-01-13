@@ -13,16 +13,16 @@ import fr.inria.astor.core.solutionsearch.spaces.operators.AstorOperator;
  */
 public class FakeIngredientStrategy extends IngredientSearchStrategy {
 
-	
+    
 
-	public FakeIngredientStrategy(IngredientPool space) {
-		super(space);
-	}
+    public FakeIngredientStrategy(IngredientPool space) {
+        super(space);
+    }
 
-	@Override
-	public Ingredient getFixIngredient(ModificationPoint modificationPoint, AstorOperator operationType) {
-		return null;
-	}
+    @Override
+    public Ingredient getFixIngredient(ModificationPoint modificationPoint, AstorOperator operationType) {
+        return null;
+    }
 
 
 

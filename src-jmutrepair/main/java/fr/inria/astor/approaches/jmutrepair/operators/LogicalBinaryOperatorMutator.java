@@ -17,37 +17,37 @@ import spoon.reflect.factory.Factory;
  * 
  */
 public class LogicalBinaryOperatorMutator extends BinaryOperatorMutator {
-	List<BinaryOperatorKind> operators1 = null;
+    List<BinaryOperatorKind> operators1 = null;
 
-	public LogicalBinaryOperatorMutator(Factory factory) {
-		super(factory);
-		operators1 = Arrays.asList(BinaryOperatorKind.AND, BinaryOperatorKind.OR);
+    public LogicalBinaryOperatorMutator(Factory factory) {
+        super(factory);
+        operators1 = Arrays.asList(BinaryOperatorKind.AND, BinaryOperatorKind.OR);
 
-	}
+    }
 
-	double[][] probs = {
-			// AND
-			{ 0, 0.25 }, // OR
-			{ 0.25, 0 } };
+    double[][] probs = {
+            // AND
+            { 0, 0.25 }, // OR
+            { 0.25, 0 } };
 
-	public List<MutantCtElement> execute(CtElement toMutate) {
+    public List<MutantCtElement> execute(CtElement toMutate) {
 
-		List<MutantCtElement> result = new ArrayList<MutantCtElement>();
+        List<MutantCtElement> result = new ArrayList<MutantCtElement>();
 
-		if (toMutate instanceof CtBinaryOperator<?>) {
-			CtBinaryOperator<?> op = (CtBinaryOperator<?>) toMutate;
+        if (toMutate instanceof CtBinaryOperator<?>) {
+            CtBinaryOperator<?> op = (CtBinaryOperator<?>) toMutate;
 
-			addRemainingsAndFoward(result, op, operators1);
+            addRemainingsAndFoward(result, op, operators1);
 
-		}
-		return result;
-	}
+        }
+        return result;
+    }
 
-	@Override
-	public double getProbabilityChange(BinaryOperatorKind oldKind, BinaryOperatorKind modifiedKind) {
-		int oldI = operators1.indexOf(oldKind);
-		int newI = operators1.indexOf(modifiedKind);
-		return probs[oldI][newI];
-	}
+    @Override
+    public double getProbabilityChange(BinaryOperatorKind oldKind, BinaryOperatorKind modifiedKind) {
+        int oldI = operators1.indexOf(oldKind);
+        int newI = operators1.indexOf(modifiedKind);
+        return probs[oldI][newI];
+    }
 
 }

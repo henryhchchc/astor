@@ -20,43 +20,43 @@ import spoon.reflect.declaration.CtElement;
  */
 public class InsertReturnOp extends AutonomousOperator implements StatementLevelOperator {
 
-	InsertBeforeOp insertOp = new InsertBeforeOp();
+    InsertBeforeOp insertOp = new InsertBeforeOp();
 
-	@Override
-	public List<OperatorInstance> createOperatorInstances(ModificationPoint modificationPoint) {
-		List<OperatorInstance> instances = new ArrayList<>();
+    @Override
+    public List<OperatorInstance> createOperatorInstances(ModificationPoint modificationPoint) {
+        List<OperatorInstance> instances = new ArrayList<>();
 
-		CtElement createReturn = KaliCodeFactory.createReturn(modificationPoint.getCodeElement());
-		if (createReturn != null) {
-			OperatorInstance opInsertReturn = new StatementOperatorInstance(modificationPoint, this,
-					modificationPoint.getCodeElement(), createReturn);
-			instances.add(opInsertReturn);
-		}
-		return instances;
-	}
+        CtElement createReturn = KaliCodeFactory.createReturn(modificationPoint.getCodeElement());
+        if (createReturn != null) {
+            OperatorInstance opInsertReturn = new StatementOperatorInstance(modificationPoint, this,
+                    modificationPoint.getCodeElement(), createReturn);
+            instances.add(opInsertReturn);
+        }
+        return instances;
+    }
 
-	@Override
-	public boolean applyChangesInModel(OperatorInstance operation, ProgramVariant p) {
+    @Override
+    public boolean applyChangesInModel(OperatorInstance operation, ProgramVariant p) {
 
-		return insertOp.applyChangesInModel(operation, p);
+        return insertOp.applyChangesInModel(operation, p);
 
-	}
+    }
 
-	@Override
-	public boolean undoChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
-		return insertOp.undoChangesInModel(opInstance, p);
-	}
+    @Override
+    public boolean undoChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
+        return insertOp.undoChangesInModel(opInstance, p);
+    }
 
-	@Override
-	public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
-		return insertOp.updateProgramVariant(opInstance, p);
-	}
+    @Override
+    public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
+        return insertOp.updateProgramVariant(opInstance, p);
+    }
 
-	@Override
-	public boolean canBeAppliedToPoint(ModificationPoint point) {
+    @Override
+    public boolean canBeAppliedToPoint(ModificationPoint point) {
 
-		return point.getCodeElement() instanceof CtStatement && !(point.getCodeElement().toString().startsWith("super")
-				|| point.getCodeElement().toString().startsWith("<init>"));
-	}
+        return point.getCodeElement() instanceof CtStatement && !(point.getCodeElement().toString().startsWith("super")
+                || point.getCodeElement().toString().startsWith("<init>"));
+    }
 
 }

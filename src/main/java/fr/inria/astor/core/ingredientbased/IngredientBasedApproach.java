@@ -11,18 +11,18 @@ import fr.inria.astor.core.solutionsearch.spaces.ingredients.transformations.Ing
  */
 public interface IngredientBasedApproach {
 
-	// Ingredients pools
-	public IngredientPool getIngredientPool();
+    // Ingredients pools
+    public IngredientPool getIngredientPool();
 
-	public void setIngredientPool(IngredientPool ingredientPool);
+    public void setIngredientPool(IngredientPool ingredientPool);
 
-	// Ingredients transformations
-	public IngredientTransformationStrategy getIngredientTransformationStrategy() throws Exception;
+    // Ingredients transformations
+    public IngredientTransformationStrategy getIngredientTransformationStrategy() throws Exception;
 
-	public void setIngredientTransformationStrategy(IngredientTransformationStrategy ingredientTransformationStrategy);
+    public void setIngredientTransformationStrategy(IngredientTransformationStrategy ingredientTransformationStrategy);
 
-	// Selection of Ingredient
-	public IngredientSearchStrategy getIngredientSearchStrategy();
+    // Selection of Ingredient
+    public IngredientSearchStrategy getIngredientSearchStrategy();
 
-	public void setIngredientSearchStrategy(IngredientSearchStrategy ingredientStrategy);
+    public void setIngredientSearchStrategy(IngredientSearchStrategy ingredientStrategy);
 }

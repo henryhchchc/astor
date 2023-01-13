@@ -13,11 +13,11 @@ import fr.inria.astor.core.entities.ModificationPoint;
  */
 public class UniformRandomSuspiciousNavigation implements SuspiciousNavigationStrategy {
 
-	@Override
-	public List<ModificationPoint> getSortedModificationPointsList(List<ModificationPoint> modificationPoints) {
-		List<ModificationPoint> shuffList = new ArrayList<ModificationPoint>(modificationPoints);
-		Collections.shuffle(shuffList);
-		return shuffList;
-	}
+    @Override
+    public List<ModificationPoint> getSortedModificationPointsList(List<ModificationPoint> modificationPoints) {
+        List<ModificationPoint> shuffList = new ArrayList<ModificationPoint>(modificationPoints);
+        Collections.shuffle(shuffList);
+        return shuffList;
+    }
 
 }

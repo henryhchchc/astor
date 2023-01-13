@@ -23,49 +23,49 @@ import spoon.reflect.code.CtExpression;
  */
 public class Cardumen1HApproach extends ExhaustiveIngredientBasedEngine {
 
-	public Cardumen1HApproach(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade) throws JSAPException {
+    public Cardumen1HApproach(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade) throws JSAPException {
 
-		super(mutatorExecutor, projFacade);
+        super(mutatorExecutor, projFacade);
 
-		ConfigurationProperties.setProperty(ExtensionPoints.TARGET_CODE_PROCESSOR.identifier, "expression");
-		ConfigurationProperties.setProperty(ExtensionPoints.OPERATORS_SPACE.identifier, "r-expression");
+        ConfigurationProperties.setProperty(ExtensionPoints.TARGET_CODE_PROCESSOR.identifier, "expression");
+        ConfigurationProperties.setProperty(ExtensionPoints.OPERATORS_SPACE.identifier, "r-expression");
 
-		ConfigurationProperties.setProperty("nrPlaceholders", "1");
-		ConfigurationProperties.setProperty("excludevariableplaceholder", "false");
-		ConfigurationProperties.setProperty("excludeliteralplaceholder", "true");
-		ConfigurationProperties.setProperty("excludeinvocationplaceholder", "true");
-		ConfigurationProperties.setProperty("excludevarliteralplaceholder", "true");
+        ConfigurationProperties.setProperty("nrPlaceholders", "1");
+        ConfigurationProperties.setProperty("excludevariableplaceholder", "false");
+        ConfigurationProperties.setProperty("excludeliteralplaceholder", "true");
+        ConfigurationProperties.setProperty("excludeinvocationplaceholder", "true");
+        ConfigurationProperties.setProperty("excludevarliteralplaceholder", "true");
 
-	}
+    }
 
-	@Override
-	protected void loadIngredientPool() throws JSAPException, Exception {
+    @Override
+    protected void loadIngredientPool() throws JSAPException, Exception {
 
-		List<TargetElementProcessor<?>> ingredientProcessors = this.getTargetElementProcessors();
-		TOSIngredientPool<CtExpression<?>> ingredientPool = new TOSIngredientPool<CtExpression<?>>(
-				ingredientProcessors);
-		String scope = ConfigurationProperties.getProperty(ExtensionPoints.INGREDIENT_STRATEGY_SCOPE.identifier);
-		if (scope != null) {
-			ingredientPool.scope = IngredientPoolScope.valueOf(scope.toUpperCase());
-		}
-		this.setIngredientPool(ingredientPool);
+        List<TargetElementProcessor<?>> ingredientProcessors = this.getTargetElementProcessors();
+        TOSIngredientPool<CtExpression<?>> ingredientPool = new TOSIngredientPool<CtExpression<?>>(
+                ingredientProcessors);
+        String scope = ConfigurationProperties.getProperty(ExtensionPoints.INGREDIENT_STRATEGY_SCOPE.identifier);
+        if (scope != null) {
+            ingredientPool.scope = IngredientPoolScope.valueOf(scope.toUpperCase());
+        }
+        this.setIngredientPool(ingredientPool);
 
-	}
+    }
 
-	@Override
-	protected void loadIngredientSearchStrategy() throws Exception {
+    @Override
+    protected void loadIngredientSearchStrategy() throws Exception {
 
-		TOSIngredientRandomSearchStrategy ingredientStrategy = new TOSIngredientRandomSearchStrategy(
-				this.getIngredientPool());
-		this.setIngredientSearchStrategy(ingredientStrategy);
+        TOSIngredientRandomSearchStrategy ingredientStrategy = new TOSIngredientRandomSearchStrategy(
+                this.getIngredientPool());
+        this.setIngredientSearchStrategy(ingredientStrategy);
 
-	}
+    }
 
-	@Override
-	protected void loadIngredientTransformationStrategy() throws Exception {
-		TOSIngredientTransformationStrategy ingtransf = new TOSIngredientTransformationStrategy();
-		this.setIngredientTransformationStrategy(ingtransf);
-	}
+    @Override
+    protected void loadIngredientTransformationStrategy() throws Exception {
+        TOSIngredientTransformationStrategy ingtransf = new TOSIngredientTransformationStrategy();
+        this.setIngredientTransformationStrategy(ingtransf);
+    }
 
 }
 

@@ -13,11 +13,11 @@ import fr.inria.astor.core.solutionsearch.spaces.operators.OperatorSpace;
  */
 public class jGenProgSpace extends OperatorSpace{
 
-	public jGenProgSpace(){
-		super.register(new RemoveOp());
-		super.register(new ReplaceOp());
-		super.register(new InsertAfterOp());
-		super.register(new InsertBeforeOp());	
-	}
-	
+    public jGenProgSpace(){
+        super.register(new RemoveOp());
+        super.register(new ReplaceOp());
+        super.register(new InsertAfterOp());
+        super.register(new InsertBeforeOp());    
+    }
+    
 }

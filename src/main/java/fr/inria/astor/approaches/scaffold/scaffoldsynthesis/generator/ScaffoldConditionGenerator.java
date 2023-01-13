@@ -5,23 +5,23 @@ import fr.inria.astor.approaches.scaffold.scaffoldsynthesis.generator.candidate.
 
 public class ScaffoldConditionGenerator extends ScaffoldGenerator {
 
-	private ConditionSymmetryCandidate predicate;
-	
-	public void initScaffold() {
-		predicate=new ConditionSymmetryCandidate();
-	}
+    private ConditionSymmetryCandidate predicate;
+    
+    public void initScaffold() {
+        predicate=new ConditionSymmetryCandidate();
+    }
 
-	public Boolean next(ExpressionValueCandidate[] vals) {
-		
-		return predicate.next(vals);
-	}
+    public Boolean next(ExpressionValueCandidate[] vals) {
+        
+        return predicate.next(vals);
+    }
 
-	@Override
-	public void reset() {
-		predicate.reset();
-	}
+    @Override
+    public void reset() {
+        predicate.reset();
+    }
 
-	public String toString() {
-		return predicate.toString();
-	}
+    public String toString() {
+        return predicate.toString();
+    }
 }

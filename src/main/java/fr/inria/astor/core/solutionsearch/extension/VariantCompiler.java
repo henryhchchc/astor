@@ -14,8 +14,8 @@ import spoon.reflect.declaration.CtType;
  */
 public interface VariantCompiler extends AstorExtensionPoint {
 
-	public CompilationResult compile(ProgramVariant instanceToCompile, URL[] classpath);
+    public CompilationResult compile(ProgramVariant instanceToCompile, URL[] classpath);
 
-	public CompilationResult compile(Collection<? extends CtType> classesToCompile, URL[] urlArray);
-		
+    public CompilationResult compile(Collection<? extends CtType> classesToCompile, URL[] urlArray);
+        
 }

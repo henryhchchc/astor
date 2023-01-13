@@ -18,47 +18,47 @@ import spoon.reflect.declaration.CtType;
  */
 public class PackageBasicFixSpace extends LocalIngredientSpace {
 
-	public PackageBasicFixSpace(TargetElementProcessor<?> processor) throws JSAPException {
-		super(processor);
+    public PackageBasicFixSpace(TargetElementProcessor<?> processor) throws JSAPException {
+        super(processor);
 
-	}
+    }
 
-	public PackageBasicFixSpace(List<TargetElementProcessor<?>> processor) throws JSAPException {
-		super(processor);
+    public PackageBasicFixSpace(List<TargetElementProcessor<?>> processor) throws JSAPException {
+        super(processor);
 
-	}
+    }
 
-	@Override
-	public String calculateLocation(CtElement original) {
+    @Override
+    public String calculateLocation(CtElement original) {
 
-		return original.getParent(CtPackage.class).getQualifiedName();
-	}
+        return original.getParent(CtPackage.class).getQualifiedName();
+    }
 
-	@Override
-	public void defineSpace(ProgramVariant variant) {
-		List<CtType<?>> affected = variant.getAllClasses();
+    @Override
+    public void defineSpace(ProgramVariant variant) {
+        List<CtType<?>> affected = variant.getAllClasses();
 
-		List<CtPackage> packageAnalyzed = new ArrayList<>();
-		for (CtType<?> ing : affected) {
+        List<CtPackage> packageAnalyzed = new ArrayList<>();
+        for (CtType<?> ing : affected) {
 
-			CtPackage p = ing.getParent(CtPackage.class);
-			if (!packageAnalyzed.contains(p)) {
-				packageAnalyzed.add(p);
-				for (CtType<?> t : p.getTypes()) {
-					this.createFixSpaceFromAClass(t);
-				}
+            CtPackage p = ing.getParent(CtPackage.class);
+            if (!packageAnalyzed.contains(p)) {
+                packageAnalyzed.add(p);
+                for (CtType<?> t : p.getTypes()) {
+                    this.createFixSpaceFromAClass(t);
+                }
 
-			}
+            }
 
-		}
+        }
 
-	}
+    }
 
-	@Override
-	public IngredientPoolScope spaceScope() {
-		return IngredientPoolScope.PACKAGE;
-	}
-	
-	
+    @Override
+    public IngredientPoolScope spaceScope() {
+        return IngredientPoolScope.PACKAGE;
+    }
+    
+    
 
 }

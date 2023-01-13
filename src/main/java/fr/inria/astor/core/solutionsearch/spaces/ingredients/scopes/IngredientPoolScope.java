@@ -5,9 +5,9 @@ package fr.inria.astor.core.solutionsearch.spaces.ingredients.scopes;
  *
  */
 public enum IngredientPoolScope {
-	//Order from most restrictive to less
-	LOCAL,
-	PACKAGE,
-	GLOBAL,
-	CUSTOM;
+    //Order from most restrictive to less
+    LOCAL,
+    PACKAGE,
+    GLOBAL,
+    CUSTOM;
 }

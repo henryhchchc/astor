@@ -14,21 +14,21 @@ import spoon.reflect.declaration.CtExecutable;
  */
 public class MethodBasicIngredientScope extends LocalIngredientSpace {
 
-	public MethodBasicIngredientScope(TargetElementProcessor<?> processor) throws JSAPException {
-		super(processor);
-	}
+    public MethodBasicIngredientScope(TargetElementProcessor<?> processor) throws JSAPException {
+        super(processor);
+    }
 
-	public MethodBasicIngredientScope(List<TargetElementProcessor<?>> processors) throws JSAPException {
-		super(processors);
-	}
+    public MethodBasicIngredientScope(List<TargetElementProcessor<?>> processors) throws JSAPException {
+        super(processors);
+    }
 
-	public MethodBasicIngredientScope() throws JSAPException {
-	}
+    public MethodBasicIngredientScope() throws JSAPException {
+    }
 
-	
-	@Override
-	public String calculateLocation(CtElement original) {
-		CtExecutable method =  original.getParent(CtExecutable.class);
-		return method.getReference().toString();
-	}
+    
+    @Override
+    public String calculateLocation(CtElement original) {
+        CtExecutable method =  original.getParent(CtExecutable.class);
+        return method.getReference().toString();
+    }
 }

@@ -15,12 +15,12 @@ import fr.inria.astor.core.solutionsearch.spaces.ingredients.transformations.Ran
  */
 public class TibraApproach extends JGenProg {
 
-	public TibraApproach(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade) throws JSAPException {
-		super(mutatorExecutor, projFacade);
+    public TibraApproach(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade) throws JSAPException {
+        super(mutatorExecutor, projFacade);
 
-		ConfigurationProperties.setProperty("ingredienttransformstrategy",
-				RandomTransformationStrategy.class.getCanonicalName());
-		ConfigurationProperties.setProperty("consideryvarloops", "false");
-	}
+        ConfigurationProperties.setProperty("ingredienttransformstrategy",
+                RandomTransformationStrategy.class.getCanonicalName());
+        ConfigurationProperties.setProperty("consideryvarloops", "false");
+    }
 
 }

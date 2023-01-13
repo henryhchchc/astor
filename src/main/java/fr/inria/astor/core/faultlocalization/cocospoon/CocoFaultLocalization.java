@@ -40,134 +40,134 @@ import spoon.support.RuntimeProcessingManager;
  */
 public class CocoFaultLocalization implements FaultLocalizationStrategy {
 
-	protected static Logger log = Logger.getLogger(Thread.currentThread().getName());
+    protected static Logger log = Logger.getLogger(Thread.currentThread().getName());
 
-	@Override
-	public FaultLocalizationResult searchSuspicious(ProjectRepairFacade project, List<String> testregression)
-			throws Exception {
+    @Override
+    public FaultLocalizationResult searchSuspicious(ProjectRepairFacade project, List<String> testregression)
+            throws Exception {
 
-		MutationSupporter.cleanFactory();
+        MutationSupporter.cleanFactory();
 
-		initModel(project);
+        initModel(project);
 
-		// Parser
-		parseModel();
+        // Parser
+        parseModel();
 
-		// Compile
+        // Compile
 
-		CompilationResult cresults = compile(project);
+        CompilationResult cresults = compile(project);
 
-		// Create class loader
-		BytecodeClassLoader customClassLoader = createClassLoader(cresults, project);
+        // Create class loader
+        BytecodeClassLoader customClassLoader = createClassLoader(cresults, project);
 
-		// call cocoa with tests
-		CocoSpoonEngineFaultLocalizer coco4Astor = new CocoSpoonEngineFaultLocalizer(new Ochiai());
-		coco4Astor.runTests(testregression.toArray(new String[0]), customClassLoader, project);
+        // call cocoa with tests
+        CocoSpoonEngineFaultLocalizer coco4Astor = new CocoSpoonEngineFaultLocalizer(new Ochiai());
+        coco4Astor.runTests(testregression.toArray(new String[0]), customClassLoader, project);
 
-		// Collecting failing test cases
-		List<String> testsfailing = coco4Astor.getResultsPerNameOfTest().entrySet().stream()
-				.filter(e -> e.getValue() == false).collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()))
-				.keySet().stream().collect(Collectors.toList());
+        // Collecting failing test cases
+        List<String> testsfailing = coco4Astor.getResultsPerNameOfTest().entrySet().stream()
+                .filter(e -> e.getValue() == false).collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()))
+                .keySet().stream().collect(Collectors.toList());
 
-		Map<SourceLocation, List<TestResult>> stc = coco4Astor.getTestListPerStatement();
-		List<? extends StatementSourceLocation> suspstatement = coco4Astor.getStatements();
+        Map<SourceLocation, List<TestResult>> stc = coco4Astor.getTestListPerStatement();
+        List<? extends StatementSourceLocation> suspstatement = coco4Astor.getStatements();
 
-		MutationSupporter.cleanFactory();
+        MutationSupporter.cleanFactory();
 
-		Double thr = ConfigurationProperties.getPropertyDouble("flthreshold");
+        Double thr = ConfigurationProperties.getPropertyDouble("flthreshold");
 
-		List<SuspiciousCode> candidates = new ArrayList<>();
-		for (StatementSourceLocation statementSourceLocation : suspstatement) {
-			if ((!ConfigurationProperties.getPropertyBool("limitbysuspicious")
-					|| (statementSourceLocation.getSuspiciousness() >= thr))) {
-				SuspiciousCode spc = new SuspiciousCode(statementSourceLocation.getLocation().getRootClassName(), null,
-						statementSourceLocation.getSuspiciousness());
-				spc.setLineNumber(statementSourceLocation.getLocation().getLineNumber());
-				candidates.add(spc);
-				List<TestResult> testCoverLocation = stc.get(statementSourceLocation.getLocation());
+        List<SuspiciousCode> candidates = new ArrayList<>();
+        for (StatementSourceLocation statementSourceLocation : suspstatement) {
+            if ((!ConfigurationProperties.getPropertyBool("limitbysuspicious")
+                    || (statementSourceLocation.getSuspiciousness() >= thr))) {
+                SuspiciousCode spc = new SuspiciousCode(statementSourceLocation.getLocation().getRootClassName(), null,
+                        statementSourceLocation.getSuspiciousness());
+                spc.setLineNumber(statementSourceLocation.getLocation().getLineNumber());
+                candidates.add(spc);
+                List<TestResult> testCoverLocation = stc.get(statementSourceLocation.getLocation());
 
-				// Transforming the representation of test
-				List<TestCaseResult> testcaseresult = new ArrayList<>();
+                // Transforming the representation of test
+                List<TestCaseResult> testcaseresult = new ArrayList<>();
 
-				for (TestResult testResult : testCoverLocation) {
-					testcaseresult
-							.add(new TestCaseResult(testResult.getTestCase().toString(), testResult.isSuccessful()));
-				}
+                for (TestResult testResult : testCoverLocation) {
+                    testcaseresult
+                            .add(new TestCaseResult(testResult.getTestCase().toString(), testResult.isSuccessful()));
+                }
 
-				spc.setCoveredByTests(testcaseresult);
-			}
-		}
-		int maxSuspCandidates = ConfigurationProperties.getPropertyInt("maxsuspcandidates");
+                spc.setCoveredByTests(testcaseresult);
+            }
+        }
+        int maxSuspCandidates = ConfigurationProperties.getPropertyInt("maxsuspcandidates");
 
-		if (!ConfigurationProperties.getPropertyBool("includeZeros")) {
-			candidates.removeIf(susp -> (susp.getSuspiciousValue() == 0));
-		}
-		// We select the best X candidates.
-		int max = (candidates.size() < maxSuspCandidates) ? candidates.size() : maxSuspCandidates;
-		candidates = candidates.subList(0, max);
+        if (!ConfigurationProperties.getPropertyBool("includeZeros")) {
+            candidates.removeIf(susp -> (susp.getSuspiciousValue() == 0));
+        }
+        // We select the best X candidates.
+        int max = (candidates.size() < maxSuspCandidates) ? candidates.size() : maxSuspCandidates;
+        candidates = candidates.subList(0, max);
 
-		FaultLocalizationResult flresults = new FaultLocalizationResult(candidates, testsfailing);
+        FaultLocalizationResult flresults = new FaultLocalizationResult(candidates, testsfailing);
 
-		return flresults;
-	}
+        return flresults;
+    }
 
-	public CompilationResult compile(ProjectRepairFacade projectFacade) throws MalformedURLException {
+    public CompilationResult compile(ProjectRepairFacade projectFacade) throws MalformedURLException {
 
-		SpoonClassCompiler scc = new SpoonClassCompiler(MutationSupporter.getFactory());
+        SpoonClassCompiler scc = new SpoonClassCompiler(MutationSupporter.getFactory());
 
-		String classpath = projectFacade.getProperties().getDependenciesString();
-		classpath += File.pathSeparator + System.getProperty("java.class.path") + // For
-																					// dependency
-				File.pathSeparator +
-				// Workarroud
-				projectFacade.getOutDirWithPrefix(ProgramVariant.DEFAULT_ORIGINAL_VARIANT);
-		String[] cpArray = classpath.split(File.pathSeparator);
+        String classpath = projectFacade.getProperties().getDependenciesString();
+        classpath += File.pathSeparator + System.getProperty("java.class.path") + // For
+                                                                                    // dependency
+                File.pathSeparator +
+                // Workarroud
+                projectFacade.getOutDirWithPrefix(ProgramVariant.DEFAULT_ORIGINAL_VARIANT);
+        String[] cpArray = classpath.split(File.pathSeparator);
 
-		System.out.println("Classpath " + Arrays.toString(cpArray));
-		return scc.compile(MutationSupporter.getFactory().Class().getAll(), Converters.toURLArray(cpArray));
-	}
+        System.out.println("Classpath " + Arrays.toString(cpArray));
+        return scc.compile(MutationSupporter.getFactory().Class().getAll(), Converters.toURLArray(cpArray));
+    }
 
-	public BytecodeClassLoader createClassLoader(CompilationResult cresult, ProjectRepairFacade projectFacade)
-			throws MalformedURLException {
+    public BytecodeClassLoader createClassLoader(CompilationResult cresult, ProjectRepairFacade projectFacade)
+            throws MalformedURLException {
 
-		String classpath = projectFacade.getProperties().getDependenciesString();
-		classpath += File.pathSeparator + System.getProperty("java.class.path") + File.pathSeparator +
-		// Workarroud
-				projectFacade.getOutDirWithPrefix(ProgramVariant.DEFAULT_ORIGINAL_VARIANT);
+        String classpath = projectFacade.getProperties().getDependenciesString();
+        classpath += File.pathSeparator + System.getProperty("java.class.path") + File.pathSeparator +
+        // Workarroud
+                projectFacade.getOutDirWithPrefix(ProgramVariant.DEFAULT_ORIGINAL_VARIANT);
 
-		BytecodeClassLoader bclassloader = new BytecodeClassLoader(
-				Converters.toURLArray(classpath.split(File.pathSeparator)));
-		bclassloader.setBytecodes(cresult.getByteCodes());
-		return bclassloader;
-	}
+        BytecodeClassLoader bclassloader = new BytecodeClassLoader(
+                Converters.toURLArray(classpath.split(File.pathSeparator)));
+        bclassloader.setBytecodes(cresult.getByteCodes());
+        return bclassloader;
+    }
 
-	public void parseModel() {
-		WatcherProcessor processor = new WatcherProcessor();
-		ProcessingManager manager = new RuntimeProcessingManager(MutationSupporter.getFactory());
-		manager.addProcessor(processor);
+    public void parseModel() {
+        WatcherProcessor processor = new WatcherProcessor();
+        ProcessingManager manager = new RuntimeProcessingManager(MutationSupporter.getFactory());
+        manager.addProcessor(processor);
 
-		for (CtType<?> modelledClass : MutationSupporter.getFactory().Type().getAll()) {
+        for (CtType<?> modelledClass : MutationSupporter.getFactory().Type().getAll()) {
 
-			try {
-				manager.process(modelledClass);
-			} catch (ProcessInterruption e) {
-				continue;
-			}
-		}
-	}
+            try {
+                manager.process(modelledClass);
+            } catch (ProcessInterruption e) {
+                continue;
+            }
+        }
+    }
 
-	// Code properties.
-	public void initModel(ProjectRepairFacade projectFacade) throws Exception {
+    // Code properties.
+    public void initModel(ProjectRepairFacade projectFacade) throws Exception {
 
-		MutationSupporter.currentSupporter.buildSpoonModel(projectFacade);
+        MutationSupporter.currentSupporter.buildSpoonModel(projectFacade);
 
-	}
+    }
 
-	@Override
-	public List<String> findTestCasesToExecute(ProjectRepairFacade projectFacade) {
-		List<String> testCasesToRun = FinderTestCases.findJUnit4XTestCasesForRegression(projectFacade);
+    @Override
+    public List<String> findTestCasesToExecute(ProjectRepairFacade projectFacade) {
+        List<String> testCasesToRun = FinderTestCases.findJUnit4XTestCasesForRegression(projectFacade);
 
-		return testCasesToRun;
-	}
+        return testCasesToRun;
+    }
 
 }

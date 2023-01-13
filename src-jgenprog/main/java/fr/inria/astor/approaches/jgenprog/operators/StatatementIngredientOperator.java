@@ -12,10 +12,10 @@ import fr.inria.astor.core.solutionsearch.spaces.operators.IngredientBasedOperat
  */
 public abstract class StatatementIngredientOperator extends IngredientBasedOperator {
 
-	@Override
-	protected OperatorInstance createOperatorInstance(ModificationPoint mp) {
-		OperatorInstance operation = new StatementOperatorInstance(mp, this, mp.getCodeElement(), null);
-		return operation;
-	}
+    @Override
+    protected OperatorInstance createOperatorInstance(ModificationPoint mp) {
+        OperatorInstance operation = new StatementOperatorInstance(mp, this, mp.getCodeElement(), null);
+        return operation;
+    }
 
 }

@@ -9,34 +9,34 @@ import spoon.reflect.declaration.CtElement;
  */
 public class MutantCtElement {
 
-	CtElement element;
-	double probabilistic;
-	
-	public MutantCtElement(CtElement element, double probabilistic) {
-		super();
-		this.element = element;
-		this.probabilistic = probabilistic;
-	}
+    CtElement element;
+    double probabilistic;
+    
+    public MutantCtElement(CtElement element, double probabilistic) {
+        super();
+        this.element = element;
+        this.probabilistic = probabilistic;
+    }
 
-	public CtElement getElement() {
-		return element;
-	}
+    public CtElement getElement() {
+        return element;
+    }
 
-	public void setElement(CtElement element) {
-		this.element = element;
-	}
+    public void setElement(CtElement element) {
+        this.element = element;
+    }
 
-	public double getProbabilistic() {
-		return probabilistic;
-	}
+    public double getProbabilistic() {
+        return probabilistic;
+    }
 
-	public void setProbabilistic(double probabilistic) {
-		this.probabilistic = probabilistic;
-	}
+    public void setProbabilistic(double probabilistic) {
+        this.probabilistic = probabilistic;
+    }
 
-	@Override
-	public String toString() {
-		return  element + "[p=" + probabilistic + "]";
-	}
-	
+    @Override
+    public String toString() {
+        return  element + "[p=" + probabilistic + "]";
+    }
+    
 }

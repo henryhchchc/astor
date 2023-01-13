@@ -6,23 +6,23 @@ import spoon.support.reflect.declaration.CtTypeImpl;
 
 public class ROOTTYPE extends CtTypeImpl {
 
-	@Override
-	public void accept(CtVisitor visitor) {
+    @Override
+    public void accept(CtVisitor visitor) {
 
-		
-	}
+        
+    }
 
-	@Override
-	public String getSimpleName() {
-		
-		return "";
-	}
+    @Override
+    public String getSimpleName() {
+        
+        return "";
+    }
 
-	//@Override
-	public boolean isSubtypeOf(CtTypeReference arg0) {
-		return false;
-	}
-	
-	
+    //@Override
+    public boolean isSubtypeOf(CtTypeReference arg0) {
+        return false;
+    }
+    
+    
 
 }

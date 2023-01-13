@@ -14,23 +14,23 @@ import fr.inria.astor.core.solutionsearch.spaces.operators.OperatorSpace;;
  */
 public class FakeOperatorSelectionStrategy extends OperatorSelectionStrategy {
 
-	public FakeOperatorSelectionStrategy(OperatorSpace space) {
-		super(space);
-	}
+    public FakeOperatorSelectionStrategy(OperatorSpace space) {
+        super(space);
+    }
 
-	@Override
-	public AstorOperator getNextOperator(SuspiciousModificationPoint modificationPoint) {
+    @Override
+    public AstorOperator getNextOperator(SuspiciousModificationPoint modificationPoint) {
 
-		if (modificationPoint.getSuspicious().getLineNumber() % 10 == 0)
-			return this.operatorSpace.getOperators().get(0);
-		else
-			return this.operatorSpace.getOperators().get(1);
-	}
+        if (modificationPoint.getSuspicious().getLineNumber() % 10 == 0)
+            return this.operatorSpace.getOperators().get(0);
+        else
+            return this.operatorSpace.getOperators().get(1);
+    }
 
-	@Override
-	public AstorOperator getNextOperator() {
+    @Override
+    public AstorOperator getNextOperator() {
 
-		return null;
-	}
+        return null;
+    }
 
 }

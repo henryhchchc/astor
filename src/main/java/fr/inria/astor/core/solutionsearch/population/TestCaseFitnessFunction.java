@@ -11,22 +11,22 @@ import fr.inria.astor.core.entities.validation.VariantValidationResult;
  */
 public class TestCaseFitnessFunction implements FitnessFunction {
 
-	/**
-	 * In this case the fitness value is associate to the failures: LESS FITNESS
-	 * is better.
-	 */
-	public double calculateFitnessValue(VariantValidationResult validationResult) {
+    /**
+     * In this case the fitness value is associate to the failures: LESS FITNESS
+     * is better.
+     */
+    public double calculateFitnessValue(VariantValidationResult validationResult) {
 
-		if (validationResult == null)
-			return this.getWorstMaxFitnessValue();
+        if (validationResult == null)
+            return this.getWorstMaxFitnessValue();
 
-		TestCaseVariantValidationResult result = (TestCaseVariantValidationResult) validationResult;
-		return result.getFailureCount();
-	}
+        TestCaseVariantValidationResult result = (TestCaseVariantValidationResult) validationResult;
+        return result.getFailureCount();
+    }
 
-	public double getWorstMaxFitnessValue() {
+    public double getWorstMaxFitnessValue() {
 
-		return Double.MAX_VALUE;
-	}
+        return Double.MAX_VALUE;
+    }
 
 }

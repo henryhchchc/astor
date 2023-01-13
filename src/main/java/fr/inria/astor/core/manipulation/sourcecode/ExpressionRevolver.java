@@ -16,28 +16,28 @@ import spoon.reflect.code.CtUnaryOperator;
  */
 public class ExpressionRevolver {
 
-	public static List<CtExpression<Boolean>> getExpressions(CtExpression<Boolean> element) {
-		List<CtExpression<Boolean>> expsRetrieved = new ArrayList<CtExpression<Boolean>>();
+    public static List<CtExpression<Boolean>> getExpressions(CtExpression<Boolean> element) {
+        List<CtExpression<Boolean>> expsRetrieved = new ArrayList<CtExpression<Boolean>>();
 
-		if (element instanceof CtUnaryOperator) {
-			expsRetrieved.add(element);
-			element = ((CtUnaryOperator) element).getOperand();
-		}
+        if (element instanceof CtUnaryOperator) {
+            expsRetrieved.add(element);
+            element = ((CtUnaryOperator) element).getOperand();
+        }
 
-		if (element instanceof CtBinaryOperator) {
-			expsRetrieved.add(element);
-			CtBinaryOperator bin = (CtBinaryOperator) element;
-			if (bin.getKind().equals(BinaryOperatorKind.AND) || bin.getKind().equals(BinaryOperatorKind.OR)) {
-				expsRetrieved.addAll(getExpressions(bin.getLeftHandOperand()));
-				expsRetrieved.addAll(getExpressions(bin.getRightHandOperand()));
-			}
-		} else {
-			if (element instanceof CtInvocation
-					&& element.getType().getSimpleName().equals(boolean.class.getSimpleName())) {
-				expsRetrieved.add(element);
-			}
-		}
-		return expsRetrieved;
-	}
+        if (element instanceof CtBinaryOperator) {
+            expsRetrieved.add(element);
+            CtBinaryOperator bin = (CtBinaryOperator) element;
+            if (bin.getKind().equals(BinaryOperatorKind.AND) || bin.getKind().equals(BinaryOperatorKind.OR)) {
+                expsRetrieved.addAll(getExpressions(bin.getLeftHandOperand()));
+                expsRetrieved.addAll(getExpressions(bin.getRightHandOperand()));
+            }
+        } else {
+            if (element instanceof CtInvocation
+                    && element.getType().getSimpleName().equals(boolean.class.getSimpleName())) {
+                expsRetrieved.add(element);
+            }
+        }
+        return expsRetrieved;
+    }
 
 }

@@ -12,10 +12,10 @@ import fr.inria.astor.core.solutionsearch.spaces.operators.OperatorSpace;
  */
 public class DeepRepairOperatorSpace extends OperatorSpace{
 
-	public DeepRepairOperatorSpace(){
-		super.register(new ReplaceOp());
-		super.register(new InsertAfterOp());
-		super.register(new InsertBeforeOp());	
-	}
-	
+    public DeepRepairOperatorSpace(){
+        super.register(new ReplaceOp());
+        super.register(new InsertAfterOp());
+        super.register(new InsertBeforeOp());    
+    }
+    
 }

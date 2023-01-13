@@ -16,64 +16,64 @@ import spoon.reflect.declaration.CtElement;
  */
 public class FineGrainedExpressionReplaceOperator extends ReplaceOp {
 
-	CtElement originalParent = null;
+    CtElement originalParent = null;
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public boolean applyChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
+    @SuppressWarnings("rawtypes")
+    @Override
+    public boolean applyChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
 
-		CtExpression elementToModify = (CtExpression) opInstance.getOriginal();
-		CtExpression elementOriginalCloned = (CtExpression) MutationSupporter.clone(elementToModify);
+        CtExpression elementToModify = (CtExpression) opInstance.getOriginal();
+        CtExpression elementOriginalCloned = (CtExpression) MutationSupporter.clone(elementToModify);
 
-		CtElement elFixIngredient = opInstance.getModified();
+        CtElement elFixIngredient = opInstance.getModified();
 
-		MetaGenerator.getSourceTarget().put(elementToModify, elFixIngredient);
+        MetaGenerator.getSourceTarget().put(elementToModify, elFixIngredient);
 
-		// MetaGenerator.targetSource.put(elementToModify, elFixIngredient);
+        // MetaGenerator.targetSource.put(elementToModify, elFixIngredient);
 
-		this.originalParent = elementToModify.getParent();
-		// we transform the Spoon model
-		try {
-			elementToModify.replace(elFixIngredient);
-		} catch (Exception e) {
-			log.error("error to modify " + elementOriginalCloned + " to " + elFixIngredient);
-			log.error(e);
-			e.printStackTrace();
-			opInstance.setExceptionAtApplied(e);
-			return false;
-		}
-		opInstance.setOriginal(elementToModify);
+        this.originalParent = elementToModify.getParent();
+        // we transform the Spoon model
+        try {
+            elementToModify.replace(elFixIngredient);
+        } catch (Exception e) {
+            log.error("error to modify " + elementOriginalCloned + " to " + elFixIngredient);
+            log.error(e);
+            e.printStackTrace();
+            opInstance.setExceptionAtApplied(e);
+            return false;
+        }
+        opInstance.setOriginal(elementToModify);
 
-		boolean change = !opInstance.getModificationPoint().getCodeElement().toString()
-				.equals(elementOriginalCloned.toString());
+        boolean change = !opInstance.getModificationPoint().getCodeElement().toString()
+                .equals(elementOriginalCloned.toString());
 
-		if (!change)
-			log.error("Replacement does not work for  modify " + elementOriginalCloned + " to " + elFixIngredient);
+        if (!change)
+            log.error("Replacement does not work for  modify " + elementOriginalCloned + " to " + elFixIngredient);
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean undoChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
+    @Override
+    public boolean undoChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
 
-		opInstance.getModified().setParent(this.originalParent);
-		// We update the spoon Model
-		opInstance.getModified().replace(opInstance.getOriginal());
-		// Finally, we update the modification point (i.e., Astor
-		// Representation)
-		return true;
-	}
+        opInstance.getModified().setParent(this.originalParent);
+        // We update the spoon Model
+        opInstance.getModified().replace(opInstance.getOriginal());
+        // Finally, we update the modification point (i.e., Astor
+        // Representation)
+        return true;
+    }
 
-	@Override
-	public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
-		// We dont need to update the variant here
-		return false;
-	}
+    @Override
+    public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
+        // We dont need to update the variant here
+        return false;
+    }
 
-	@Override
-	public boolean canBeAppliedToPoint(ModificationPoint point) {
+    @Override
+    public boolean canBeAppliedToPoint(ModificationPoint point) {
 
-		return (point.getCodeElement() instanceof CtExpression);
-	}
+        return (point.getCodeElement() instanceof CtExpression);
+    }
 
 }

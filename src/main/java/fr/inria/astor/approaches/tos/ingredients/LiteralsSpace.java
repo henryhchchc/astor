@@ -22,72 +22,72 @@ import spoon.reflect.declaration.CtType;
  *
  */
 public class LiteralsSpace extends AstorCtIngredientPool {
-	protected IngredientPoolScope scope;
+    protected IngredientPoolScope scope;
 
-	public LiteralsSpace(IngredientPoolScope scope) throws JSAPException {
-		super();
-		this.scope = scope;
-		this.setIngredientProcessor(new CodeParserLauncher<>(new LiteralsProcessor()));
-	}
+    public LiteralsSpace(IngredientPoolScope scope) throws JSAPException {
+        super();
+        this.scope = scope;
+        this.setIngredientProcessor(new CodeParserLauncher<>(new LiteralsProcessor()));
+    }
 
-	@Override
-	public void defineSpace(ProgramVariant variant) {
-		List<CtType<?>> types = obtainClassesFromScope(variant);
-		for (CtType type : types) {
-			this.createFixSpaceFromAClass(type);
-		}
-	}
+    @Override
+    public void defineSpace(ProgramVariant variant) {
+        List<CtType<?>> types = obtainClassesFromScope(variant);
+        for (CtType type : types) {
+            this.createFixSpaceFromAClass(type);
+        }
+    }
 
-	protected List<CtType<?>> obtainClassesFromScope(ProgramVariant variant) {
+    protected List<CtType<?>> obtainClassesFromScope(ProgramVariant variant) {
 
-		if (IngredientPoolScope.PACKAGE.equals(scope)) {
-			List<CtType<?>> affected = variant.getAllClasses();
-			List<CtType<?>> types = new ArrayList<>();
-			List<CtPackage> packageAnalyzed = new ArrayList<>();
-			for (CtType<?> ing : affected) {
+        if (IngredientPoolScope.PACKAGE.equals(scope)) {
+            List<CtType<?>> affected = variant.getAllClasses();
+            List<CtType<?>> types = new ArrayList<>();
+            List<CtPackage> packageAnalyzed = new ArrayList<>();
+            for (CtType<?> ing : affected) {
 
-				CtPackage p = ing.getParent(CtPackage.class);
-				if (!packageAnalyzed.contains(p)) {
-					packageAnalyzed.add(p);
-					for (CtType<?> type : p.getTypes()) {
-						types.add(type);
-					}
-				}
-			}
-			return types;
-		}
-		if (IngredientPoolScope.LOCAL.equals(scope)) {
-			return variant.getAllClasses();
-		}
-		if (IngredientPoolScope.GLOBAL.equals(scope)) {
-			return MutationSupporter.getFactory().Type().getAll();
-		}
-		return null;
-	}
+                CtPackage p = ing.getParent(CtPackage.class);
+                if (!packageAnalyzed.contains(p)) {
+                    packageAnalyzed.add(p);
+                    for (CtType<?> type : p.getTypes()) {
+                        types.add(type);
+                    }
+                }
+            }
+            return types;
+        }
+        if (IngredientPoolScope.LOCAL.equals(scope)) {
+            return variant.getAllClasses();
+        }
+        if (IngredientPoolScope.GLOBAL.equals(scope)) {
+            return MutationSupporter.getFactory().Type().getAll();
+        }
+        return null;
+    }
 
-	@Override
-	public IngredientPoolScope spaceScope() {
-		return this.scope;
-	}
+    @Override
+    public IngredientPoolScope spaceScope() {
+        return this.scope;
+    }
 
-	@Override
-	public String calculateLocation(CtElement elementToModify) {
+    @Override
+    public String calculateLocation(CtElement elementToModify) {
 
-		if (IngredientPoolScope.PACKAGE.equals(scope)) {
-			return elementToModify.getParent(CtPackage.class).getQualifiedName();
-		} else if (IngredientPoolScope.LOCAL.equals(scope)) {
-			return elementToModify.getParent(CtType.class).getQualifiedName();
-		} else if (IngredientPoolScope.GLOBAL.equals(scope))
-			return "Global";
+        if (IngredientPoolScope.PACKAGE.equals(scope)) {
+            return elementToModify.getParent(CtPackage.class).getQualifiedName();
+        } else if (IngredientPoolScope.LOCAL.equals(scope)) {
+            return elementToModify.getParent(CtType.class).getQualifiedName();
+        } else if (IngredientPoolScope.GLOBAL.equals(scope))
+            return "Global";
 
-		return null;
+        return null;
 
-	}
+    }
 
-	@Override
-	public String getType(Ingredient ingredient) {
-		// before was new code
-		return ingredient.getCode().getClass().getSimpleName();
-	}
+    @Override
+    public String getType(Ingredient ingredient) {
+        // before was new code
+        return ingredient.getCode().getClass().getSimpleName();
+    }
 
 }

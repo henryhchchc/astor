@@ -10,17 +10,17 @@ import spoon.reflect.code.CtIf;
  */
 public class IFConditionFixSpaceProcessor extends TargetElementProcessor<CtIf>  {
 
-	private Logger logger = Logger.getLogger(IFConditionFixSpaceProcessor.class.getName());
+    private Logger logger = Logger.getLogger(IFConditionFixSpaceProcessor.class.getName());
 
-	public  IFConditionFixSpaceProcessor(){
-		super();
-	
-	}
-	
-	
-	@Override
-	public void process(CtIf element) {
-			super.add(element);
-	}
-	
+    public  IFConditionFixSpaceProcessor(){
+        super();
+    
+    }
+    
+    
+    @Override
+    public void process(CtIf element) {
+            super.add(element);
+    }
+    
 }

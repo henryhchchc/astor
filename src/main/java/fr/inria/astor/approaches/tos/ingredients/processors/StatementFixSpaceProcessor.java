@@ -16,18 +16,18 @@ import spoon.reflect.declaration.CtMethod;
  */
 public class StatementFixSpaceProcessor extends TargetElementProcessor<CtStatement> {
 
-	/**
-	 * The default statement transformator is CTStamemeny
-	 */
-	public StatementFixSpaceProcessor() {
-		super();
-	}
+    /**
+     * The default statement transformator is CTStamemeny
+     */
+    public StatementFixSpaceProcessor() {
+        super();
+    }
 
-	@Override
-	public void process(CtStatement element) {
-		if (!(element instanceof CtClass || element instanceof CtMethod) && (element.getParent() instanceof CtBlock)) {
-			add(element);
-		}
-	}
+    @Override
+    public void process(CtStatement element) {
+        if (!(element instanceof CtClass || element instanceof CtMethod) && (element.getParent() instanceof CtBlock)) {
+            add(element);
+        }
+    }
 
 }

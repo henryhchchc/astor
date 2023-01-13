@@ -13,28 +13,28 @@ import spoon.reflect.declaration.CtType;
 
 public class IFCollectorProcessor  extends TargetElementProcessor<CtIf>  {
 
-	private Logger logger = Logger.getLogger(IFExpressionFixSpaceProcessor.class.getName());
+    private Logger logger = Logger.getLogger(IFExpressionFixSpaceProcessor.class.getName());
 
 
-	@Override
-	public void process(CtIf element) {
-		
-		CtType simpleType = getSimpleType(element);
-		/*ifs.add(element);
-		ifClasses.put(element, simpleType);*/
-		super.add(element);
-		
-	}
-	public boolean mustClone(){
-		return false;
-	}
-	
-	public CtType getSimpleType(CtElement el){
-		if(el instanceof CtType){
-			return (CtType) el;
-		}
-		else{
-			return getSimpleType(el.getParent());
-		}
-	}
+    @Override
+    public void process(CtIf element) {
+        
+        CtType simpleType = getSimpleType(element);
+        /*ifs.add(element);
+        ifClasses.put(element, simpleType);*/
+        super.add(element);
+        
+    }
+    public boolean mustClone(){
+        return false;
+    }
+    
+    public CtType getSimpleType(CtElement el){
+        if(el instanceof CtType){
+            return (CtType) el;
+        }
+        else{
+            return getSimpleType(el.getParent());
+        }
+    }
 }

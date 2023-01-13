@@ -8,5 +8,5 @@ package fr.inria.astor.core.entities.validation;
  */
 public interface VariantValidationResult {
 
-	public boolean isSuccessful();
+    public boolean isSuccessful();
 }

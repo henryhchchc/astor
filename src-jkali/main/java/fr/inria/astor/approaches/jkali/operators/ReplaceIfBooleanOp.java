@@ -21,71 +21,71 @@ import spoon.reflect.code.CtIf;
  */
 public class ReplaceIfBooleanOp extends AutonomousOperator implements StatementLevelOperator {
 
-	ReplaceOp replaceOp = new ReplaceOp();
+    ReplaceOp replaceOp = new ReplaceOp();
 
-	public ReplaceIfBooleanOp() {
-		super();
-	}
+    public ReplaceIfBooleanOp() {
+        super();
+    }
 
-	@Override
-	public boolean canBeAppliedToPoint(ModificationPoint point) {
+    @Override
+    public boolean canBeAppliedToPoint(ModificationPoint point) {
 
-		return (point.getCodeElement() instanceof CtIf);
-	}
+        return (point.getCodeElement() instanceof CtIf);
+    }
 
-	@Override
-	public List<OperatorInstance> createOperatorInstances(ModificationPoint modificationPoint) {
-		List<OperatorInstance> instances = new ArrayList<>();
+    @Override
+    public List<OperatorInstance> createOperatorInstances(ModificationPoint modificationPoint) {
+        List<OperatorInstance> instances = new ArrayList<>();
 
-		OperatorInstance opChangeIftrue = new StatementOperatorInstance(modificationPoint, this,
-				modificationPoint.getCodeElement(), createIf((CtIf) modificationPoint.getCodeElement(), true));
+        OperatorInstance opChangeIftrue = new StatementOperatorInstance(modificationPoint, this,
+                modificationPoint.getCodeElement(), createIf((CtIf) modificationPoint.getCodeElement(), true));
 
-		instances.add(opChangeIftrue);
+        instances.add(opChangeIftrue);
 
-		OperatorInstance opChangeIffalse = new StatementOperatorInstance(modificationPoint, this,
-				modificationPoint.getCodeElement(), createIf((CtIf) modificationPoint.getCodeElement(), false));
+        OperatorInstance opChangeIffalse = new StatementOperatorInstance(modificationPoint, this,
+                modificationPoint.getCodeElement(), createIf((CtIf) modificationPoint.getCodeElement(), false));
 
-		instances.add(opChangeIffalse);
+        instances.add(opChangeIffalse);
 
-		return instances;
-	}
+        return instances;
+    }
 
-	/**
-	 * Creates a new if from that one passed as parammeter. The next if has a
-	 * condition expression expression true or false according to the variable
-	 * <b>thenBranch</b>
-	 * 
-	 * @param ifElement
-	 * @param thenBranch
-	 * @return
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked", })
-	private CtIf createIf(CtIf ifElement, boolean thenBranch) {
+    /**
+     * Creates a new if from that one passed as parammeter. The next if has a
+     * condition expression expression true or false according to the variable
+     * <b>thenBranch</b>
+     * 
+     * @param ifElement
+     * @param thenBranch
+     * @return
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked", })
+    private CtIf createIf(CtIf ifElement, boolean thenBranch) {
 
-		CtIf clonedIf = MutationSupporter.getFactory().Core().clone(ifElement);
-		CtExpression ifExpression = MutationSupporter.getFactory().Code()
-				.createCodeSnippetExpression(Boolean.toString(thenBranch));
+        CtIf clonedIf = MutationSupporter.getFactory().Core().clone(ifElement);
+        CtExpression ifExpression = MutationSupporter.getFactory().Code()
+                .createCodeSnippetExpression(Boolean.toString(thenBranch));
 
-		clonedIf.setCondition(ifExpression);
+        clonedIf.setCondition(ifExpression);
 
-		return clonedIf;
-	}
+        return clonedIf;
+    }
 
-	@Override
-	public boolean applyChangesInModel(OperatorInstance operation, ProgramVariant p) {
+    @Override
+    public boolean applyChangesInModel(OperatorInstance operation, ProgramVariant p) {
 
-		return replaceOp.applyChangesInModel(operation, p);
+        return replaceOp.applyChangesInModel(operation, p);
 
-	}
+    }
 
-	@Override
-	public boolean undoChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
-		return replaceOp.undoChangesInModel(opInstance, p);
-	}
+    @Override
+    public boolean undoChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
+        return replaceOp.undoChangesInModel(opInstance, p);
+    }
 
-	@Override
-	public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
-		return replaceOp.updateProgramVariant(opInstance, p);
-	}
+    @Override
+    public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
+        return replaceOp.updateProgramVariant(opInstance, p);
+    }
 
 }

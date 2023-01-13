@@ -10,13 +10,13 @@ package fr.inria.astor.core.entities.validation;
 public interface TestCaseVariantValidationResult extends VariantValidationResult {
 
 
-	public int getFailureCount();
+    public int getFailureCount();
 
-	public boolean isRegressionExecuted();
+    public boolean isRegressionExecuted();
 
-	public void setRegressionExecuted(boolean regressionExecuted);
+    public void setRegressionExecuted(boolean regressionExecuted);
 
-	public int getPassingTestCases();
+    public int getPassingTestCases();
 
-	public int getCasesExecuted();
+    public int getCasesExecuted();
 }

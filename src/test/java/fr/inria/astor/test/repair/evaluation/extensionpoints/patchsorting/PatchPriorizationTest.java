@@ -23,31 +23,31 @@ import fr.inria.main.evolution.AstorMain;
  */
 public class PatchPriorizationTest {
 
-	@Test
-	public void testMath70PriorityLocalSolution() throws Exception {
-		AstorMain main1 = new AstorMain();
-		String dep = new File("./examples/libs/junit-4.4.jar").getAbsolutePath();
-		File out = new File(ConfigurationProperties.getProperty("workingDirectory"));
-		String[] args = new String[] { "-dependencies", dep, "-mode", "jgenprog", "-failing",
-				"org.apache.commons.math.analysis.solvers.BisectionSolverTest", "-location",
-				new File("./examples/math_70").getAbsolutePath(), "-package", "org.apache.commons", "-srcjavafolder",
-				"/src/java/", "-srctestfolder", "/src/test/", "-binjavafolder", "/target/classes", "-bintestfolder",
-				"/target/test-classes", "-javacompliancelevel", "7", "-flthreshold", "1", "-out",
-				out.getAbsolutePath(), "-scope", "package", "-seed", "10", "-maxgen", "10000", "-stopfirst", "false",
-				"-maxtime", "15", //
-				"-patchprioritization", IdentifierPriorityCriterion.class.getName(), "-parameters",
-				"maxnumbersolutions:2"
+    @Test
+    public void testMath70PriorityLocalSolution() throws Exception {
+        AstorMain main1 = new AstorMain();
+        String dep = new File("./examples/libs/junit-4.4.jar").getAbsolutePath();
+        File out = new File(ConfigurationProperties.getProperty("workingDirectory"));
+        String[] args = new String[] { "-dependencies", dep, "-mode", "jgenprog", "-failing",
+                "org.apache.commons.math.analysis.solvers.BisectionSolverTest", "-location",
+                new File("./examples/math_70").getAbsolutePath(), "-package", "org.apache.commons", "-srcjavafolder",
+                "/src/java/", "-srctestfolder", "/src/test/", "-binjavafolder", "/target/classes", "-bintestfolder",
+                "/target/test-classes", "-javacompliancelevel", "7", "-flthreshold", "1", "-out",
+                out.getAbsolutePath(), "-scope", "package", "-seed", "10", "-maxgen", "10000", "-stopfirst", "false",
+                "-maxtime", "15", //
+                "-patchprioritization", IdentifierPriorityCriterion.class.getName(), "-parameters",
+                "maxnumbersolutions:2"
 
-		};
-		System.out.println(Arrays.toString(args));
-		main1.execute(args);
+        };
+        System.out.println(Arrays.toString(args));
+        main1.execute(args);
 
-		List<ProgramVariant> solutions = main1.getEngine().getSolutions();
-		assertTrue(solutions.size() > 0);
-		assertEquals(2, solutions.size());
-		ProgramVariant variant = solutions.get(0);
-		assertTrue(((TestCasesProgramValidationResult) variant.getValidationResult()).isRegressionExecuted());
-		
-		assertEquals(AstorOutputStatus.STOP_BY_PATCH_FOUND, main1.getEngine().getOutputStatus());
-	}
+        List<ProgramVariant> solutions = main1.getEngine().getSolutions();
+        assertTrue(solutions.size() > 0);
+        assertEquals(2, solutions.size());
+        ProgramVariant variant = solutions.get(0);
+        assertTrue(((TestCasesProgramValidationResult) variant.getValidationResult()).isRegressionExecuted());
+        
+        assertEquals(AstorOutputStatus.STOP_BY_PATCH_FOUND, main1.getEngine().getOutputStatus());
+    }
 }

@@ -16,40 +16,40 @@ import spoon.reflect.declaration.CtVariable;
  */
 public class SuspiciousModificationPoint extends ModificationPoint {
 
-	protected SuspiciousCode suspicious;
+    protected SuspiciousCode suspicious;
 
-	public SuspiciousModificationPoint() {
-		super();
-	}
+    public SuspiciousModificationPoint() {
+        super();
+    }
 
-	public SuspiciousModificationPoint(SuspiciousCode suspicious, CtElement rootElement, CtClass clonedClass,
-			List<CtVariable> context) {
-		super(rootElement, clonedClass, context);
-		this.suspicious = suspicious;
-	}
+    public SuspiciousModificationPoint(SuspiciousCode suspicious, CtElement rootElement, CtClass clonedClass,
+            List<CtVariable> context) {
+        super(rootElement, clonedClass, context);
+        this.suspicious = suspicious;
+    }
 
-	public SuspiciousCode getSuspicious() {
-		return suspicious;
-	}
+    public SuspiciousCode getSuspicious() {
+        return suspicious;
+    }
 
-	public void setSuspicious(SuspiciousCode suspicious) {
-		this.suspicious = suspicious;
-	}
+    public void setSuspicious(SuspiciousCode suspicious) {
+        this.suspicious = suspicious;
+    }
 
-	public String toString() {
-		return "MP=" + ctClass.getQualifiedName() + " line: " + suspicious.getLineNumber() + ", pointed element: "
-				+ codeElement.getClass().getSimpleName() + "";
-	}
+    public String toString() {
+        return "MP=" + ctClass.getQualifiedName() + " line: " + suspicious.getLineNumber() + ", pointed element: "
+                + codeElement.getClass().getSimpleName() + "";
+    }
 
-	@Override
-	public ModificationPoint clone() {
+    @Override
+    public ModificationPoint clone() {
 
-		SuspiciousModificationPoint sp = new SuspiciousModificationPoint(suspicious, codeElement, ctClass,
-				contextOfModificationPoint);
-		sp.identified = this.identified;
-		sp.generation = this.generation;
-		sp.programVariant = this.programVariant;
-		return sp;
-	}
+        SuspiciousModificationPoint sp = new SuspiciousModificationPoint(suspicious, codeElement, ctClass,
+                contextOfModificationPoint);
+        sp.identified = this.identified;
+        sp.generation = this.generation;
+        sp.programVariant = this.programVariant;
+        return sp;
+    }
 
 }

@@ -27,84 +27,84 @@ import spoon.reflect.declaration.CtElement;
  */
 public class PerfectEngine extends AstorCoreEngine {
 
-	public PerfectEngine(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade) throws JSAPException {
-		super(mutatorExecutor, projFacade);
+    public PerfectEngine(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade) throws JSAPException {
+        super(mutatorExecutor, projFacade);
 
-	}
+    }
 
-	@Override
-	public void startSearch() throws Exception {
+    @Override
+    public void startSearch() throws Exception {
 
-		ProgramVariant programVariant = this.getVariants().get(0);
+        ProgramVariant programVariant = this.getVariants().get(0);
 
-		OperatorInstance opinstance = null;
+        OperatorInstance opinstance = null;
 
-		String op = ConfigurationProperties.getProperty("peOperator");
+        String op = ConfigurationProperties.getProperty("peOperator");
 
-		String contentFile = ConfigurationProperties.getProperty("pefile");
+        String contentFile = ConfigurationProperties.getProperty("pefile");
 
-		String content = new String(Files.readAllBytes(Paths.get(contentFile)));
+        String content = new String(Files.readAllBytes(Paths.get(contentFile)));
 
-		CtCodeElement contentSp = MutationSupporter.getFactory().Code().createCodeSnippetStatement(content)
-				.partiallyEvaluate();
-		ModificationPoint modificationPoint = programVariant.getModificationPoints().get(0);
+        CtCodeElement contentSp = MutationSupporter.getFactory().Code().createCodeSnippetStatement(content)
+                .partiallyEvaluate();
+        ModificationPoint modificationPoint = programVariant.getModificationPoints().get(0);
 
-		System.out.println("-->> " + contentSp.toString());
-		System.out.println("code patch " + modificationPoint.getCodeElement());
+        System.out.println("-->> " + contentSp.toString());
+        System.out.println("code patch " + modificationPoint.getCodeElement());
 
-		CtElement parent = modificationPoint.getCodeElement().getParent();
-		System.out.println(parent);
+        CtElement parent = modificationPoint.getCodeElement().getParent();
+        System.out.println(parent);
 
-		contentSp.setParent(parent);
+        contentSp.setParent(parent);
 
-		if (op.equals("replace")) {
+        if (op.equals("replace")) {
 
-			ReplaceOp rop = new ReplaceOp();
+            ReplaceOp rop = new ReplaceOp();
 
-			opinstance = new StatementOperatorInstance(modificationPoint, rop, modificationPoint.getCodeElement(),
-					contentSp);
+            opinstance = new StatementOperatorInstance(modificationPoint, rop, modificationPoint.getCodeElement(),
+                    contentSp);
 
-		} else if (op.equals("insertbefore"))
+        } else if (op.equals("insertbefore"))
 
-		{
+        {
 
-			InsertBeforeOp rop = new InsertBeforeOp();
+            InsertBeforeOp rop = new InsertBeforeOp();
 
-			opinstance = new StatementOperatorInstance(modificationPoint, rop, modificationPoint.getCodeElement(),
-					contentSp);
-		}
+            opinstance = new StatementOperatorInstance(modificationPoint, rop, modificationPoint.getCodeElement(),
+                    contentSp);
+        }
 
-		boolean applied = opinstance.applyModification();
+        boolean applied = opinstance.applyModification();
 
-		assertTrue(applied);
+        assertTrue(applied);
 
-		programVariant.putModificationInstance(0, opinstance);
+        programVariant.putModificationInstance(0, opinstance);
 
-		programVariant.setId(10);
+        programVariant.setId(10);
 
-		ConfigurationProperties.setProperty("saveall", "true");
+        ConfigurationProperties.setProperty("saveall", "true");
 
-		boolean solution = this.processCreatedVariant(programVariant, 1);
+        boolean solution = this.processCreatedVariant(programVariant, 1);
 
-		if (solution) {
-			log.info("Solution found " + getSolutions().size());
+        if (solution) {
+            log.info("Solution found " + getSolutions().size());
 
-			this.solutions.add(programVariant);
+            this.solutions.add(programVariant);
 
-		}
+        }
 
-		opinstance.undoModification();
+        opinstance.undoModification();
 
-		if (solution) {
-			log.info("Solution found " + getSolutions().size());
-			this.savePatch(programVariant);
-		}
+        if (solution) {
+            log.info("Solution found " + getSolutions().size());
+            this.savePatch(programVariant);
+        }
 
-		if (!this.solutions.isEmpty() && ConfigurationProperties.getPropertyBool("stopfirst")) {
-			this.setOutputStatus(AstorOutputStatus.STOP_BY_PATCH_FOUND);
-			return;
-		}
+        if (!this.solutions.isEmpty() && ConfigurationProperties.getPropertyBool("stopfirst")) {
+            this.setOutputStatus(AstorOutputStatus.STOP_BY_PATCH_FOUND);
+            return;
+        }
 
-	}
+    }
 
 }

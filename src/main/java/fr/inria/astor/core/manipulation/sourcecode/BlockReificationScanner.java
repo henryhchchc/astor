@@ -15,22 +15,22 @@ import spoon.reflect.visitor.CtScanner;
  */
 public class BlockReificationScanner extends CtScanner {
 
-	@Override
-	public void visitCtIf(CtIf element) {
-		super.visitCtIf(element);
-		if(!(element.getThenStatement() instanceof CtBlock)){
-			CtStatement c = element.getThenStatement() ;
-			CtBlock nBlock = MutationSupporter.getFactory().Core().createBlock();
-			nBlock.addStatement(c);
-			element.setThenStatement(nBlock);
-		}
-		
-		if( element.getElseStatement() != null && !(element.getElseStatement() instanceof CtBlock)){
-			CtStatement c = element.getElseStatement() ;
-			CtBlock nBlock = MutationSupporter.getFactory().Core().createBlock();
-			nBlock.addStatement(c);
-			element.setElseStatement(nBlock);
-		}
-	}
+    @Override
+    public void visitCtIf(CtIf element) {
+        super.visitCtIf(element);
+        if(!(element.getThenStatement() instanceof CtBlock)){
+            CtStatement c = element.getThenStatement() ;
+            CtBlock nBlock = MutationSupporter.getFactory().Core().createBlock();
+            nBlock.addStatement(c);
+            element.setThenStatement(nBlock);
+        }
+        
+        if( element.getElseStatement() != null && !(element.getElseStatement() instanceof CtBlock)){
+            CtStatement c = element.getElseStatement() ;
+            CtBlock nBlock = MutationSupporter.getFactory().Core().createBlock();
+            nBlock.addStatement(c);
+            element.setElseStatement(nBlock);
+        }
+    }
 
 }

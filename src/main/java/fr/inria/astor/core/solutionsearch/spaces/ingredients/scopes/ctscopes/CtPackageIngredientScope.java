@@ -14,21 +14,21 @@ import spoon.reflect.declaration.CtPackage;
  *
  */
 public class CtPackageIngredientScope extends CtLocationIngredientSpace {
-	
-	@Override
-	public Class getCtElementForSplitSpace() {
-		return CtPackage.class;
-	}
+    
+    @Override
+    public Class getCtElementForSplitSpace() {
+        return CtPackage.class;
+    }
 
-	public CtPackageIngredientScope() throws JSAPException {
-		super();
-	}
+    public CtPackageIngredientScope() throws JSAPException {
+        super();
+    }
 
-	public CtPackageIngredientScope(TargetElementProcessor<?> processor) throws JSAPException {
-		super(processor);
-	}
+    public CtPackageIngredientScope(TargetElementProcessor<?> processor) throws JSAPException {
+        super(processor);
+    }
 
-	public CtPackageIngredientScope(List<TargetElementProcessor<?>> processors) throws JSAPException {
-		super(processors);
-	}
+    public CtPackageIngredientScope(List<TargetElementProcessor<?>> processors) throws JSAPException {
+        super(processors);
+    }
 }

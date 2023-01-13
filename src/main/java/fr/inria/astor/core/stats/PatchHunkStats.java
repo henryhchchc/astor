@@ -12,14 +12,14 @@ import fr.inria.astor.core.stats.PatchStat.HunkStatEnum;
  */
 public class PatchHunkStats {
 
-	private Map<HunkStatEnum, Object> stats = new HashMap<>();
+    private Map<HunkStatEnum, Object> stats = new HashMap<>();
 
-	public Map<HunkStatEnum, Object> getStats() {
-		return stats;
-	}
+    public Map<HunkStatEnum, Object> getStats() {
+        return stats;
+    }
 
-	public void setStats(Map<HunkStatEnum, Object> stats) {
-		this.stats = stats;
-	}
+    public void setStats(Map<HunkStatEnum, Object> stats) {
+        this.stats = stats;
+    }
 
 }

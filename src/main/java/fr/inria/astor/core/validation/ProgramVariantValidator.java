@@ -15,27 +15,27 @@ import fr.inria.astor.core.stats.Stats;
  */
 public abstract class ProgramVariantValidator implements AstorExtensionPoint {
 
-	protected Stats currentStats = Stats.getCurrentStat();
+    protected Stats currentStats = Stats.getCurrentStat();
 
-	public void setStats(Stats stats) {
-		currentStats = stats;
-	};
+    public void setStats(Stats stats) {
+        currentStats = stats;
+    };
 
-	/**
-	 * Validates a program variant
-	 * 
-	 * @param variant
-	 * @param projectFacade
-	 * @return
-	 */
-	public abstract VariantValidationResult validate(ProgramVariant variant, ProjectRepairFacade projectFacade);
+    /**
+     * Validates a program variant
+     * 
+     * @param variant
+     * @param projectFacade
+     * @return
+     */
+    public abstract VariantValidationResult validate(ProgramVariant variant, ProjectRepairFacade projectFacade);
 
-	/**
-	 * Determines the test cases from a project
-	 * 
-	 * @param projectFacade
-	 * @return
-	 */
-	public abstract List<String> findTestCasesToExecute(ProjectRepairFacade projectFacade);
+    /**
+     * Determines the test cases from a project
+     * 
+     * @param projectFacade
+     * @return
+     */
+    public abstract List<String> findTestCasesToExecute(ProjectRepairFacade projectFacade);
 
 }

@@ -14,33 +14,33 @@ import fr.inria.astor.core.solutionsearch.spaces.operators.AstorOperator;
  */
 public abstract class IngredientSearchStrategy implements  AstorExtensionPoint {
 
-	protected IngredientPool ingredientSpace = null;
+    protected IngredientPool ingredientSpace = null;
 
-	/**
-	 * The strategy receives as parameter the FixSpace
-	 * 
-	 * @param space
-	 */
-	public IngredientSearchStrategy(IngredientPool space) {
-		super();
-		this.ingredientSpace = space;
-	}
+    /**
+     * The strategy receives as parameter the FixSpace
+     * 
+     * @param space
+     */
+    public IngredientSearchStrategy(IngredientPool space) {
+        super();
+        this.ingredientSpace = space;
+    }
 
-	/**
-	 * Method that returns an Ingredient from the ingredient space given a
-	 * modification point and a Operator
-	 * 
-	 * @param modificationPoint
-	 *            point to be modified using an ingredient
-	 * @param operationType
-	 *            operation applied to the modif point
-	 * @return an ingredient
-	 */
-	public abstract Ingredient getFixIngredient(ModificationPoint modificationPoint, 
-			AstorOperator operationType);
+    /**
+     * Method that returns an Ingredient from the ingredient space given a
+     * modification point and a Operator
+     * 
+     * @param modificationPoint
+     *            point to be modified using an ingredient
+     * @param operationType
+     *            operation applied to the modif point
+     * @return an ingredient
+     */
+    public abstract Ingredient getFixIngredient(ModificationPoint modificationPoint, 
+            AstorOperator operationType);
 
-	public IngredientPool getIngredientSpace() {
-		return ingredientSpace;
-	}
+    public IngredientPool getIngredientSpace() {
+        return ingredientSpace;
+    }
 
 }

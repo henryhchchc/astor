@@ -12,14 +12,14 @@ import fr.inria.main.ExecutionResult;
  */
 public class RepairResult extends ExecutionResult {
 
-	private List<ProgramVariant> solutions;
+    private List<ProgramVariant> solutions;
 
-	public List<ProgramVariant> getSolutions() {
-		return solutions;
-	}
+    public List<ProgramVariant> getSolutions() {
+        return solutions;
+    }
 
-	public void setSolutions(List<ProgramVariant> solutions) {
-		this.solutions = solutions;
-	}
+    public void setSolutions(List<ProgramVariant> solutions) {
+        this.solutions = solutions;
+    }
 
 }

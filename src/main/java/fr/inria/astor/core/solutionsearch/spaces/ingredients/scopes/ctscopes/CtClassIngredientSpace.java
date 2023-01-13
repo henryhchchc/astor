@@ -15,22 +15,22 @@ import spoon.reflect.declaration.CtClass;
  */
 public class CtClassIngredientSpace extends CtLocationIngredientSpace {
 
-	@Override
-	public Class getCtElementForSplitSpace() {
-		return CtClass.class;
-	}
+    @Override
+    public Class getCtElementForSplitSpace() {
+        return CtClass.class;
+    }
 
-	public CtClassIngredientSpace() throws JSAPException {
-		super();
-	}
+    public CtClassIngredientSpace() throws JSAPException {
+        super();
+    }
 
-	public CtClassIngredientSpace(TargetElementProcessor<?> processor) throws JSAPException {
-		super(processor);
-	}
+    public CtClassIngredientSpace(TargetElementProcessor<?> processor) throws JSAPException {
+        super(processor);
+    }
 
-	public CtClassIngredientSpace(List<TargetElementProcessor<?>> processors) throws JSAPException {
-		super(processors);
-	}
+    public CtClassIngredientSpace(List<TargetElementProcessor<?>> processors) throws JSAPException {
+        super(processors);
+    }
 
-	
+    
 }

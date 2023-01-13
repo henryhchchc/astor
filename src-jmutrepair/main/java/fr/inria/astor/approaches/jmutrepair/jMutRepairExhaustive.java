@@ -17,14 +17,14 @@ import fr.inria.main.evolution.ExtensionPoints;
  */
 public class jMutRepairExhaustive extends ExhaustiveSearchEngine {
 
-	public jMutRepairExhaustive(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade)
-			throws JSAPException {
-		super(mutatorExecutor, projFacade);
-		ConfigurationProperties.properties.setProperty("regressionforfaultlocalization", "true");
-		ConfigurationProperties.properties.setProperty("population", "1");
-		setPropertyIfNotDefined(ExtensionPoints.OPERATORS_SPACE.identifier, "mutationspace");
-		setPropertyIfNotDefined(ExtensionPoints.TARGET_CODE_PROCESSOR.identifier,
-				"if-conditions" + File.pathSeparator + "return-op-mutation");
-	}
+    public jMutRepairExhaustive(MutationSupporter mutatorExecutor, ProjectRepairFacade projFacade)
+            throws JSAPException {
+        super(mutatorExecutor, projFacade);
+        ConfigurationProperties.properties.setProperty("regressionforfaultlocalization", "true");
+        ConfigurationProperties.properties.setProperty("population", "1");
+        setPropertyIfNotDefined(ExtensionPoints.OPERATORS_SPACE.identifier, "mutationspace");
+        setPropertyIfNotDefined(ExtensionPoints.TARGET_CODE_PROCESSOR.identifier,
+                "if-conditions" + File.pathSeparator + "return-op-mutation");
+    }
 
 }

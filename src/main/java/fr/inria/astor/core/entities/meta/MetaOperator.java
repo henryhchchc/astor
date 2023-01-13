@@ -12,10 +12,10 @@ import fr.inria.astor.core.entities.OperatorInstance;
  */
 public interface MetaOperator {
 
-	public OperatorInstance getConcreteOperatorInstance(MetaOperatorInstance operatorInstance, int metaIdentifier);
+    public OperatorInstance getConcreteOperatorInstance(MetaOperatorInstance operatorInstance, int metaIdentifier);
 
-	public List<MetaOperatorInstance> createMetaOperatorInstances(ModificationPoint modificationPoint);
+    public List<MetaOperatorInstance> createMetaOperatorInstances(ModificationPoint modificationPoint);
 
-	public String identifier();
+    public String identifier();
 
 }

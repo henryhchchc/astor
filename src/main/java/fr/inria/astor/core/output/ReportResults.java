@@ -13,6 +13,6 @@ import fr.inria.astor.core.stats.Stats.GeneralStatEnum;
  */
 public interface ReportResults extends AstorExtensionPoint {
 
-	
-	public Object produceOutput(List<PatchStat> statsForPatches, Map<GeneralStatEnum, Object> generalStats, String output);
+    
+    public Object produceOutput(List<PatchStat> statsForPatches, Map<GeneralStatEnum, Object> generalStats, String output);
 }

@@ -10,29 +10,29 @@ import java.util.Set;
  */
 public class CacheList<E> extends ArrayList<E> {
 
-	private Set<String> cache = new HashSet<String>();
-	
-	
-	@Override
-	public boolean contains(Object o) {
-		if(cache.contains(o.toString()))
-			return true;
+    private Set<String> cache = new HashSet<String>();
+    
+    
+    @Override
+    public boolean contains(Object o) {
+        if(cache.contains(o.toString()))
+            return true;
 
-		return super.contains(o);
-	}
+        return super.contains(o);
+    }
 
-	@Override
-	public boolean add(E e) {
-		cache.add(e.toString());
-		return super.add(e);
-	}
+    @Override
+    public boolean add(E e) {
+        cache.add(e.toString());
+        return super.add(e);
+    }
 
-	@Override
-	public void add(int index, E element) {
-		cache.add(element.toString());
-		super.add(index, element);
-	}
+    @Override
+    public void add(int index, E element) {
+        cache.add(element.toString());
+        super.add(index, element);
+    }
 
-	
-	
+    
+    
 }

@@ -37,68 +37,68 @@ import fr.inria.astor.core.faultlocalization.entity.runtestsuite.TestFilter;
  */
 public final class TestClassesFinder implements Callable<Collection<Class<?>>> {
 
-	private final Logger logger = Logger.getLogger(this.getClass());
+    private final Logger logger = Logger.getLogger(this.getClass());
 
-	public Collection<Class<?>> call() throws Exception {
-		Class<?>[] classes = new Processor(
-				new ClassloaderFinder((URLClassLoader) Thread.currentThread().getContextClassLoader()),
-				new TestFilter()).process();
+    public Collection<Class<?>> call() throws Exception {
+        Class<?>[] classes = new Processor(
+                new ClassloaderFinder((URLClassLoader) Thread.currentThread().getContextClassLoader()),
+                new TestFilter()).process();
 
-		return java.util.Arrays.asList(classes);
-	}
+        return java.util.Arrays.asList(classes);
+    }
 
-	protected String[] namesFrom(Collection<Class<?>> classes) {
-		String[] names = new String[classes.size()];
-		int index = 0;
-		for (Class<?> aClass : classes) {
-			names[index] = aClass.getName();
-			index += 1;
-		}
-		return names;
-	}
+    protected String[] namesFrom(Collection<Class<?>> classes) {
+        String[] names = new String[classes.size()];
+        int index = 0;
+        for (Class<?> aClass : classes) {
+            names[index] = aClass.getName();
+            index += 1;
+        }
+        return names;
+    }
 
-	public String[] findIn(ClassLoader dumpedToClassLoader, boolean acceptTestSuite) {
-		ExecutorService executor = Executors
-				.newSingleThreadExecutor(new CustomClassLoaderThreadFactory(dumpedToClassLoader));
-		String[] testClasses;
-		try {
-			Collection<Class<?>> classes = executor.submit(new TestClassesFinder()).get();
-			testClasses = namesFrom(classes);
-		} catch (InterruptedException ie) {
-			throw new RuntimeException(ie);
-		} catch (ExecutionException ee) {
-			// throw new RuntimeException(ee);
-			ee.printStackTrace();
-			return null;
-		} finally {
-			executor.shutdown();
-		}
+    public String[] findIn(ClassLoader dumpedToClassLoader, boolean acceptTestSuite) {
+        ExecutorService executor = Executors
+                .newSingleThreadExecutor(new CustomClassLoaderThreadFactory(dumpedToClassLoader));
+        String[] testClasses;
+        try {
+            Collection<Class<?>> classes = executor.submit(new TestClassesFinder()).get();
+            testClasses = namesFrom(classes);
+        } catch (InterruptedException ie) {
+            throw new RuntimeException(ie);
+        } catch (ExecutionException ee) {
+            // throw new RuntimeException(ee);
+            ee.printStackTrace();
+            return null;
+        } finally {
+            executor.shutdown();
+        }
 
-		if (!acceptTestSuite) {
-			testClasses = removeTestSuite(testClasses);
-		}
+        if (!acceptTestSuite) {
+            testClasses = removeTestSuite(testClasses);
+        }
 
-		if (this.logger.isDebugEnabled()) {
-			// this.logger.debug("Test clases:");
-			for (String testClass : testClasses) {
-				// this.logger.debug(testClass);
-			}
-		}
-		return testClasses;
-	}
+        if (this.logger.isDebugEnabled()) {
+            // this.logger.debug("Test clases:");
+            for (String testClass : testClasses) {
+                // this.logger.debug(testClass);
+            }
+        }
+        return testClasses;
+    }
 
-	public String[] findIn(final URL[] classpath, boolean acceptTestSuite) {
-		return findIn(new URLClassLoader(classpath, Thread.currentThread().getContextClassLoader()), acceptTestSuite);
-	}
+    public String[] findIn(final URL[] classpath, boolean acceptTestSuite) {
+        return findIn(new URLClassLoader(classpath, Thread.currentThread().getContextClassLoader()), acceptTestSuite);
+    }
 
-	public String[] removeTestSuite(String[] totalTest) {
-		List<String> tests = new ArrayList<String>();
-		for (int i = 0; i < totalTest.length; i++) {
-			if (!totalTest[i].endsWith("Suite")) {
-				tests.add(totalTest[i]);
-			}
-		}
-		return tests.toArray(new String[tests.size()]);
-	}
+    public String[] removeTestSuite(String[] totalTest) {
+        List<String> tests = new ArrayList<String>();
+        for (int i = 0; i < totalTest.length; i++) {
+            if (!totalTest[i].endsWith("Suite")) {
+                tests.add(totalTest[i]);
+            }
+        }
+        return tests.toArray(new String[tests.size()]);
+    }
 
 }

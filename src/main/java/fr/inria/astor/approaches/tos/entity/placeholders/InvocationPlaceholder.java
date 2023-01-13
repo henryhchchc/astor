@@ -18,87 +18,87 @@ import spoon.reflect.reference.CtTypeReference;
  */
 public class InvocationPlaceholder extends Placeholder {
 
-	protected String newName;
-	protected CtAbstractInvocation invocation;
-	protected CtTypeReference target;
-	protected CtTypeReference type;
-	protected String oldName;
+    protected String newName;
+    protected CtAbstractInvocation invocation;
+    protected CtTypeReference target;
+    protected CtTypeReference type;
+    protected String oldName;
 
-	public InvocationPlaceholder() {
-	}
+    public InvocationPlaceholder() {
+    }
 
-	public InvocationPlaceholder(String name, CtAbstractInvocation invocation, CtTypeReference target,
-			CtTypeReference type) {
-		super();
-		this.newName = name;
-		this.invocation = invocation;
-		this.target = target;
-		this.type = type;
-	}
+    public InvocationPlaceholder(String name, CtAbstractInvocation invocation, CtTypeReference target,
+            CtTypeReference type) {
+        super();
+        this.newName = name;
+        this.invocation = invocation;
+        this.target = target;
+        this.type = type;
+    }
 
-	public String getName() {
-		return newName;
-	}
+    public String getName() {
+        return newName;
+    }
 
-	public void setName(String name) {
-		this.newName = name;
-	}
+    public void setName(String name) {
+        this.newName = name;
+    }
 
-	public CtAbstractInvocation getInvocation() {
-		return invocation;
-	}
+    public CtAbstractInvocation getInvocation() {
+        return invocation;
+    }
 
-	public void setInvocation(CtAbstractInvocation invocation) {
-		this.invocation = invocation;
-	}
+    public void setInvocation(CtAbstractInvocation invocation) {
+        this.invocation = invocation;
+    }
 
-	public CtTypeReference getTarget() {
-		return target;
-	}
+    public CtTypeReference getTarget() {
+        return target;
+    }
 
-	public void setTarget(CtTypeReference target) {
-		this.target = target;
-	}
+    public void setTarget(CtTypeReference target) {
+        this.target = target;
+    }
 
-	public CtTypeReference getType() {
-		return type;
-	}
+    public CtTypeReference getType() {
+        return type;
+    }
 
-	public void setType(CtTypeReference type) {
-		this.type = type;
-	}
+    public void setType(CtTypeReference type) {
+        this.type = type;
+    }
 
-	@Override
-	public void apply() {
-		CtExecutableReference execr = this.getInvocation().getExecutable();
-		this.oldName = execr.getSimpleName();
-		execr.setSimpleName(newName);
+    @Override
+    public void apply() {
+        CtExecutableReference execr = this.getInvocation().getExecutable();
+        this.oldName = execr.getSimpleName();
+        execr.setSimpleName(newName);
 
-	}
+    }
 
-	@Override
-	public void revert() {
-		CtExecutableReference execr = this.getInvocation().getExecutable();
-		execr.setSimpleName(oldName);
+    @Override
+    public void revert() {
+        CtExecutableReference execr = this.getInvocation().getExecutable();
+        execr.setSimpleName(oldName);
 
-	}
+    }
 
-	@Override
-	public List<CtCodeElement> getAffectedElements() {
-		List<CtCodeElement> affected = new ArrayList<>();
-		// TODO: cast...
-		affected.add((CtCodeElement) invocation);
-		return affected;
-	}
+    @Override
+    public List<CtCodeElement> getAffectedElements() {
+        List<CtCodeElement> affected = new ArrayList<>();
+        // TODO: cast...
+        affected.add((CtCodeElement) invocation);
+        return affected;
+    }
 
-	@Override
-	public List<Transformation> visit(ModificationPoint modificationPoint, PatchGenerator visitor) {
+    @Override
+    public List<Transformation> visit(ModificationPoint modificationPoint, PatchGenerator visitor) {
 
-		return visitor.process(modificationPoint, this);
-	}
+        return visitor.process(modificationPoint, this);
+    }
 
-	public String toString() {
-		return this.getClass().getSimpleName() + ": " + this.newName + " --> "
-				+ invocation.getExecutable().getSimpleName();
-	}
+    public String toString() {
+        return this.getClass().getSimpleName() + ": " + this.newName + " --> "
+                + invocation.getExecutable().getSimpleName();
+    }
 }

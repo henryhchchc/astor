@@ -16,45 +16,45 @@ import spoon.reflect.declaration.CtMethod;
  */
 public class InsertMethodOperator extends AstorOperator {
 
-	CtMethod newMethod = null;
-	CtClass parentClass = null;
+    CtMethod newMethod = null;
+    CtClass parentClass = null;
 
-	@Override
-	public boolean applyChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
-		CtMethod newMethod = (CtMethod) opInstance.getModified();
-		parentClass = opInstance.getOriginal().getParent(CtClass.class);
-		if (parentClass != null) {
-			this.newMethod = newMethod;
-			parentClass.addMethod(newMethod);
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public boolean applyChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
+        CtMethod newMethod = (CtMethod) opInstance.getModified();
+        parentClass = opInstance.getOriginal().getParent(CtClass.class);
+        if (parentClass != null) {
+            this.newMethod = newMethod;
+            parentClass.addMethod(newMethod);
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public boolean undoChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
-		if (parentClass != null && this.newMethod != null) {
-			parentClass.removeMethod(newMethod);
-			return true;
-		}
+    @Override
+    public boolean undoChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
+        if (parentClass != null && this.newMethod != null) {
+            parentClass.removeMethod(newMethod);
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
-		return false;
-	}
+    @Override
+    public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
+        return false;
+    }
 
-	@Override
-	public boolean canBeAppliedToPoint(ModificationPoint point) {
+    @Override
+    public boolean canBeAppliedToPoint(ModificationPoint point) {
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public List<OperatorInstance> createOperatorInstances(ModificationPoint modificationPoint) {
-		return null;
-	}
+    @Override
+    public List<OperatorInstance> createOperatorInstances(ModificationPoint modificationPoint) {
+        return null;
+    }
 
 }

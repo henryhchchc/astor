@@ -13,17 +13,17 @@ import spoon.reflect.code.CtStatement;
  */
 public abstract class InsertStatementOp extends StatatementIngredientOperator implements StatementLevelOperator {
 
-	@Override
-	public abstract boolean undoChangesInModel(OperatorInstance operation, ProgramVariant p);
+    @Override
+    public abstract boolean undoChangesInModel(OperatorInstance operation, ProgramVariant p);
 
-	@Override
-	public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
-		return addPoint(p, opInstance);
-	}
+    @Override
+    public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
+        return addPoint(p, opInstance);
+    }
 
-	@Override
-	public boolean canBeAppliedToPoint(ModificationPoint point) {
-		return (point.getCodeElement() instanceof CtStatement);
-	}
+    @Override
+    public boolean canBeAppliedToPoint(ModificationPoint point) {
+        return (point.getCodeElement() instanceof CtStatement);
+    }
 
 }

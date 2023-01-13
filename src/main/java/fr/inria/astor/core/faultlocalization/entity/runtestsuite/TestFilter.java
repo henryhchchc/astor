@@ -17,141 +17,141 @@ import junit.framework.TestCase;
  */
 public class TestFilter implements ClassFilter {
 
-	private final boolean searchInJars;
+    private final boolean searchInJars;
 
-	private final TestType[] testTypes;
+    private final TestType[] testTypes;
 
-	public TestFilter() {
-		this.searchInJars = true;
-		this.testTypes = new TestType[] { TestType.JUNIT38_TEST_CLASSES, TestType.RUN_WITH_CLASSES,
-				TestType.TEST_CLASSES };
-	}
+    public TestFilter() {
+        this.searchInJars = true;
+        this.testTypes = new TestType[] { TestType.JUNIT38_TEST_CLASSES, TestType.RUN_WITH_CLASSES,
+                TestType.TEST_CLASSES };
+    }
 
-	public TestFilter(boolean searchInJars) {
-		this.searchInJars = searchInJars;
-		this.testTypes = new TestType[] { TestType.JUNIT38_TEST_CLASSES, TestType.RUN_WITH_CLASSES,
-				TestType.TEST_CLASSES };
-	}
+    public TestFilter(boolean searchInJars) {
+        this.searchInJars = searchInJars;
+        this.testTypes = new TestType[] { TestType.JUNIT38_TEST_CLASSES, TestType.RUN_WITH_CLASSES,
+                TestType.TEST_CLASSES };
+    }
 
-	public TestFilter(TestType[] suiteTypes) {
-		this.searchInJars = true;
-		this.testTypes = suiteTypes;
-	}
+    public TestFilter(TestType[] suiteTypes) {
+        this.searchInJars = true;
+        this.testTypes = suiteTypes;
+    }
 
-	public TestFilter(boolean searchInJars, TestType[] suiteTypes) {
-		this.searchInJars = searchInJars;
-		this.testTypes = suiteTypes;
-	}
+    public TestFilter(boolean searchInJars, TestType[] suiteTypes) {
+        this.searchInJars = searchInJars;
+        this.testTypes = suiteTypes;
+    }
 
-	public boolean acceptClass(Class<?> clazz) {
-		// We directly ignore abstract class
-		if (isAbstractClass(clazz)) {
-			return false;
-		}
-		// --
-		if (isInSuiteTypes(TestType.TEST_CLASSES)) {
-			if (acceptTestClass(clazz)) {
-				return true;
-			}
-			if (acceptTestClassJUnit5(clazz)) {
-				return true;
-			}
-		}
-		if (isInSuiteTypes(TestType.JUNIT38_TEST_CLASSES)) {
-			if (acceptJUnit38Test(clazz)) {
-				return true;
-			}
-		}
-		if (isInSuiteTypes(TestType.RUN_WITH_CLASSES)) {
-			return acceptRunWithClass(clazz);
-		}
+    public boolean acceptClass(Class<?> clazz) {
+        // We directly ignore abstract class
+        if (isAbstractClass(clazz)) {
+            return false;
+        }
+        // --
+        if (isInSuiteTypes(TestType.TEST_CLASSES)) {
+            if (acceptTestClass(clazz)) {
+                return true;
+            }
+            if (acceptTestClassJUnit5(clazz)) {
+                return true;
+            }
+        }
+        if (isInSuiteTypes(TestType.JUNIT38_TEST_CLASSES)) {
+            if (acceptJUnit38Test(clazz)) {
+                return true;
+            }
+        }
+        if (isInSuiteTypes(TestType.RUN_WITH_CLASSES)) {
+            return acceptRunWithClass(clazz);
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	private boolean acceptJUnit38Test(Class<?> clazz) {
-		if (isAbstractClass(clazz)) {
-			return false;
-		}
-		return TestCase.class.isAssignableFrom(clazz);
-	}
+    private boolean acceptJUnit38Test(Class<?> clazz) {
+        if (isAbstractClass(clazz)) {
+            return false;
+        }
+        return TestCase.class.isAssignableFrom(clazz);
+    }
 
-	private boolean acceptRunWithClass(Class<?> clazz) {
-		return clazz.isAnnotationPresent(RunWith.class);
-	}
+    private boolean acceptRunWithClass(Class<?> clazz) {
+        return clazz.isAnnotationPresent(RunWith.class);
+    }
 
-	private boolean isInSuiteTypes(TestType testType) {
-		return Arrays.asList(testTypes).contains(testType);
-	}
+    private boolean isInSuiteTypes(TestType testType) {
+        return Arrays.asList(testTypes).contains(testType);
+    }
 
-	private boolean acceptTestClass(Class<?> clazz) {
-		if (isAbstractClass(clazz)) {
-			return false;
-		}
-		try {
-			for (Method method : clazz.getMethods()) {
-				if (method.getAnnotation(Test.class) != null) {
-					return true;
-				}
+    private boolean acceptTestClass(Class<?> clazz) {
+        if (isAbstractClass(clazz)) {
+            return false;
+        }
+        try {
+            for (Method method : clazz.getMethods()) {
+                if (method.getAnnotation(Test.class) != null) {
+                    return true;
+                }
 
-				for (java.lang.annotation.Annotation iAnnot : method.getAnnotations()) {
-					String name = iAnnot.toString();
-					// if (name.contains(".Test"))
-					// return true;
-				}
-			}
-		} catch (NoClassDefFoundError ignore) {
-		} catch (java.lang.VerifyError e) {
-			System.out.println("Error analyzing class " + clazz.getName());
+                for (java.lang.annotation.Annotation iAnnot : method.getAnnotations()) {
+                    String name = iAnnot.toString();
+                    // if (name.contains(".Test"))
+                    // return true;
+                }
+            }
+        } catch (NoClassDefFoundError ignore) {
+        } catch (java.lang.VerifyError e) {
+            System.out.println("Error analyzing class " + clazz.getName());
 
-			e.printStackTrace();
+            e.printStackTrace();
 
-		} catch (java.lang.ClassFormatError er) {
-			System.err.println("Error trucated class " + clazz.getName());
-		}
+        } catch (java.lang.ClassFormatError er) {
+            System.err.println("Error trucated class " + clazz.getName());
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	private boolean acceptTestClassJUnit5(Class<?> clazz) {
-		if (isAbstractClass(clazz)) {
-			return false;
-		}
+    private boolean acceptTestClassJUnit5(Class<?> clazz) {
+        if (isAbstractClass(clazz)) {
+            return false;
+        }
 
-		try {
-			for (Method method : clazz.getMethods()) {
-				if (method.getAnnotation(org.junit.jupiter.api.Test.class) != null) {
-					return true;
-				}
+        try {
+            for (Method method : clazz.getMethods()) {
+                if (method.getAnnotation(org.junit.jupiter.api.Test.class) != null) {
+                    return true;
+                }
 
-			}
-		} catch (NoClassDefFoundError ignore) {
-		} catch (java.lang.VerifyError e) {
-			System.out.println("Error analyzing class " + clazz.getName());
+            }
+        } catch (NoClassDefFoundError ignore) {
+        } catch (java.lang.VerifyError e) {
+            System.out.println("Error analyzing class " + clazz.getName());
 
-			e.printStackTrace();
+            e.printStackTrace();
 
-		} catch (java.lang.ClassFormatError er) {
-			System.err.println("Error trucated class " + clazz.getName());
-		}
+        } catch (java.lang.ClassFormatError er) {
+            System.err.println("Error trucated class " + clazz.getName());
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	private boolean isAbstractClass(Class<?> clazz) {
-		return (clazz.getModifiers() & Modifier.ABSTRACT) != 0;
-	}
+    private boolean isAbstractClass(Class<?> clazz) {
+        return (clazz.getModifiers() & Modifier.ABSTRACT) != 0;
+    }
 
-	public boolean acceptInnerClass() {
-		return true;
-	}
+    public boolean acceptInnerClass() {
+        return true;
+    }
 
-	public boolean searchInJars() {
-		return searchInJars;
-	}
+    public boolean searchInJars() {
+        return searchInJars;
+    }
 
-	public boolean acceptClassName(String className) {
-		return true;
-	}
+    public boolean acceptClassName(String className) {
+        return true;
+    }
 
 }

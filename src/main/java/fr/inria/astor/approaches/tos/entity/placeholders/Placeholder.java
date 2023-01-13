@@ -15,25 +15,25 @@ import spoon.reflect.code.CtCodeElement;
  */
 public abstract class Placeholder {
 
-	TOSEntity tos;
+    TOSEntity tos;
 
-	public TOSEntity getTos() {
-		return tos;
-	}
+    public TOSEntity getTos() {
+        return tos;
+    }
 
-	public void setTos(TOSEntity tos) {
-		this.tos = tos;
-	}
+    public void setTos(TOSEntity tos) {
+        this.tos = tos;
+    }
 
-	public abstract void apply();
+    public abstract void apply();
 
-	public abstract void revert();
+    public abstract void revert();
 
-	public abstract List<CtCodeElement> getAffectedElements();
+    public abstract List<CtCodeElement> getAffectedElements();
 
-	public abstract List<Transformation> visit(ModificationPoint modificationPoint, PatchGenerator visitor);
+    public abstract List<Transformation> visit(ModificationPoint modificationPoint, PatchGenerator visitor);
 
-	public String toString(){
-		return this.getClass().getSimpleName()+ ": "+getAffectedElements();
-	}
+    public String toString(){
+        return this.getClass().getSimpleName()+ ": "+getAffectedElements();
+    }
 }

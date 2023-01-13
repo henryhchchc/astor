@@ -10,23 +10,23 @@ import java.util.List;
  *
  */
 public enum ExecutionMode {
-	DeepRepair(Collections.singletonList("deeprepair")),
-	CARDUMEN(Collections.singletonList("cardumen")),
-	jGenProg(Collections.singletonList("jgenprog")),
-	jKali(Collections.singletonList("jkali")),
-	MutRepair(Arrays.asList("mutation","jmutrepair", "mutrepair")),
-	EXASTOR(Arrays.asList("exhaustive", "exastor")),
-	SCAFFOLD(Collections.singletonList("scaffold")),
-	TIBRA(Collections.singletonList("tibra")),
-	custom(Collections.singletonList("custom"));
+    DeepRepair(Collections.singletonList("deeprepair")),
+    CARDUMEN(Collections.singletonList("cardumen")),
+    jGenProg(Collections.singletonList("jgenprog")),
+    jKali(Collections.singletonList("jkali")),
+    MutRepair(Arrays.asList("mutation","jmutrepair", "mutrepair")),
+    EXASTOR(Arrays.asList("exhaustive", "exastor")),
+    SCAFFOLD(Collections.singletonList("scaffold")),
+    TIBRA(Collections.singletonList("tibra")),
+    custom(Collections.singletonList("custom"));
 
-	private List<String> acceptedNames;
+    private List<String> acceptedNames;
 
-	ExecutionMode(List<String> acceptedNames) {
-		this.acceptedNames = acceptedNames;
-	}
+    ExecutionMode(List<String> acceptedNames) {
+        this.acceptedNames = acceptedNames;
+    }
 
-	public List<String> getAcceptedNames() {
-		return acceptedNames;
-	}
+    public List<String> getAcceptedNames() {
+        return acceptedNames;
+    }
 }

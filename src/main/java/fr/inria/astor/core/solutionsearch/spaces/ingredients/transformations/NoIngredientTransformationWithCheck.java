@@ -20,32 +20,32 @@ import spoon.reflect.declaration.CtElement;
  */
 public class NoIngredientTransformationWithCheck implements IngredientTransformationStrategy {
 
-	protected static Logger log = Logger.getLogger(NoIngredientTransformationWithCheck.class.getName());
+    protected static Logger log = Logger.getLogger(NoIngredientTransformationWithCheck.class.getName());
 
-	@Override
-	public List<Ingredient> transform(ModificationPoint modificationPoint, Ingredient ingredient) {
+    @Override
+    public List<Ingredient> transform(ModificationPoint modificationPoint, Ingredient ingredient) {
 
-		List<Ingredient> result = new ArrayList<>();
+        List<Ingredient> result = new ArrayList<>();
 
-		CtElement elementFromIngredient = ingredient.getCode();
+        CtElement elementFromIngredient = ingredient.getCode();
 
-		boolean fit = VariableResolver.fitInPlace(modificationPoint.getContextOfModificationPoint(),
-				elementFromIngredient);
+        boolean fit = VariableResolver.fitInPlace(modificationPoint.getContextOfModificationPoint(),
+                elementFromIngredient);
 
-		if (fit) {
-			IngredientPoolScope scope = VariableResolver.determineIngredientScope(modificationPoint.getCodeElement(),
-					elementFromIngredient);
+        if (fit) {
+            IngredientPoolScope scope = VariableResolver.determineIngredientScope(modificationPoint.getCodeElement(),
+                    elementFromIngredient);
 
-			boolean changeShadow = VariableResolver.changeShadowedVars(modificationPoint.getCodeElement(),
-					elementFromIngredient);
-			if (changeShadow) {
-				log.debug("Transforming shadowed variable in " + elementFromIngredient);
-			}
+            boolean changeShadow = VariableResolver.changeShadowedVars(modificationPoint.getCodeElement(),
+                    elementFromIngredient);
+            if (changeShadow) {
+                log.debug("Transforming shadowed variable in " + elementFromIngredient);
+            }
 
-			// Only one ingredient was to be returned (the original)
-			result.add(new Ingredient(elementFromIngredient, scope));
-		}
-		return result;
-	}
+            // Only one ingredient was to be returned (the original)
+            result.add(new Ingredient(elementFromIngredient, scope));
+        }
+        return result;
+    }
 
 }

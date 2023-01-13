@@ -15,19 +15,19 @@ import spoon.support.QueueProcessingManager;
 
 public abstract class SpoonLauncher extends Launcher {
 
-	Factory factory = null;
-	
-	public SpoonLauncher(Factory factory) throws Exception {
-		this.factory = factory;
-	}
-	
-	protected void process(CtElement element) {
-		ProcessingManager processing = new QueueProcessingManager(factory);
-		for (String processorName : getProcessorTypes()) {
-			processing.addProcessor(processorName);
-		}
+    Factory factory = null;
+    
+    public SpoonLauncher(Factory factory) throws Exception {
+        this.factory = factory;
+    }
+    
+    protected void process(CtElement element) {
+        ProcessingManager processing = new QueueProcessingManager(factory);
+        for (String processorName : getProcessorTypes()) {
+            processing.addProcessor(processorName);
+        }
 
-		processing.process(element);
-	}
-	
+        processing.process(element);
+    }
+    
 }

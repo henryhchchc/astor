@@ -10,18 +10,18 @@ import java.util.List;
  */
 public class CompositeExecutionResult extends ExecutionResult {
 
-	private List<ExecutionResult> results = new ArrayList<ExecutionResult>();
+    private List<ExecutionResult> results = new ArrayList<ExecutionResult>();
 
-	public void add(ExecutionResult result) {
-		results.add(result);
-	}
+    public void add(ExecutionResult result) {
+        results.add(result);
+    }
 
-	public List<ExecutionResult> getResults() {
-		return results;
-	}
+    public List<ExecutionResult> getResults() {
+        return results;
+    }
 
-	public void setResults(List<ExecutionResult> results) {
-		this.results = results;
-	}
+    public void setResults(List<ExecutionResult> results) {
+        this.results = results;
+    }
 
 }

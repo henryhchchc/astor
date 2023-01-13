@@ -27,404 +27,404 @@ import fr.inria.main.evolution.AstorMain;
  *
  */
 public class FaultLocalizationTest {
-	@org.junit.Test
-	public void testFLMath70_GZoltar() throws Exception {
-		FaultLocalizationMain main = new FaultLocalizationMain();
-		CommandSummary cs = MathCommandsTests.getMath70Command();
-		// by default, max generations is zero, that means, it does not evolve
-		cs.command.put("-faultlocalization", FaultLocalization.GZOLTAR.name());
-		cs.command.put("-flthreshold", "0.0001");
+    @org.junit.Test
+    public void testFLMath70_GZoltar() throws Exception {
+        FaultLocalizationMain main = new FaultLocalizationMain();
+        CommandSummary cs = MathCommandsTests.getMath70Command();
+        // by default, max generations is zero, that means, it does not evolve
+        cs.command.put("-faultlocalization", FaultLocalization.GZOLTAR.name());
+        cs.command.put("-flthreshold", "0.0001");
 
-		// We execute astor for creating the model and run FL
+        // We execute astor for creating the model and run FL
 
-		FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
-		System.out.println(er);
-		assertFalse(er.getCandidates().isEmpty());
-		assertFalse(er.getExecutedTestCasesMethods().isEmpty());
-		assertFalse(er.getFailingTestCasesClasses().isEmpty());
-		assertFalse(er.getFailingTestCasesMethods().isEmpty());
+        FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
+        System.out.println(er);
+        assertFalse(er.getCandidates().isEmpty());
+        assertFalse(er.getExecutedTestCasesMethods().isEmpty());
+        assertFalse(er.getFailingTestCasesClasses().isEmpty());
+        assertFalse(er.getFailingTestCasesMethods().isEmpty());
 
-		// 3 more tests
-		assertEquals(2181, er.getExecutedTestCasesMethods().size());
-	}
+        // 3 more tests
+        assertEquals(2181, er.getExecutedTestCasesMethods().size());
+    }
 
-	@org.junit.Test
-	public void testFLMath70_GZoltar_limited() throws Exception {
-		FaultLocalizationMain main = new FaultLocalizationMain();
-		CommandSummary cs = MathCommandsTests.getMath70Command();
-		// by default, max generations is zero, that means, it does not evolve
-		cs.command.put("-faultlocalization", FaultLocalization.GZOLTAR.name());
-		cs.command.put("-flthreshold", "0.0001");
+    @org.junit.Test
+    public void testFLMath70_GZoltar_limited() throws Exception {
+        FaultLocalizationMain main = new FaultLocalizationMain();
+        CommandSummary cs = MathCommandsTests.getMath70Command();
+        // by default, max generations is zero, that means, it does not evolve
+        cs.command.put("-faultlocalization", FaultLocalization.GZOLTAR.name());
+        cs.command.put("-flthreshold", "0.0001");
 
-		String oneFailingTestClassToRun = "org.apache.commons.math.analysis.solvers.BisectionSolverTest";
-		String anotherTestClassToRun = "org.apache.commons.math.estimation.LevenbergMarquardtEstimatorTest";
-		cs.command.put("-regressiontestcases4fl",
-				oneFailingTestClassToRun + File.pathSeparator + anotherTestClassToRun);
+        String oneFailingTestClassToRun = "org.apache.commons.math.analysis.solvers.BisectionSolverTest";
+        String anotherTestClassToRun = "org.apache.commons.math.estimation.LevenbergMarquardtEstimatorTest";
+        cs.command.put("-regressiontestcases4fl",
+                oneFailingTestClassToRun + File.pathSeparator + anotherTestClassToRun);
 
-		// We execute astor for creating the model and run FL
+        // We execute astor for creating the model and run FL
 
-		FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
-		System.out.println(er);
-		assertFalse(er.getCandidates().isEmpty());
-		assertFalse(er.getExecutedTestCasesMethods().isEmpty());
-		assertFalse(er.getFailingTestCasesClasses().isEmpty());
-		assertFalse(er.getFailingTestCasesMethods().isEmpty());
+        FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
+        System.out.println(er);
+        assertFalse(er.getCandidates().isEmpty());
+        assertFalse(er.getExecutedTestCasesMethods().isEmpty());
+        assertFalse(er.getFailingTestCasesClasses().isEmpty());
+        assertFalse(er.getFailingTestCasesMethods().isEmpty());
 
-		assertEquals(27, er.getExecutedTestCasesMethods().size());
+        assertEquals(27, er.getExecutedTestCasesMethods().size());
 
-		// All test method must come from some of those two test clases
-		for (String testMethod : er.getExecutedTestCasesMethods()) {
+        // All test method must come from some of those two test clases
+        for (String testMethod : er.getExecutedTestCasesMethods()) {
 
-			assertTrue(testMethod.contains(oneFailingTestClassToRun) || testMethod.contains(anotherTestClassToRun));
+            assertTrue(testMethod.contains(oneFailingTestClassToRun) || testMethod.contains(anotherTestClassToRun));
 
-		}
+        }
 
-		assertTrue(er.getFailingTestCasesClasses().contains(oneFailingTestClassToRun));
+        assertTrue(er.getFailingTestCasesClasses().contains(oneFailingTestClassToRun));
 
-		assertEquals(1, er.getFailingTestCasesClasses().size());
-	}
+        assertEquals(1, er.getFailingTestCasesClasses().size());
+    }
 
-	@org.junit.Test
-	public void testFLMath70GZoltar_limitedMethod() throws Exception {
+    @org.junit.Test
+    public void testFLMath70GZoltar_limitedMethod() throws Exception {
 
-		FaultLocalization fl = FaultLocalization.GZOLTAR;
+        FaultLocalization fl = FaultLocalization.GZOLTAR;
 
-		helperLimitedNumberOfTestMethods(fl);
+        helperLimitedNumberOfTestMethods(fl);
 
-	}
+    }
 
-	@org.junit.Test
-	public void testFLMath70_limited() throws Exception {
+    @org.junit.Test
+    public void testFLMath70_limited() throws Exception {
 
-		FaultLocalization flocalization = FaultLocalization.GZOLTAR;
+        FaultLocalization flocalization = FaultLocalization.GZOLTAR;
 
-		helperLimitedTestClasses(flocalization);
+        helperLimitedTestClasses(flocalization);
 
-	}
+    }
 
-	@org.junit.Test
-	public void testFLMath70Flacoco() throws Exception {
-		FaultLocalizationMain main = new FaultLocalizationMain();
-		CommandSummary cs = MathCommandsTests.getMath70Command();
-		// by default, max generations is zero, that means, it does not evolve
-		cs.command.put("-faultlocalization", FaultLocalization.FLACOCO.name());
-		cs.command.put("-flthreshold", "0.0001");
+    @org.junit.Test
+    public void testFLMath70Flacoco() throws Exception {
+        FaultLocalizationMain main = new FaultLocalizationMain();
+        CommandSummary cs = MathCommandsTests.getMath70Command();
+        // by default, max generations is zero, that means, it does not evolve
+        cs.command.put("-faultlocalization", FaultLocalization.FLACOCO.name());
+        cs.command.put("-flthreshold", "0.0001");
 
-		// We execute astor for creating the model and run FL
+        // We execute astor for creating the model and run FL
 
-		FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
-		System.out.println(er);
-		assertFalse(er.getCandidates().isEmpty());
-		assertFalse(er.getExecutedTestCasesMethods().isEmpty());
-		assertFalse(er.getFailingTestCasesClasses().isEmpty());
-		assertFalse(er.getFailingTestCasesMethods().isEmpty());
+        FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
+        System.out.println(er);
+        assertFalse(er.getCandidates().isEmpty());
+        assertFalse(er.getExecutedTestCasesMethods().isEmpty());
+        assertFalse(er.getFailingTestCasesClasses().isEmpty());
+        assertFalse(er.getFailingTestCasesMethods().isEmpty());
 
-		// In order to check that we dont have duplicates
-		assertEquals(er.getExecutedTestCasesMethods().stream().distinct().count(),
-				er.getExecutedTestCasesMethods().size());
+        // In order to check that we dont have duplicates
+        assertEquals(er.getExecutedTestCasesMethods().stream().distinct().count(),
+                er.getExecutedTestCasesMethods().size());
 
-		assertEquals(2178, er.getExecutedTestCasesMethods().size());
-	}
+        assertEquals(2178, er.getExecutedTestCasesMethods().size());
+    }
 
-	@org.junit.Test
-	public void testFLMath70Flacoco_limitedTest() throws Exception {
-		FaultLocalization flocalization = FaultLocalization.FLACOCO;
+    @org.junit.Test
+    public void testFLMath70Flacoco_limitedTest() throws Exception {
+        FaultLocalization flocalization = FaultLocalization.FLACOCO;
 
-		helperLimitedTestClasses(flocalization);
+        helperLimitedTestClasses(flocalization);
 
-	}
+    }
 
-	@org.junit.Test
-	public void testFLMath70Flacoco_limitedMixed() throws Exception {
+    @org.junit.Test
+    public void testFLMath70Flacoco_limitedMixed() throws Exception {
 
-		FaultLocalization fl = FaultLocalization.FLACOCO;
+        FaultLocalization fl = FaultLocalization.FLACOCO;
 
-		helperLimitedTestAndClasses(fl);
+        helperLimitedTestAndClasses(fl);
 
-	}
+    }
 
-	private void helperLimitedTestAndClasses(FaultLocalization fl) throws Exception {
-		FaultLocalizationMain main = new FaultLocalizationMain();
-		CommandSummary cs = MathCommandsTests.getMath70Command();
-		// by default, max generations is zero, that means, it does not evolve
+    private void helperLimitedTestAndClasses(FaultLocalization fl) throws Exception {
+        FaultLocalizationMain main = new FaultLocalizationMain();
+        CommandSummary cs = MathCommandsTests.getMath70Command();
+        // by default, max generations is zero, that means, it does not evolve
 
-		cs.command.put("-faultlocalization", fl.name());
-		cs.command.put("-flthreshold", "0.0000");
-		cs.command.put("-parameters", "includeZeros:false:keepGZoltarFiles:false");
+        cs.command.put("-faultlocalization", fl.name());
+        cs.command.put("-flthreshold", "0.0000");
+        cs.command.put("-parameters", "includeZeros:false:keepGZoltarFiles:false");
 
-		String oneFailingTestClassToRun = "org.apache.commons.math.analysis.solvers.BisectionSolverTest#testMath369";
-		String anotherTestClassToRun = "org.apache.commons.math.estimation.LevenbergMarquardtEstimatorTest";
+        String oneFailingTestClassToRun = "org.apache.commons.math.analysis.solvers.BisectionSolverTest#testMath369";
+        String anotherTestClassToRun = "org.apache.commons.math.estimation.LevenbergMarquardtEstimatorTest";
 
-		cs.command.put("-regressiontestcases4fl",
-				oneFailingTestClassToRun + File.pathSeparator + anotherTestClassToRun);
-		// We execute astor for creating the model and run FL
+        cs.command.put("-regressiontestcases4fl",
+                oneFailingTestClassToRun + File.pathSeparator + anotherTestClassToRun);
+        // We execute astor for creating the model and run FL
 
-		FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
+        FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
 
-		assertFalse(er.getCandidates().isEmpty());
-		assertFalse(er.getExecutedTestCasesMethods().isEmpty());
-		assertFalse(er.getFailingTestCasesClasses().isEmpty());
-		assertFalse(er.getFailingTestCasesMethods().isEmpty());
+        assertFalse(er.getCandidates().isEmpty());
+        assertFalse(er.getExecutedTestCasesMethods().isEmpty());
+        assertFalse(er.getFailingTestCasesClasses().isEmpty());
+        assertFalse(er.getFailingTestCasesMethods().isEmpty());
 
-		assertEquals(16, er.getExecutedTestCasesMethods().size());
+        assertEquals(16, er.getExecutedTestCasesMethods().size());
 
-		// All test method must come from some of those two test clases
-		for (String testMethod : er.getExecutedTestCasesMethods()) {
+        // All test method must come from some of those two test clases
+        for (String testMethod : er.getExecutedTestCasesMethods()) {
 
-			assertTrue(testMethod.contains(oneFailingTestClassToRun) || testMethod.contains(anotherTestClassToRun));
+            assertTrue(testMethod.contains(oneFailingTestClassToRun) || testMethod.contains(anotherTestClassToRun));
 
-		}
+        }
 
-		assertTrue(er.getFailingTestCasesClasses().contains(oneFailingTestClassToRun.split("#")[0]));
-		assertFalse(er.getFailingTestCasesClasses().contains(anotherTestClassToRun));
+        assertTrue(er.getFailingTestCasesClasses().contains(oneFailingTestClassToRun.split("#")[0]));
+        assertFalse(er.getFailingTestCasesClasses().contains(anotherTestClassToRun));
 
-		assertTrue(er.getFailingTestCasesMethods().contains(oneFailingTestClassToRun));
-		assertFalse(er.getFailingTestCasesMethods().contains(anotherTestClassToRun));
+        assertTrue(er.getFailingTestCasesMethods().contains(oneFailingTestClassToRun));
+        assertFalse(er.getFailingTestCasesMethods().contains(anotherTestClassToRun));
 
-		assertEquals(1, er.getFailingTestCasesClasses().size());
-	}
+        assertEquals(1, er.getFailingTestCasesClasses().size());
+    }
 
-	private void helperLimitedTestAndClassesFromFile(FaultLocalization fl) throws Exception {
-		FaultLocalizationMain main = new FaultLocalizationMain();
-		CommandSummary cs = MathCommandsTests.getMath70Command();
-		// by default, max generations is zero, that means, it does not evolve
+    private void helperLimitedTestAndClassesFromFile(FaultLocalization fl) throws Exception {
+        FaultLocalizationMain main = new FaultLocalizationMain();
+        CommandSummary cs = MathCommandsTests.getMath70Command();
+        // by default, max generations is zero, that means, it does not evolve
 
-		cs.command.put("-faultlocalization", fl.name());
-		cs.command.put("-flthreshold", "0.0000");
-		cs.command.put("-parameters", "includeZeros:false:keepGZoltarFiles:false");
+        cs.command.put("-faultlocalization", fl.name());
+        cs.command.put("-flthreshold", "0.0000");
+        cs.command.put("-parameters", "includeZeros:false:keepGZoltarFiles:false");
 
-		String oneFailingTestClassToRun = "org.apache.commons.math.analysis.solvers.BisectionSolverTest#testMath369";
-		String anotherTestClassToRun = "org.apache.commons.math.estimation.LevenbergMarquardtEstimatorTest";
-		String thirdTestclassToRun = "org.apache.commons.math.estimation.WeightedMeasurementTest";
+        String oneFailingTestClassToRun = "org.apache.commons.math.analysis.solvers.BisectionSolverTest#testMath369";
+        String anotherTestClassToRun = "org.apache.commons.math.estimation.LevenbergMarquardtEstimatorTest";
+        String thirdTestclassToRun = "org.apache.commons.math.estimation.WeightedMeasurementTest";
 
-		File ft = Files.newTemporaryFile();
-		FileWriter fw = new FileWriter(ft);
+        File ft = Files.newTemporaryFile();
+        FileWriter fw = new FileWriter(ft);
 
-		fw.write(oneFailingTestClassToRun);
-		fw.write("\n");
-		fw.write(anotherTestClassToRun);
-		fw.write("\n");
-		fw.write(thirdTestclassToRun);
-		fw.flush();
-		fw.close();
+        fw.write(oneFailingTestClassToRun);
+        fw.write("\n");
+        fw.write(anotherTestClassToRun);
+        fw.write("\n");
+        fw.write(thirdTestclassToRun);
+        fw.flush();
+        fw.close();
 
-		cs.command.put("-filetestcases4fl", ft.getAbsolutePath());
-		// We execute astor for creating the model and run FL
+        cs.command.put("-filetestcases4fl", ft.getAbsolutePath());
+        // We execute astor for creating the model and run FL
 
-		FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
+        FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
 
-		assertFalse(er.getCandidates().isEmpty());
-		assertFalse(er.getExecutedTestCasesMethods().isEmpty());
-		assertFalse(er.getFailingTestCasesClasses().isEmpty());
-		assertFalse(er.getFailingTestCasesMethods().isEmpty());
+        assertFalse(er.getCandidates().isEmpty());
+        assertFalse(er.getExecutedTestCasesMethods().isEmpty());
+        assertFalse(er.getFailingTestCasesClasses().isEmpty());
+        assertFalse(er.getFailingTestCasesMethods().isEmpty());
 
-		assertEquals(19, er.getExecutedTestCasesMethods().size());
+        assertEquals(19, er.getExecutedTestCasesMethods().size());
 
-		// All test method must come from some of those two test classes
-		for (String testMethod : er.getExecutedTestCasesMethods()) {
+        // All test method must come from some of those two test classes
+        for (String testMethod : er.getExecutedTestCasesMethods()) {
 
-			assertTrue(testMethod.contains(oneFailingTestClassToRun) || testMethod.contains(anotherTestClassToRun)
-					|| testMethod.contains(thirdTestclassToRun));
+            assertTrue(testMethod.contains(oneFailingTestClassToRun) || testMethod.contains(anotherTestClassToRun)
+                    || testMethod.contains(thirdTestclassToRun));
 
-		}
+        }
 
-		assertTrue(er.getFailingTestCasesClasses().contains(oneFailingTestClassToRun.split("#")[0]));
-		assertFalse(er.getFailingTestCasesClasses().contains(anotherTestClassToRun));
-		assertFalse(er.getFailingTestCasesClasses().contains(thirdTestclassToRun));
+        assertTrue(er.getFailingTestCasesClasses().contains(oneFailingTestClassToRun.split("#")[0]));
+        assertFalse(er.getFailingTestCasesClasses().contains(anotherTestClassToRun));
+        assertFalse(er.getFailingTestCasesClasses().contains(thirdTestclassToRun));
 
-		assertTrue(er.getFailingTestCasesMethods().contains(oneFailingTestClassToRun));
-		assertFalse(er.getFailingTestCasesMethods().contains(anotherTestClassToRun));
+        assertTrue(er.getFailingTestCasesMethods().contains(oneFailingTestClassToRun));
+        assertFalse(er.getFailingTestCasesMethods().contains(anotherTestClassToRun));
 
-		assertEquals(1, er.getFailingTestCasesClasses().size());
-	}
+        assertEquals(1, er.getFailingTestCasesClasses().size());
+    }
 
-	@org.junit.Test
-	public void testFLMath70Flacoco_limitedMethodTest() throws Exception {
+    @org.junit.Test
+    public void testFLMath70Flacoco_limitedMethodTest() throws Exception {
 
-		FaultLocalization fl = FaultLocalization.FLACOCO;
+        FaultLocalization fl = FaultLocalization.FLACOCO;
 
-		helperLimitedNumberOfTestMethods(fl);
+        helperLimitedNumberOfTestMethods(fl);
 
-	}
+    }
 
-	@Test
-	public void testMath70FixedFL() throws Exception {
-		AstorMain main1 = new AstorMain();
-		String dep = new File("./examples/libs/junit-4.4.jar").getAbsolutePath();
-		File out = new File(ConfigurationProperties.getProperty("workingDirectory"));
-		String[] args = new String[] { "-dependencies", dep, "-mode", "jgenprog", "-failing",
-				"org.apache.commons.math.analysis.solvers.BisectionSolverTest", "-location",
-				new File("./examples/math_70").getAbsolutePath(), "-package", "org.apache.commons", "-srcjavafolder",
-				"/src/java/", "-srctestfolder", "/src/test/", "-binjavafolder", "/target/classes", "-bintestfolder",
-				"/target/test-classes", "-javacompliancelevel", "7", "-flthreshold", "0.5", "-out",
-				out.getAbsolutePath(), "-faultlocalization", "flacoco", "-scope", "package", "-seed", "10", "-maxgen",
-				"10000", "-stopfirst", "true", "-maxtime", "10", "-population", "1" };
-		System.out.println(Arrays.toString(args));
-		CommandSummary command = new CommandSummary(args);
+    @Test
+    public void testMath70FixedFL() throws Exception {
+        AstorMain main1 = new AstorMain();
+        String dep = new File("./examples/libs/junit-4.4.jar").getAbsolutePath();
+        File out = new File(ConfigurationProperties.getProperty("workingDirectory"));
+        String[] args = new String[] { "-dependencies", dep, "-mode", "jgenprog", "-failing",
+                "org.apache.commons.math.analysis.solvers.BisectionSolverTest", "-location",
+                new File("./examples/math_70").getAbsolutePath(), "-package", "org.apache.commons", "-srcjavafolder",
+                "/src/java/", "-srctestfolder", "/src/test/", "-binjavafolder", "/target/classes", "-bintestfolder",
+                "/target/test-classes", "-javacompliancelevel", "7", "-flthreshold", "0.5", "-out",
+                out.getAbsolutePath(), "-faultlocalization", "flacoco", "-scope", "package", "-seed", "10", "-maxgen",
+                "10000", "-stopfirst", "true", "-maxtime", "10", "-population", "1" };
+        System.out.println(Arrays.toString(args));
+        CommandSummary command = new CommandSummary(args);
 
-		command.command.put("-parameters", "fixedLocation:BisectionSolver-72");
-		main1.execute(command.flat());
+        command.command.put("-parameters", "fixedLocation:BisectionSolver-72");
+        main1.execute(command.flat());
 
-		List<ProgramVariant> solutions = main1.getEngine().getSolutions();
-		assertTrue(solutions.size() >= 1);
+        List<ProgramVariant> solutions = main1.getEngine().getSolutions();
+        assertTrue(solutions.size() >= 1);
 
-	}
+    }
 
-	@org.junit.Test
-	public void testFLMath70Ngz() throws Exception {
-		FaultLocalizationMain main = new FaultLocalizationMain();
-		CommandSummary cs = MathCommandsTests.getMath70Command();
-		// by default, max generations is zero, that means, it does not evolve
-		cs.command.put("-faultlocalization", FaultLocalization.GZOLTAR1_7.name());
-		cs.command.put("-flthreshold", "0.0000");
-		cs.command.put("-parameters", "includeZeros:false:keepGZoltarFiles:false");
+    @org.junit.Test
+    public void testFLMath70Ngz() throws Exception {
+        FaultLocalizationMain main = new FaultLocalizationMain();
+        CommandSummary cs = MathCommandsTests.getMath70Command();
+        // by default, max generations is zero, that means, it does not evolve
+        cs.command.put("-faultlocalization", FaultLocalization.GZOLTAR1_7.name());
+        cs.command.put("-flthreshold", "0.0000");
+        cs.command.put("-parameters", "includeZeros:false:keepGZoltarFiles:false");
 
-		// We execute astor for creating the model and run FL
+        // We execute astor for creating the model and run FL
 
-		FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
+        FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
 
-		assertFalse(er.getCandidates().isEmpty());
-		assertFalse(er.getExecutedTestCasesMethods().isEmpty());
-		assertFalse(er.getFailingTestCasesClasses().isEmpty());
-		assertFalse(er.getFailingTestCasesMethods().isEmpty());
+        assertFalse(er.getCandidates().isEmpty());
+        assertFalse(er.getExecutedTestCasesMethods().isEmpty());
+        assertFalse(er.getFailingTestCasesClasses().isEmpty());
+        assertFalse(er.getFailingTestCasesMethods().isEmpty());
 
-		// Avoid the first line of the result file
-		assertFalse(er.getExecutedTestCasesMethods().contains("name"));
+        // Avoid the first line of the result file
+        assertFalse(er.getExecutedTestCasesMethods().contains("name"));
 
-		assertEquals(2178, er.getExecutedTestCasesMethods().size());
+        assertEquals(2178, er.getExecutedTestCasesMethods().size());
 
-	}
+    }
 
-	@org.junit.Test
-	public void testFLMath70Ngz_limited() throws Exception {
+    @org.junit.Test
+    public void testFLMath70Ngz_limited() throws Exception {
 
-		FaultLocalization flocalization = FaultLocalization.GZOLTAR1_7;
+        FaultLocalization flocalization = FaultLocalization.GZOLTAR1_7;
 
-		helperLimitedTestClasses(flocalization);
+        helperLimitedTestClasses(flocalization);
 
-	}
+    }
 
-	private void helperLimitedTestClasses(FaultLocalization flocalization) throws Exception {
-		FaultLocalizationMain main = new FaultLocalizationMain();
-		CommandSummary cs = MathCommandsTests.getMath70Command();
-		// by default, max generations is zero, that means, it does not evolve
+    private void helperLimitedTestClasses(FaultLocalization flocalization) throws Exception {
+        FaultLocalizationMain main = new FaultLocalizationMain();
+        CommandSummary cs = MathCommandsTests.getMath70Command();
+        // by default, max generations is zero, that means, it does not evolve
 
-		cs.command.put("-faultlocalization", flocalization.name());
-		cs.command.put("-flthreshold", "0.0000");
-		cs.command.put("-parameters", "includeZeros:false:keepGZoltarFiles:false");
+        cs.command.put("-faultlocalization", flocalization.name());
+        cs.command.put("-flthreshold", "0.0000");
+        cs.command.put("-parameters", "includeZeros:false:keepGZoltarFiles:false");
 
-		String oneFailingTestClassToRun = "org.apache.commons.math.analysis.solvers.BisectionSolverTest";
-		String anotherTestClassToRun = "org.apache.commons.math.estimation.LevenbergMarquardtEstimatorTest";
-		cs.command.put("-regressiontestcases4fl",
-				oneFailingTestClassToRun + File.pathSeparator + anotherTestClassToRun);
-		// We execute astor for creating the model and run FL
+        String oneFailingTestClassToRun = "org.apache.commons.math.analysis.solvers.BisectionSolverTest";
+        String anotherTestClassToRun = "org.apache.commons.math.estimation.LevenbergMarquardtEstimatorTest";
+        cs.command.put("-regressiontestcases4fl",
+                oneFailingTestClassToRun + File.pathSeparator + anotherTestClassToRun);
+        // We execute astor for creating the model and run FL
 
-		FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
+        FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
 
-		assertFalse(er.getCandidates().isEmpty());
-		assertFalse(er.getExecutedTestCasesMethods().isEmpty());
-		assertFalse(er.getFailingTestCasesClasses().isEmpty());
-		assertFalse(er.getFailingTestCasesMethods().isEmpty());
+        assertFalse(er.getCandidates().isEmpty());
+        assertFalse(er.getExecutedTestCasesMethods().isEmpty());
+        assertFalse(er.getFailingTestCasesClasses().isEmpty());
+        assertFalse(er.getFailingTestCasesMethods().isEmpty());
 
-		assertEquals(27, er.getExecutedTestCasesMethods().size());
+        assertEquals(27, er.getExecutedTestCasesMethods().size());
 
-		// All test method must come from some of those two test clases
-		for (String testMethod : er.getExecutedTestCasesMethods()) {
+        // All test method must come from some of those two test clases
+        for (String testMethod : er.getExecutedTestCasesMethods()) {
 
-			assertTrue(testMethod.contains(oneFailingTestClassToRun) || testMethod.contains(anotherTestClassToRun));
+            assertTrue(testMethod.contains(oneFailingTestClassToRun) || testMethod.contains(anotherTestClassToRun));
 
-		}
+        }
 
-		assertTrue(er.getFailingTestCasesClasses().contains(oneFailingTestClassToRun));
-		assertTrue(er.getFailingTestCasesMethods()
-				.contains("org.apache.commons.math.analysis.solvers.BisectionSolverTest#testMath369"));
+        assertTrue(er.getFailingTestCasesClasses().contains(oneFailingTestClassToRun));
+        assertTrue(er.getFailingTestCasesMethods()
+                .contains("org.apache.commons.math.analysis.solvers.BisectionSolverTest#testMath369"));
 
-		assertEquals(1, er.getFailingTestCasesClasses().size());
-	}
+        assertEquals(1, er.getFailingTestCasesClasses().size());
+    }
 
-	@org.junit.Test
-	public void testFLMath70Ngz_limitedMethod() throws Exception {
+    @org.junit.Test
+    public void testFLMath70Ngz_limitedMethod() throws Exception {
 
-		FaultLocalization fl = FaultLocalization.GZOLTAR1_7;
+        FaultLocalization fl = FaultLocalization.GZOLTAR1_7;
 
-		helperLimitedNumberOfTestMethods(fl);
+        helperLimitedNumberOfTestMethods(fl);
 
-	}
+    }
 
-	private void helperLimitedNumberOfTestMethods(FaultLocalization fl) throws Exception {
-		FaultLocalizationMain main = new FaultLocalizationMain();
-		CommandSummary cs = MathCommandsTests.getMath70Command();
-		// by default, max generations is zero, that means, it does not evolve
+    private void helperLimitedNumberOfTestMethods(FaultLocalization fl) throws Exception {
+        FaultLocalizationMain main = new FaultLocalizationMain();
+        CommandSummary cs = MathCommandsTests.getMath70Command();
+        // by default, max generations is zero, that means, it does not evolve
 
-		cs.command.put("-faultlocalization", fl.name());
-		cs.command.put("-flthreshold", "0.0000");
-		cs.command.put("-parameters", "includeZeros:false:keepGZoltarFiles:false");
+        cs.command.put("-faultlocalization", fl.name());
+        cs.command.put("-flthreshold", "0.0000");
+        cs.command.put("-parameters", "includeZeros:false:keepGZoltarFiles:false");
 
-		String oneFailingTestClassToRun = "org.apache.commons.math.analysis.solvers.BisectionSolverTest#testMath369";
-		String anotherTestClassToRun = "org.apache.commons.math.estimation.LevenbergMarquardtEstimatorTest#testTrivial";
+        String oneFailingTestClassToRun = "org.apache.commons.math.analysis.solvers.BisectionSolverTest#testMath369";
+        String anotherTestClassToRun = "org.apache.commons.math.estimation.LevenbergMarquardtEstimatorTest#testTrivial";
 
-		cs.command.put("-regressiontestcases4fl",
-				oneFailingTestClassToRun + File.pathSeparator + anotherTestClassToRun);
-		// We execute astor for creating the model and run FL
+        cs.command.put("-regressiontestcases4fl",
+                oneFailingTestClassToRun + File.pathSeparator + anotherTestClassToRun);
+        // We execute astor for creating the model and run FL
 
-		FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
+        FaultLocalizationResult er = (FaultLocalizationResult) main.execute(cs.flat());
 
-		assertFalse(er.getCandidates().isEmpty());
-		assertFalse(er.getExecutedTestCasesMethods().isEmpty());
-		assertFalse(er.getFailingTestCasesClasses().isEmpty());
-		assertFalse(er.getFailingTestCasesMethods().isEmpty());
+        assertFalse(er.getCandidates().isEmpty());
+        assertFalse(er.getExecutedTestCasesMethods().isEmpty());
+        assertFalse(er.getFailingTestCasesClasses().isEmpty());
+        assertFalse(er.getFailingTestCasesMethods().isEmpty());
 
-		assertEquals(2, er.getExecutedTestCasesMethods().size());
+        assertEquals(2, er.getExecutedTestCasesMethods().size());
 
-		// All test method must come from some of those two test clases
-		for (String testMethod : er.getExecutedTestCasesMethods()) {
+        // All test method must come from some of those two test clases
+        for (String testMethod : er.getExecutedTestCasesMethods()) {
 
-			assertTrue(testMethod.contains(oneFailingTestClassToRun) || testMethod.contains(anotherTestClassToRun));
+            assertTrue(testMethod.contains(oneFailingTestClassToRun) || testMethod.contains(anotherTestClassToRun));
 
-		}
+        }
 
-		assertTrue(er.getFailingTestCasesClasses().contains(oneFailingTestClassToRun.split("#")[0]));
-		assertFalse(er.getFailingTestCasesClasses().contains(anotherTestClassToRun.split("#")[0]));
+        assertTrue(er.getFailingTestCasesClasses().contains(oneFailingTestClassToRun.split("#")[0]));
+        assertFalse(er.getFailingTestCasesClasses().contains(anotherTestClassToRun.split("#")[0]));
 
-		assertTrue(er.getFailingTestCasesMethods().contains(oneFailingTestClassToRun));
-		assertFalse(er.getFailingTestCasesMethods().contains(anotherTestClassToRun));
+        assertTrue(er.getFailingTestCasesMethods().contains(oneFailingTestClassToRun));
+        assertFalse(er.getFailingTestCasesMethods().contains(anotherTestClassToRun));
 
-		assertEquals(1, er.getFailingTestCasesClasses().size());
-	}
+        assertEquals(1, er.getFailingTestCasesClasses().size());
+    }
 
-	@org.junit.Test
-	public void testFLMath70Ngz_limitedMixed() throws Exception {
-		FaultLocalization fl = FaultLocalization.GZOLTAR1_7;
+    @org.junit.Test
+    public void testFLMath70Ngz_limitedMixed() throws Exception {
+        FaultLocalization fl = FaultLocalization.GZOLTAR1_7;
 
-		helperLimitedTestAndClasses(fl);
+        helperLimitedTestAndClasses(fl);
 
-	}
+    }
 
-	@org.junit.Test
-	public void testFLMath70Flacoco_File() throws Exception {
+    @org.junit.Test
+    public void testFLMath70Flacoco_File() throws Exception {
 
-		FaultLocalization fl = FaultLocalization.FLACOCO;
+        FaultLocalization fl = FaultLocalization.FLACOCO;
 
-		helperLimitedTestAndClassesFromFile(fl);
+        helperLimitedTestAndClassesFromFile(fl);
 
-	}
+    }
 
-	@org.junit.Test
-	public void testFLMath70Gzoltar_File() throws Exception {
+    @org.junit.Test
+    public void testFLMath70Gzoltar_File() throws Exception {
 
-		FaultLocalization fl = FaultLocalization.GZOLTAR;
+        FaultLocalization fl = FaultLocalization.GZOLTAR;
 
-		helperLimitedTestAndClassesFromFile(fl);
+        helperLimitedTestAndClassesFromFile(fl);
 
-	}
+    }
 
-	@org.junit.Test
-	public void testFLMath70GzoltarNew_File() throws Exception {
+    @org.junit.Test
+    public void testFLMath70GzoltarNew_File() throws Exception {
 
-		FaultLocalization fl = FaultLocalization.GZOLTAR1_7;
+        FaultLocalization fl = FaultLocalization.GZOLTAR1_7;
 
-		helperLimitedTestAndClassesFromFile(fl);
+        helperLimitedTestAndClassesFromFile(fl);
 
-	}
+    }
 
 }

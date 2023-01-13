@@ -6,21 +6,21 @@ package fr.inria.astor.core.faultlocalization.cocospoon.testrunner;
  */
 public class TestResultImpl implements TestResult {
 
-	private TestCase testCase;
-	private boolean successful;
+    private TestCase testCase;
+    private boolean successful;
 
-	public TestResultImpl(TestCase testCase, boolean successful) {
-		this.testCase = testCase;
-		this.successful = successful;
-	}
+    public TestResultImpl(TestCase testCase, boolean successful) {
+        this.testCase = testCase;
+        this.successful = successful;
+    }
 
-	@Override
-	public TestCase getTestCase() {
-		return this.testCase;
-	}
+    @Override
+    public TestCase getTestCase() {
+        return this.testCase;
+    }
 
-	@Override
-	public boolean isSuccessful() {
-		return this.successful;
-	}
+    @Override
+    public boolean isSuccessful() {
+        return this.successful;
+    }
 }

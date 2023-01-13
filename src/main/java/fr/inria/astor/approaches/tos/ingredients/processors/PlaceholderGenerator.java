@@ -12,6 +12,6 @@ import spoon.reflect.declaration.CtElement;
  */
 public interface PlaceholderGenerator<T extends CtElement> {
 
-	public List<? extends Placeholder> createTOS(T ingredientStatement);
+    public List<? extends Placeholder> createTOS(T ingredientStatement);
 
 }

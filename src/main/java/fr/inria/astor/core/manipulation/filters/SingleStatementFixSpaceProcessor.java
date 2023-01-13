@@ -17,22 +17,22 @@ import spoon.reflect.declaration.CtMethod;
  */
 public class SingleStatementFixSpaceProcessor extends TargetElementProcessor<CtStatement> {
 
-	/**
-	 * The default statement transformator is CTStamemeny
-	 */
-	public SingleStatementFixSpaceProcessor() {
-		super();
-	}
+    /**
+     * The default statement transformator is CTStamemeny
+     */
+    public SingleStatementFixSpaceProcessor() {
+        super();
+    }
 
-	@Override
-	public void process(CtStatement element) {
-		if (!(element instanceof CtBlock || element instanceof CtClass || element instanceof CtMethod
-				|| element instanceof CtTry || element instanceof CtCatch) && 
-				(element.getParent() instanceof CtBlock) && 
-				(!(element.toString().startsWith("super"))
-						|| ConfigurationProperties.getPropertyBool("manipulatesuper"))) {
-			add(element);
-		}
-	}
+    @Override
+    public void process(CtStatement element) {
+        if (!(element instanceof CtBlock || element instanceof CtClass || element instanceof CtMethod
+                || element instanceof CtTry || element instanceof CtCatch) && 
+                (element.getParent() instanceof CtBlock) && 
+                (!(element.toString().startsWith("super"))
+                        || ConfigurationProperties.getPropertyBool("manipulatesuper"))) {
+            add(element);
+        }
+    }
 
 }

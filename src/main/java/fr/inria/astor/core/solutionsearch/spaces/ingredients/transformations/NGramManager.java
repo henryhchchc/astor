@@ -21,58 +21,58 @@ import spoon.reflect.declaration.CtType;
  */
 public class NGramManager {
 
-	protected Map<String, NGrams> ngramsSplitted = null;
-	protected NGrams ngglobal = null;
+    protected Map<String, NGrams> ngramsSplitted = null;
+    protected NGrams ngglobal = null;
 
-	protected Logger logger = Logger.getLogger(ProbabilisticTransformationStrategy.class.getName());
+    protected Logger logger = Logger.getLogger(ProbabilisticTransformationStrategy.class.getName());
 
-	public NGramManager(Map<String, NGrams> ngramsSplitted, NGrams ngglobal) {
-		super();
-		this.ngramsSplitted = ngramsSplitted;
-		this.ngglobal = ngglobal;
-	}
+    public NGramManager(Map<String, NGrams> ngramsSplitted, NGrams ngglobal) {
+        super();
+        this.ngramsSplitted = ngramsSplitted;
+        this.ngglobal = ngglobal;
+    }
 
-	public void init() throws JSAPException {
-		this.ngglobal = new NGrams();
-		this.ngramsSplitted = new HashMap<>();
-		logger.debug("Calculating N-grams");
+    public void init() throws JSAPException {
+        this.ngglobal = new NGrams();
+        this.ngramsSplitted = new HashMap<>();
+        logger.debug("Calculating N-grams");
 
-		TargetElementProcessor<?> elementProcessor = new SpecialStatementFixSpaceProcessor();
-		Boolean mustCloneOriginalValue = ConfigurationProperties.getPropertyBool("duplicateingredientsinspace");
-		// Forcing to duplicate
-		ConfigurationProperties.setProperty("duplicateingredientsinspace", "true");
+        TargetElementProcessor<?> elementProcessor = new SpecialStatementFixSpaceProcessor();
+        Boolean mustCloneOriginalValue = ConfigurationProperties.getPropertyBool("duplicateingredientsinspace");
+        // Forcing to duplicate
+        ConfigurationProperties.setProperty("duplicateingredientsinspace", "true");
 
-		List<CtType<?>> all = MutationSupporter.getFactory().Type().getAll();
+        List<CtType<?>> all = MutationSupporter.getFactory().Type().getAll();
 
-		GramProcessor pt = new GramProcessor(elementProcessor);
-		for (CtType<?> ctType : all) {
-			NGrams ng = pt.calculateGrams4Class(ctType);
-			ngramsSplitted.put(ctType.getQualifiedName(), ng);
+        GramProcessor pt = new GramProcessor(elementProcessor);
+        for (CtType<?> ctType : all) {
+            NGrams ng = pt.calculateGrams4Class(ctType);
+            ngramsSplitted.put(ctType.getQualifiedName(), ng);
 
-		}
-		ngglobal = pt.calculateGlobal(all);
+        }
+        ngglobal = pt.calculateGlobal(all);
 
-		// reset property clone
-		ConfigurationProperties.setProperty("duplicateingredientsinspace", Boolean.toString(mustCloneOriginalValue));
+        // reset property clone
+        ConfigurationProperties.setProperty("duplicateingredientsinspace", Boolean.toString(mustCloneOriginalValue));
 
-	}
-	public boolean initialized(){
-		return (ngramsSplitted != null && ngglobal != null);
-	}
-	public Map<String, NGrams> getNgramsSplitted() {
-		return ngramsSplitted;
-	}
+    }
+    public boolean initialized(){
+        return (ngramsSplitted != null && ngglobal != null);
+    }
+    public Map<String, NGrams> getNgramsSplitted() {
+        return ngramsSplitted;
+    }
 
-	public void setNgramsSplitted(Map<String, NGrams> ngramsSplitted) {
-		this.ngramsSplitted = ngramsSplitted;
-	}
+    public void setNgramsSplitted(Map<String, NGrams> ngramsSplitted) {
+        this.ngramsSplitted = ngramsSplitted;
+    }
 
-	public NGrams getNgglobal() {
-		return ngglobal;
-	}
+    public NGrams getNgglobal() {
+        return ngglobal;
+    }
 
-	public void setNgglobal(NGrams ngglobal) {
-		this.ngglobal = ngglobal;
-	}
+    public void setNgglobal(NGrams ngglobal) {
+        this.ngglobal = ngglobal;
+    }
 
 }

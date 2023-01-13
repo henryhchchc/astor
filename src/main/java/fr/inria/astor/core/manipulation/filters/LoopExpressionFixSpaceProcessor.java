@@ -17,32 +17,32 @@ import spoon.reflect.code.CtWhile;
  */
 public class LoopExpressionFixSpaceProcessor extends TargetElementProcessor<CtLoop> {
 
-	private Logger logger = Logger.getLogger(LoopExpressionFixSpaceProcessor.class.getName());
-	
-	public LoopExpressionFixSpaceProcessor(){
-		super();
+    private Logger logger = Logger.getLogger(LoopExpressionFixSpaceProcessor.class.getName());
+    
+    public LoopExpressionFixSpaceProcessor(){
+        super();
 
-	}
-	@Override
-	public void process(CtLoop element) {
-		if(element instanceof CtFor){
-			addExpressionAndSubexpressions(((CtFor)element).getExpression());
-		}
-		if(element instanceof CtWhile){
-			addExpressionAndSubexpressions(((CtWhile)element).getLoopingExpression());
-		}
-		if(element instanceof CtDo){
-			addExpressionAndSubexpressions(((CtDo)element).getLoopingExpression());
-		}
-		
-	}
-	
-	public void addExpressionAndSubexpressions(CtExpression  ctExp1){
-		List<CtExpression<Boolean>> ctExp = ExpressionRevolver.getExpressions(ctExp1);
-		for (CtExpression ctExpression : ctExp) {
-			super.add(ctExpression);
-		}
-	}
-		
+    }
+    @Override
+    public void process(CtLoop element) {
+        if(element instanceof CtFor){
+            addExpressionAndSubexpressions(((CtFor)element).getExpression());
+        }
+        if(element instanceof CtWhile){
+            addExpressionAndSubexpressions(((CtWhile)element).getLoopingExpression());
+        }
+        if(element instanceof CtDo){
+            addExpressionAndSubexpressions(((CtDo)element).getLoopingExpression());
+        }
+        
+    }
+    
+    public void addExpressionAndSubexpressions(CtExpression  ctExp1){
+        List<CtExpression<Boolean>> ctExp = ExpressionRevolver.getExpressions(ctExp1);
+        for (CtExpression ctExpression : ctExp) {
+            super.add(ctExpression);
+        }
+    }
+        
 
 }

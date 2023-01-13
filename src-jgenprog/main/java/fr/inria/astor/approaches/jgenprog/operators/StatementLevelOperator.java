@@ -11,9 +11,9 @@ import spoon.reflect.code.CtStatement;
  */
 public interface StatementLevelOperator {
 
-	public default boolean canBeAppliedToPoint(ModificationPoint point) {
+    public default boolean canBeAppliedToPoint(ModificationPoint point) {
 
-		return (point.getCodeElement() instanceof CtStatement);
-	}
+        return (point.getCodeElement() instanceof CtStatement);
+    }
 
 }

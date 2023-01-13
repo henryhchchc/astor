@@ -14,30 +14,30 @@ import fr.inria.astor.util.MapCounter;
  */
 public class NGrams {
 
-	//Size of grams
-	public MapCounter[] ngrams = new MapCounter[30];
-	
-	
-	public void add(List voc, int n){
-		if (ngrams[n] == null )
-			ngrams[n] = new MapCounter<>();
-		
-		for (Object object : voc) {
-			ngrams[n].add(object);
-				
-		}
-		
-	}
-	
-	public String toString(){
-		return Arrays.toString(ngrams);
-	}
-	
-	@Deprecated
-	public Map getProb(){
-		Map prob = new  HashMap();
-		return prob;
-	}
-	
-	
+    //Size of grams
+    public MapCounter[] ngrams = new MapCounter[30];
+    
+    
+    public void add(List voc, int n){
+        if (ngrams[n] == null )
+            ngrams[n] = new MapCounter<>();
+        
+        for (Object object : voc) {
+            ngrams[n].add(object);
+                
+        }
+        
+    }
+    
+    public String toString(){
+        return Arrays.toString(ngrams);
+    }
+    
+    @Deprecated
+    public Map getProb(){
+        Map prob = new  HashMap();
+        return prob;
+    }
+    
+    
 }

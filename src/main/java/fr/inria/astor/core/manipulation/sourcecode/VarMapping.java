@@ -15,37 +15,37 @@ import spoon.reflect.declaration.CtVariable;
  */
 public class VarMapping {
 
-	private Map<VarAccessWrapper, List<CtVariable>> mappedVariables = null;
-	private List<CtVariableAccess> notMappedVariables = null;
+    private Map<VarAccessWrapper, List<CtVariable>> mappedVariables = null;
+    private List<CtVariableAccess> notMappedVariables = null;
 
-	public VarMapping(Map<VarAccessWrapper, List<CtVariable>> mapsVariables,
-			List<CtVariableAccess> notMappedVariables) {
-		super();
-		this.mappedVariables = mapsVariables;
-		this.notMappedVariables = notMappedVariables;
-	}
+    public VarMapping(Map<VarAccessWrapper, List<CtVariable>> mapsVariables,
+            List<CtVariableAccess> notMappedVariables) {
+        super();
+        this.mappedVariables = mapsVariables;
+        this.notMappedVariables = notMappedVariables;
+    }
 
-	public Map<VarAccessWrapper, List<CtVariable>> getMappedVariables() {
-		return mappedVariables;
-	}
+    public Map<VarAccessWrapper, List<CtVariable>> getMappedVariables() {
+        return mappedVariables;
+    }
 
-	public void setMappedVariables(Map<VarAccessWrapper, List<CtVariable>> mapsVariables) {
-		this.mappedVariables = mapsVariables;
-	}
+    public void setMappedVariables(Map<VarAccessWrapper, List<CtVariable>> mapsVariables) {
+        this.mappedVariables = mapsVariables;
+    }
 
-	public List<CtVariableAccess> getNotMappedVariables() {
-		return notMappedVariables;
-	}
+    public List<CtVariableAccess> getNotMappedVariables() {
+        return notMappedVariables;
+    }
 
-	public void setNotMappedVariables(List<CtVariableAccess> notMappedVariables) {
-		this.notMappedVariables = notMappedVariables;
-	}
-	
-	public String toString(){
-		return "[mapped vars: ("+ mappedVariables.keySet().size() +")"+mappedVariables+
-				"\nnot mapped: ("+ notMappedVariables.size() +")"+notMappedVariables
-				+"]"
-		;
-	}
+    public void setNotMappedVariables(List<CtVariableAccess> notMappedVariables) {
+        this.notMappedVariables = notMappedVariables;
+    }
+    
+    public String toString(){
+        return "[mapped vars: ("+ mappedVariables.keySet().size() +")"+mappedVariables+
+                "\nnot mapped: ("+ notMappedVariables.size() +")"+notMappedVariables
+                +"]"
+        ;
+    }
 
 }

@@ -15,42 +15,42 @@ import fr.inria.astor.core.entities.WeightElement;
  */
 public class WeightRandomSuspiciousNavitation implements SuspiciousNavigationStrategy {
 
-	@Override
-	public List<ModificationPoint> getSortedModificationPointsList(List<ModificationPoint> modificationPoints) {
+    @Override
+    public List<ModificationPoint> getSortedModificationPointsList(List<ModificationPoint> modificationPoints) {
 
-		List<ModificationPoint> remaining = new ArrayList<ModificationPoint>(modificationPoints);
-		List<ModificationPoint> solution = new ArrayList<ModificationPoint>();
+        List<ModificationPoint> remaining = new ArrayList<ModificationPoint>(modificationPoints);
+        List<ModificationPoint> solution = new ArrayList<ModificationPoint>();
 
-		for (int i = 0; i < modificationPoints.size(); i++) {
-			List<WeightElement<?>> we = new ArrayList<WeightElement<?>>();
-			double sum = 0;
-			for (ModificationPoint gen : remaining) {
-				double susp = ((SuspiciousModificationPoint) gen).getSuspicious().getSuspiciousValue();
-				sum += susp;
-				WeightElement<?> w = new WeightElement<>(gen, 0);
-				w.weight = susp;
-				we.add(w);
-			}
+        for (int i = 0; i < modificationPoints.size(); i++) {
+            List<WeightElement<?>> we = new ArrayList<WeightElement<?>>();
+            double sum = 0;
+            for (ModificationPoint gen : remaining) {
+                double susp = ((SuspiciousModificationPoint) gen).getSuspicious().getSuspiciousValue();
+                sum += susp;
+                WeightElement<?> w = new WeightElement<>(gen, 0);
+                w.weight = susp;
+                we.add(w);
+            }
 
-			if (sum != 0) {
+            if (sum != 0) {
 
-				for (WeightElement<?> weightCtElement : we) {
-					weightCtElement.weight = weightCtElement.weight / sum;
-				}
+                for (WeightElement<?> weightCtElement : we) {
+                    weightCtElement.weight = weightCtElement.weight / sum;
+                }
 
-				WeightElement.feedAccumulative(we);
-				WeightElement<?> selected = WeightElement.selectElementWeightBalanced(we);
+                WeightElement.feedAccumulative(we);
+                WeightElement<?> selected = WeightElement.selectElementWeightBalanced(we);
 
-				ModificationPoint selectedg = (ModificationPoint) selected.element;
-				remaining.remove(selectedg);
-				solution.add(selectedg);
-			} else {
-				solution.addAll(remaining);
-				break;
-			}
-		}
-		return solution;
+                ModificationPoint selectedg = (ModificationPoint) selected.element;
+                remaining.remove(selectedg);
+                solution.add(selectedg);
+            } else {
+                solution.addAll(remaining);
+                break;
+            }
+        }
+        return solution;
 
-	}
+    }
 
 }

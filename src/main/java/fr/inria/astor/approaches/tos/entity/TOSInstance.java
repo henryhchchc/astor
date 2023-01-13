@@ -17,56 +17,56 @@ import spoon.reflect.declaration.CtElement;
  */
 public class TOSInstance extends Ingredient {
 
-	protected TOSEntity tosDerived = null;
+    protected TOSEntity tosDerived = null;
 
-	protected List<Transformation> transformations = new ArrayList<>();
+    protected List<Transformation> transformations = new ArrayList<>();
 
-	public TOSInstance(CtElement derivedFrom, TOSEntity tosDerived) {
-		super(null, null, derivedFrom);
-		this.tosDerived = tosDerived;
-	}
+    public TOSInstance(CtElement derivedFrom, TOSEntity tosDerived) {
+        super(null, null, derivedFrom);
+        this.tosDerived = tosDerived;
+    }
 
-	public TOSEntity getTosDerived() {
-		return tosDerived;
-	}
+    public TOSEntity getTosDerived() {
+        return tosDerived;
+    }
 
-	public void setTosDerived(TOSEntity tosDerived) {
-		this.tosDerived = tosDerived;
-	}
+    public void setTosDerived(TOSEntity tosDerived) {
+        this.tosDerived = tosDerived;
+    }
 
-	public List<Transformation> getTransformations() {
-		return transformations;
-	}
+    public List<Transformation> getTransformations() {
+        return transformations;
+    }
 
-	public void setTransformations(List<Transformation> transformations) {
-		this.transformations = transformations;
-	}
+    public void setTransformations(List<Transformation> transformations) {
+        this.transformations = transformations;
+    }
 
-	public CtElement generatePatch() {
-		// System.out.println("Synthesizing patch: ");
+    public CtElement generatePatch() {
+        // System.out.println("Synthesizing patch: ");
 
-		for (Transformation transformation : this.transformations) {
+        for (Transformation transformation : this.transformations) {
 
-			transformation.apply();
+            transformation.apply();
 
-		}
-		CtCodeElement cloned = MutationSupporter.clone((CtCodeElement) this.getTosDerived().getDerivedFrom());
+        }
+        CtCodeElement cloned = MutationSupporter.clone((CtCodeElement) this.getTosDerived().getDerivedFrom());
 
-		this.setCode(cloned);
+        this.setCode(cloned);
 
-		for (Transformation transformation : this.transformations) {
+        for (Transformation transformation : this.transformations) {
 
-			transformation.revert();
+            transformation.revert();
 
-		}
-		return cloned;
-	}
+        }
+        return cloned;
+    }
 
-	@Override
-	public CtElement getCode() {
-		if (this.ingredientCode == null) {
-			this.ingredientCode = this.generatePatch();
-		}
-		return this.ingredientCode;
-	}
+    @Override
+    public CtElement getCode() {
+        if (this.ingredientCode == null) {
+            this.ingredientCode = this.generatePatch();
+        }
+        return this.ingredientCode;
+    }
 }

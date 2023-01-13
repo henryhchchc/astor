@@ -20,84 +20,84 @@ import spoon.reflect.declaration.CtElement;
 @SuppressWarnings("rawtypes")
 public abstract class ExpresionMutOp extends AutonomousOperator {
 
-	MutatorComposite mutatorBinary = null;
+    MutatorComposite mutatorBinary = null;
 
-	public ExpresionMutOp() {
-		super();
-		this.mutatorBinary = new MutatorComposite(MutationSupporter.getFactory());
-		this.mutatorBinary.getMutators().add(new RelationalBinaryOperatorMutator(MutationSupporter.getFactory()));
-		this.mutatorBinary.getMutators().add(new LogicalBinaryOperatorMutator(MutationSupporter.getFactory()));
-		this.mutatorBinary.getMutators().add(new ArithmeticBinaryOperatorMutator(MutationSupporter.getFactory()));
-		this.mutatorBinary.getMutators().add(new NegationUnaryOperatorConditionMutator(MutationSupporter.getFactory()));
+    public ExpresionMutOp() {
+        super();
+        this.mutatorBinary = new MutatorComposite(MutationSupporter.getFactory());
+        this.mutatorBinary.getMutators().add(new RelationalBinaryOperatorMutator(MutationSupporter.getFactory()));
+        this.mutatorBinary.getMutators().add(new LogicalBinaryOperatorMutator(MutationSupporter.getFactory()));
+        this.mutatorBinary.getMutators().add(new ArithmeticBinaryOperatorMutator(MutationSupporter.getFactory()));
+        this.mutatorBinary.getMutators().add(new NegationUnaryOperatorConditionMutator(MutationSupporter.getFactory()));
 
-	}
+    }
 
-	@Override
-	public boolean applyChangesInModel(OperatorInstance operation, ProgramVariant p) {
-		boolean successful = false;
-		CtExpression rightTerm = null, leftTerm = null;
-		try {
+    @Override
+    public boolean applyChangesInModel(OperatorInstance operation, ProgramVariant p) {
+        boolean successful = false;
+        CtExpression rightTerm = null, leftTerm = null;
+        try {
 
-			CtExpression ctst = (CtExpression) operation.getOriginal();
-			CtExpression fix = (CtExpression) operation.getModified();
+            CtExpression ctst = (CtExpression) operation.getOriginal();
+            CtExpression fix = (CtExpression) operation.getModified();
 
-			ctst.replace((CtExpression) fix);
-			successful = true;
-			operation.setSuccessfulyApplied((successful));
+            ctst.replace((CtExpression) fix);
+            successful = true;
+            operation.setSuccessfulyApplied((successful));
 
-			log.debug(" applied: " + ctst.getParent().toString());
+            log.debug(" applied: " + ctst.getParent().toString());
 
-		} catch (Exception ex) {
-			log.error("Error applying an operation, exception: " + ex.getMessage());
-			operation.setExceptionAtApplied(ex);
-			operation.setSuccessfulyApplied(false);
-		}
-		return true;
-	}
+        } catch (Exception ex) {
+            log.error("Error applying an operation, exception: " + ex.getMessage());
+            operation.setExceptionAtApplied(ex);
+            operation.setSuccessfulyApplied(false);
+        }
+        return true;
+    }
 
-	protected abstract OperatorInstance createModificationInstance(ModificationPoint point, MutantCtElement fix)
-			throws IllegalAccessException;
+    protected abstract OperatorInstance createModificationInstance(ModificationPoint point, MutantCtElement fix)
+            throws IllegalAccessException;
 
-	@Override
-	public List<OperatorInstance> createOperatorInstances(ModificationPoint modificationPoint) {
-		List<OperatorInstance> ops = new ArrayList<>();
+    @Override
+    public List<OperatorInstance> createOperatorInstances(ModificationPoint modificationPoint) {
+        List<OperatorInstance> ops = new ArrayList<>();
 
-		List<MutantCtElement> mutations = getMutants(modificationPoint.getCodeElement());
+        List<MutantCtElement> mutations = getMutants(modificationPoint.getCodeElement());
 
-		for (MutantCtElement mutantCtElement : mutations) {
-			OperatorInstance opInstance;
-			try {
-				opInstance = createModificationInstance(modificationPoint, mutantCtElement);
-				if (opInstance != null)
-					ops.add(opInstance);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
+        for (MutantCtElement mutantCtElement : mutations) {
+            OperatorInstance opInstance;
+            try {
+                opInstance = createModificationInstance(modificationPoint, mutantCtElement);
+                if (opInstance != null)
+                    ops.add(opInstance);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
 
-		}
-		return ops;
-	}
+        }
+        return ops;
+    }
 
-	/** Return the list of CtElements Mutanted */
-	public abstract List<MutantCtElement> getMutants(CtElement targetIF);
+    /** Return the list of CtElements Mutanted */
+    public abstract List<MutantCtElement> getMutants(CtElement targetIF);
 
-	@Override
-	public boolean undoChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
-		try {
-			CtExpression ctst = (CtExpression) opInstance.getOriginal();
-			CtExpression fix = (CtExpression) opInstance.getModified();
-			fix.replace(ctst);
+    @Override
+    public boolean undoChangesInModel(OperatorInstance opInstance, ProgramVariant p) {
+        try {
+            CtExpression ctst = (CtExpression) opInstance.getOriginal();
+            CtExpression fix = (CtExpression) opInstance.getModified();
+            fix.replace(ctst);
 
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-	@Override
-	public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean updateProgramVariant(OperatorInstance opInstance, ProgramVariant p) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
 }

@@ -12,12 +12,12 @@ import fr.inria.astor.core.solutionsearch.extension.AstorExtensionPoint;
  */
 public interface IngredientTransformationStrategy extends AstorExtensionPoint {
 
-	
-	/**
-	 * 
-	 * @param modificationPoint
-	 * @param ingredient
-	 * @return
-	 */
-	public  List<Ingredient> transform(ModificationPoint modificationPoint, Ingredient ingredient);
+    
+    /**
+     * 
+     * @param modificationPoint
+     * @param ingredient
+     * @return
+     */
+    public  List<Ingredient> transform(ModificationPoint modificationPoint, Ingredient ingredient);
 }

@@ -9,7 +9,7 @@ import fr.inria.astor.core.solutionsearch.spaces.operators.OperatorSpace;
  */
 public class CardumenOperatorSpace extends OperatorSpace {
 
-	public CardumenOperatorSpace() {
-		super.register(new ExpressionReplaceOperator());
-	}
+    public CardumenOperatorSpace() {
+        super.register(new ExpressionReplaceOperator());
+    }
 }

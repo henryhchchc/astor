@@ -17,31 +17,31 @@ import spoon.reflect.declaration.CtElement;
  */
 @SuppressWarnings("rawtypes")
 public class LiteralPlaceholderGenerator<T extends CtElement> implements PlaceholderGenerator<T> {
-	
-	CodeParserLauncher<?, CtLiteral> ip = null;
+    
+    CodeParserLauncher<?, CtLiteral> ip = null;
 
-	public LiteralPlaceholderGenerator() {
+    public LiteralPlaceholderGenerator() {
 
-		try {
-			ip = new CodeParserLauncher<>(new LiteralsProcessor());
-		} catch (JSAPException e) {
-			e.printStackTrace();
-		}
-	}
+        try {
+            ip = new CodeParserLauncher<>(new LiteralsProcessor());
+        } catch (JSAPException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public List<LiteralPlaceholder> createTOS(T ingredientSource) {
-		List<LiteralPlaceholder> results = new ArrayList<>(); 
-		boolean mustclone = false;
-		List<CtLiteral> literals = ip.createFixSpace(ingredientSource, mustclone);
-		for (CtLiteral ctLiteral : literals) {
-			//TODO:
-			int i = 0;
-			LiteralPlaceholder lp = new LiteralPlaceholder("_l_"+ctLiteral.getType().getSimpleName()+"_"+i, ctLiteral);
-			results.add(lp);
-		}
-		
-		return results;
-	}
+    @Override
+    public List<LiteralPlaceholder> createTOS(T ingredientSource) {
+        List<LiteralPlaceholder> results = new ArrayList<>(); 
+        boolean mustclone = false;
+        List<CtLiteral> literals = ip.createFixSpace(ingredientSource, mustclone);
+        for (CtLiteral ctLiteral : literals) {
+            //TODO:
+            int i = 0;
+            LiteralPlaceholder lp = new LiteralPlaceholder("_l_"+ctLiteral.getType().getSimpleName()+"_"+i, ctLiteral);
+            results.add(lp);
+        }
+        
+        return results;
+    }
 
 }

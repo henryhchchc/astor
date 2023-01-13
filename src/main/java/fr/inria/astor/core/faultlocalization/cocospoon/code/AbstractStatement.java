@@ -7,54 +7,54 @@ import fr.inria.astor.core.faultlocalization.cocospoon.metrics.Metric;
  */
 public abstract class AbstractStatement {
 
-	private int ep;
+    private int ep;
 
-	private int ef;
+    private int ef;
 
-	private int np;
+    private int np;
 
-	private int nf;
+    private int nf;
 
-	private Metric metric;
+    private Metric metric;
 
-	public AbstractStatement(Metric metric) {
-		this.metric = metric;
-	}
+    public AbstractStatement(Metric metric) {
+        this.metric = metric;
+    }
 
-	public int getEf() {
-		return ef;
-	}
+    public int getEf() {
+        return ef;
+    }
 
-	public int getEp() {
-		return ep;
-	}
+    public int getEp() {
+        return ep;
+    }
 
-	public int getNf() {
-		return nf;
-	}
+    public int getNf() {
+        return nf;
+    }
 
-	public int getNp() {
-		return np;
-	}
+    public int getNp() {
+        return np;
+    }
 
-	public void setEf(int ef) {
-		this.ef = ef;
-	}
+    public void setEf(int ef) {
+        this.ef = ef;
+    }
 
-	public void setEp(int ep) {
-		this.ep = ep;
-	}
+    public void setEp(int ep) {
+        this.ep = ep;
+    }
 
-	public void setNf(int nf) {
-		this.nf = nf;
-	}
+    public void setNf(int nf) {
+        this.nf = nf;
+    }
 
-	public void setNp(int np) {
-		this.np = np;
-	}
+    public void setNp(int np) {
+        this.np = np;
+    }
 
-	public double getSuspiciousness() {
-		return this.metric.value(this.ef, this.ep, this.nf, this.np);
-	}
+    public double getSuspiciousness() {
+        return this.metric.value(this.ef, this.ep, this.nf, this.np);
+    }
 
 }

@@ -25,37 +25,37 @@ import fr.inria.astor.core.validation.ProgramVariantValidator;
  */
 public enum ExtensionPoints {
 
-	NAVIGATION_ENGINE("customengine", AstorCoreEngine.class), //
-	FAULT_LOCALIZATION("faultlocalization", FaultLocalizationStrategy.class), //
-	FITNESS_FUNCTION("fitnessfunction", FitnessFunction.class), //
-	COMPILER("compiler", VariantCompiler.class), //
-	POPULATION_CONTROLLER("populationcontroller", PopulationController.class), //
-	INGREDIENT_STRATEGY_SCOPE("scope", IngredientPool.class), //
-	SOLUTION_SORT_CRITERION("patchprioritization", SolutionVariantSortCriterion.class), //
-	VALIDATION("validation", ProgramVariantValidator.class), //
-	REPAIR_OPERATORS("repairoperators", AstorOperator.class), //
-	OPERATORS_SPACE("operatorspace", OperatorSpace.class), //
-	OPERATOR_SELECTION_STRATEGY("opselectionstrategy", OperatorSelectionStrategy.class), //
-	INGREDIENT_SEARCH_STRATEGY("ingredientstrategy", IngredientSearchStrategy.class), //
-	INGREDIENT_TRANSFORM_STRATEGY("ingredienttransformstrategy", IngredientTransformationStrategy.class), //
-	TARGET_CODE_PROCESSOR("targetelementprocessor", TargetElementProcessor.class), //
-	TARGET_INGREDIENT_CODE_PROCESSOR("targetingredientelementprocessor", TargetElementProcessor.class), //
-	CLONE_GRANULARITY("clonegranularity", Class.class), //
-	OUTPUT_RESULTS("outputresult", ReportResults.class), //
-	SUSPICIOUS_NAVIGATION("modificationpointnavigation", SuspiciousNavigationStrategy.class), //
-	// CODE_SYNTHESIS("codesynthesis", IngredientSynthesizer.class), //
-	// CONTEXT_COLLECTOR("contextcollector", ExecutionContextCollector.class)
-	;//
+    NAVIGATION_ENGINE("customengine", AstorCoreEngine.class), //
+    FAULT_LOCALIZATION("faultlocalization", FaultLocalizationStrategy.class), //
+    FITNESS_FUNCTION("fitnessfunction", FitnessFunction.class), //
+    COMPILER("compiler", VariantCompiler.class), //
+    POPULATION_CONTROLLER("populationcontroller", PopulationController.class), //
+    INGREDIENT_STRATEGY_SCOPE("scope", IngredientPool.class), //
+    SOLUTION_SORT_CRITERION("patchprioritization", SolutionVariantSortCriterion.class), //
+    VALIDATION("validation", ProgramVariantValidator.class), //
+    REPAIR_OPERATORS("repairoperators", AstorOperator.class), //
+    OPERATORS_SPACE("operatorspace", OperatorSpace.class), //
+    OPERATOR_SELECTION_STRATEGY("opselectionstrategy", OperatorSelectionStrategy.class), //
+    INGREDIENT_SEARCH_STRATEGY("ingredientstrategy", IngredientSearchStrategy.class), //
+    INGREDIENT_TRANSFORM_STRATEGY("ingredienttransformstrategy", IngredientTransformationStrategy.class), //
+    TARGET_CODE_PROCESSOR("targetelementprocessor", TargetElementProcessor.class), //
+    TARGET_INGREDIENT_CODE_PROCESSOR("targetingredientelementprocessor", TargetElementProcessor.class), //
+    CLONE_GRANULARITY("clonegranularity", Class.class), //
+    OUTPUT_RESULTS("outputresult", ReportResults.class), //
+    SUSPICIOUS_NAVIGATION("modificationpointnavigation", SuspiciousNavigationStrategy.class), //
+    // CODE_SYNTHESIS("codesynthesis", IngredientSynthesizer.class), //
+    // CONTEXT_COLLECTOR("contextcollector", ExecutionContextCollector.class)
+    ;//
 
-	public String identifier;
-	public Class<?> _class;
+    public String identifier;
+    public Class<?> _class;
 
-	ExtensionPoints(String id, Class<?> _class) {
-		this.identifier = id;
-		this._class = _class;
-	}
+    ExtensionPoints(String id, Class<?> _class) {
+        this.identifier = id;
+        this._class = _class;
+    }
 
-	public String argument() {
-		return "-" + this.identifier;
-	}
+    public String argument() {
+        return "-" + this.identifier;
+    }
 }

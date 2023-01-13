@@ -21,65 +21,65 @@ import spoon.reflect.declaration.CtType;
  */
 public class GlobalBasicIngredientSpace extends LocalIngredientSpace {
 
-	private Logger logger = Logger.getLogger(GlobalBasicIngredientSpace.class.getName());
+    private Logger logger = Logger.getLogger(GlobalBasicIngredientSpace.class.getName());
 
-	public GlobalBasicIngredientSpace(TargetElementProcessor<?> processor) throws JSAPException {
-		super(processor);
+    public GlobalBasicIngredientSpace(TargetElementProcessor<?> processor) throws JSAPException {
+        super(processor);
 
-	}
+    }
 
-	public GlobalBasicIngredientSpace(List<TargetElementProcessor<?>> processor) throws JSAPException {
-		super(processor);
+    public GlobalBasicIngredientSpace(List<TargetElementProcessor<?>> processor) throws JSAPException {
+        super(processor);
 
-	}
+    }
 
-	/**
-	 * Ignored the class, returns all elements from the space
-	 */
-	@Override
-	public List<Ingredient> getIngredients(CtElement element) {
-		List result = new ArrayList();
-		for (String type : fixSpaceByType.keySet()) {
-			result.addAll(this.fixSpaceByType.get(type));
-		}
+    /**
+     * Ignored the class, returns all elements from the space
+     */
+    @Override
+    public List<Ingredient> getIngredients(CtElement element) {
+        List result = new ArrayList();
+        for (String type : fixSpaceByType.keySet()) {
+            result.addAll(this.fixSpaceByType.get(type));
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Ignores the element, returns all types
-	 */
-	@Override
-	public List<Ingredient> getIngredients(CtElement element, String type) {
+    /**
+     * Ignores the element, returns all types
+     */
+    @Override
+    public List<Ingredient> getIngredients(CtElement element, String type) {
 
-		return this.fixSpaceByType.get(type);
+        return this.fixSpaceByType.get(type);
 
-	}
+    }
 
-	@Override
-	public IngredientPoolScope spaceScope() {
-		return IngredientPoolScope.GLOBAL;
-	}
+    @Override
+    public IngredientPoolScope spaceScope() {
+        return IngredientPoolScope.GLOBAL;
+    }
 
-	public String toString() {
-		String s = "--Space: " + this.spaceScope() + "\n";
-		int totalIng = 0;
-		for (String l : this.fixSpaceByType.keySet()) {
-			List ing = this.fixSpaceByType.get(l);
-			s += "\t " + l + ": (" + ing.size() + ") " + /* ing + */ "\n";
-			totalIng += ing.size();
-		}
-		s = " All ingredients: " + totalIng + s;
-		return s;
-	}
+    public String toString() {
+        String s = "--Space: " + this.spaceScope() + "\n";
+        int totalIng = 0;
+        for (String l : this.fixSpaceByType.keySet()) {
+            List ing = this.fixSpaceByType.get(l);
+            s += "\t " + l + ": (" + ing.size() + ") " + /* ing + */ "\n";
+            totalIng += ing.size();
+        }
+        s = " All ingredients: " + totalIng + s;
+        return s;
+    }
 
-	@Override
-	public void defineSpace(ProgramVariant variant) {
-		List<CtType<?>> affected = MutationSupporter.getFactory().Type().getAll();
-		for (CtType<?> classToProcess : affected) {
-			this.createFixSpaceFromAClass(classToProcess);
-		}
+    @Override
+    public void defineSpace(ProgramVariant variant) {
+        List<CtType<?>> affected = MutationSupporter.getFactory().Type().getAll();
+        for (CtType<?> classToProcess : affected) {
+            this.createFixSpaceFromAClass(classToProcess);
+        }
 
-	}
+    }
 
 }
